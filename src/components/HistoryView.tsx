@@ -2,10 +2,6 @@ import React, { useState } from 'react';
 import {
   ChevronLeft,
   ChevronRight,
-  Clock,
-  Sparkles,
-  Calendar,
-  Layers,
   ChevronDown,
   ChevronUp
 } from 'lucide-react';
@@ -60,7 +56,6 @@ export const HistoryView: React.FC<HistoryViewProps> = ({
   const weekLogs = logs.filter(l => l.date >= startDateStr && l.date <= endDateStr);
 
   // Calculate track touches matrix
-  // For each track, check which of the 7 days has at least 1 log
   const trackMatrix = tracks.map(track => {
     const touchedDays = weekDays.map(day => {
       const hasTouch = weekLogs.some(l => l.track_id === track.id && l.date === day.dateStr);
@@ -83,37 +78,37 @@ export const HistoryView: React.FC<HistoryViewProps> = ({
     <div className="flex-1 overflow-y-auto min-h-screen bg-transparent text-[var(--text-primary)] p-6 lg:p-10">
       <div className="max-w-[880px] mx-auto space-y-8">
         {/* Header */}
-        <header className="flex flex-col sm:flex-row sm:items-center justify-between pb-6 border-b border-[#c69956]/20 gap-4">
+        <header className="flex flex-col sm:flex-row sm:items-center justify-between pb-6 border-b border-[#c69956]/15 gap-4">
           <div>
             <div className="flex items-center gap-2 type-l6 font-mono text-[var(--text-muted)] tracking-wider uppercase mb-1">
               <span>TRAJECTORY / 轨迹，不是成绩单</span>
             </div>
             <h1 className="type-l1 font-display font-bold text-[var(--text-hero)] flex items-baseline gap-2.5">
               <span>历史轨迹</span>
-              <span className="type-l6 font-mono font-normal text-[var(--text-muted)] tracking-widest">/ ARCHIVE</span>
+              <span className="type-l6 font-mono font-normal text-[var(--text-ghost)] tracking-widest">/ ARCHIVE</span>
             </h1>
           </div>
 
           {/* Week Navigator */}
-          <div className="flex items-center gap-2 bg-[#181512] px-3 py-1.5 rounded-lg border border-[#c69956]/25 self-start sm:self-auto">
+          <div className="flex items-center gap-2 bg-[#161513] px-3 py-1.5 rounded-lg border border-[#c69956]/20 self-start sm:self-auto">
             <button
               onClick={() => setWeekOffset(prev => prev - 1)}
-              className="p-1 text-[var(--text-muted)] hover:text-[#dfbf85] transition-colors"
+              className="p-1 text-[var(--text-muted)] hover:text-[#dfbf85] transition-colors cursor-pointer"
               title="上一周"
             >
               <ChevronLeft className="w-4 h-4" />
             </button>
 
-            <span className="type-l6 font-medium text-[var(--text-primary)] px-2">
+            <span className="type-l6 font-medium text-[var(--text-primary)] px-2 font-mono">
               {weekDays[0].shortDate} ─ {weekDays[6].shortDate}
-              {weekOffset === 0 && <span className="text-[#c69956] ml-1.5">(本周)</span>}
+              {weekOffset === 0 && <span className="text-[#c69956] ml-1.5 font-sans">(本周)</span>}
             </span>
 
             <button
               onClick={() => setWeekOffset(prev => prev + 1)}
               disabled={weekOffset >= 0}
               className={`p-1 transition-colors ${
-                weekOffset >= 0 ? 'text-[var(--text-ghost)] cursor-not-allowed' : 'text-[var(--text-muted)] hover:text-[#dfbf85]'
+                weekOffset >= 0 ? 'text-[var(--text-ghost)] cursor-not-allowed' : 'text-[var(--text-muted)] hover:text-[#dfbf85] cursor-pointer'
               }`}
               title="下一周"
             >
@@ -122,11 +117,11 @@ export const HistoryView: React.FC<HistoryViewProps> = ({
           </div>
         </header>
 
-        {/* Weekly Touch Matrix (The core visual - Dedicated warm ambient micro-glow) */}
+        {/* Weekly Touch Matrix (The core optical reference - Dedicated warm ambient micro-glow) */}
         <div className="matrix-panel p-6 rounded-lg space-y-6">
           <div className="flex items-center justify-between">
             <div>
-              <h2 className="type-l3 font-bold text-[var(--text-hero)] flex items-center gap-2">
+              <h2 className="type-l3 font-bold text-[var(--text-title)] flex items-center gap-2">
                 <span>周主线触达矩阵</span>
               </h2>
               <p className="type-l6 text-[var(--text-secondary)] font-sans mt-0.5">
@@ -136,7 +131,7 @@ export const HistoryView: React.FC<HistoryViewProps> = ({
 
             <button
               onClick={() => setShowDurationStats(prev => !prev)}
-              className="type-l5 text-[var(--text-muted)] hover:text-[#dfbf85] flex items-center gap-1 transition-colors"
+              className="type-l5 text-[var(--text-muted)] hover:text-[#dfbf85] flex items-center gap-1 transition-colors cursor-pointer"
             >
               <span>{showDurationStats ? '隐藏时间明细' : '查看投入时间'}</span>
               {showDurationStats ? <ChevronUp className="w-3.5 h-3.5" /> : <ChevronDown className="w-3.5 h-3.5" />}
@@ -147,7 +142,7 @@ export const HistoryView: React.FC<HistoryViewProps> = ({
           <div className="overflow-x-auto">
             <table className="w-full text-left">
               <thead>
-                <tr className="border-b border-[#c69956]/20">
+                <tr className="border-b border-[#c69956]/15">
                   <th className="py-2.5 type-l5 font-display text-[var(--text-muted)] font-normal w-40">主线</th>
                   {weekDays.map(d => (
                     <th key={d.dateStr} className="py-2.5 text-center type-l6 text-[var(--text-muted)] font-normal">
@@ -161,9 +156,9 @@ export const HistoryView: React.FC<HistoryViewProps> = ({
                   )}
                 </tr>
               </thead>
-              <tbody className="divide-y divide-[#c69956]/10">
+              <tbody className="divide-y divide-[#c69956]/8">
                 {trackMatrix.map(({ track, touchedDays, touchCount, totalMinutes }) => (
-                  <tr key={track.id} className="hover:bg-[#181512]/50 transition-colors">
+                  <tr key={track.id} className="hover:bg-[#191715]/50 transition-colors">
                     <td className="py-3 font-medium text-[var(--text-primary)] flex items-center gap-2 type-l5">
                       <span className="truncate">{track.name}</span>
                       <span className="type-l6 text-[var(--text-muted)] font-sans">
@@ -174,7 +169,7 @@ export const HistoryView: React.FC<HistoryViewProps> = ({
                     {touchedDays.map((touched, idx) => (
                       <td key={idx} className="py-3 text-center">
                         {touched ? (
-                          <div className="w-2 h-2 rounded-full bg-[#ba9258] mx-auto shadow-[0_0_4px_rgba(198,153,86,0.22)]" />
+                          <div className="w-2 h-2 rounded-full bg-[#ba9258] mx-auto shadow-[0_0_3px_rgba(198,153,86,0.20)]" />
                         ) : (
                           <span className="text-[var(--text-ghost)] type-l5">·</span>
                         )}
@@ -207,8 +202,8 @@ export const HistoryView: React.FC<HistoryViewProps> = ({
 
         {/* Daily Archive Logs */}
         <div className="space-y-6 pt-4">
-          <div className="flex items-center justify-between border-b border-[#c69956]/20 pb-2">
-            <h2 className="type-l3 font-bold text-[var(--text-hero)]">
+          <div className="flex items-center justify-between border-b border-[#c69956]/15 pb-2">
+            <h2 className="type-l3 font-bold text-[var(--text-title)]">
               本周日常记录存根
             </h2>
             <span className="type-l6 font-mono text-[var(--text-muted)] uppercase tracking-wider">
@@ -228,11 +223,11 @@ export const HistoryView: React.FC<HistoryViewProps> = ({
 
                 return (
                   <div key={d.dateStr} className="space-y-2">
-                    {/* Date Section Header - Engineering Journal Style */}
-                    <div className="flex items-center justify-between border-b border-[#c69956]/15 pb-1.5">
+                    {/* Date Section Header */}
+                    <div className="flex items-center justify-between border-b border-[#c69956]/10 pb-1.5">
                       <div className="flex items-center gap-2">
                         <span className="w-1.5 h-1.5 rounded-full bg-[#a6824b]" />
-                        <span className="type-l4 font-bold text-[var(--text-hero)] font-display">
+                        <span className="type-l4 font-bold text-[var(--text-title)] font-display">
                           {d.dateStr} · {d.dayName}
                         </span>
                       </div>
@@ -241,7 +236,7 @@ export const HistoryView: React.FC<HistoryViewProps> = ({
                       </span>
                     </div>
 
-                    {/* Timeline Rail Entries (Zero Boxitis, pure typography & precision rail) */}
+                    {/* Timeline Rail Entries */}
                     <div className="space-y-0">
                       {dayEntries.map((entry, idx) => {
                         const track = tracks.find(t => t.id === entry.track_id);
@@ -265,25 +260,25 @@ export const HistoryView: React.FC<HistoryViewProps> = ({
                               )}
                             </div>
 
-                            {/* Center Column: Vertical Rail & Precision Node */}
+                            {/* Center Column: Precision Guide Rail & Node */}
                             <div className="relative flex flex-col items-center shrink-0 w-4">
-                              <div className={`w-[1px] flex-1 ${isFirst ? 'bg-transparent' : 'bg-[#c69956]/20'}`} />
+                              <div className={`w-[1px] flex-1 ${isFirst ? 'bg-transparent' : 'bg-[rgba(198,153,86,0.12)]'}`} />
                               <div
                                 className={`w-2 h-2 rounded-full border shrink-0 my-1 transition-transform group-hover:scale-125 ${
                                   isSession
-                                    ? 'border-[#8f6e3c] bg-[#ba9258] shadow-[0_0_3.5px_rgba(198,153,86,0.20)]'
-                                    : 'border-[#4a4239] bg-[#141210]'
+                                    ? 'border-[#8f6e3c] bg-[#ba9258] shadow-[0_0_3px_rgba(198,153,86,0.20)]'
+                                    : 'border-[#4a4237] bg-[#1a1816]'
                                 }`}
                               />
-                              <div className={`w-[1px] flex-1 ${isLast ? 'bg-transparent' : 'bg-[#c69956]/20'}`} />
+                              <div className={`w-[1px] flex-1 ${isLast ? 'bg-transparent' : 'bg-[rgba(198,153,86,0.12)]'}`} />
                             </div>
 
                             {/* Right Column: Content */}
-                            <div className="flex-1 min-w-0 flex flex-col sm:flex-row sm:items-baseline justify-between gap-2 border-b border-[#c69956]/10 py-2 group-hover:border-[#c69956]/25 transition-colors">
+                            <div className="flex-1 min-w-0 flex flex-col sm:flex-row sm:items-baseline justify-between gap-2 border-b border-[#c69956]/8 py-2 group-hover:border-[#c69956]/20 transition-colors">
                               <div className="flex items-baseline gap-2 min-w-0 flex-wrap">
                                 <span
                                   className={`type-l5 shrink-0 ${
-                                    track ? 'text-[#d4ab6a] font-medium' : 'text-[var(--text-muted)] font-normal'
+                                    track ? 'text-[#b89156] font-medium' : 'text-[var(--text-muted)] font-normal'
                                   }`}
                                 >
                                   [{track ? track.name : '生活'}]
@@ -294,7 +289,7 @@ export const HistoryView: React.FC<HistoryViewProps> = ({
                               </div>
 
                               {entry.duration_minutes && (
-                                <span className="type-l6 font-mono text-[var(--text-muted)] bg-[#161412] px-1.5 py-0.5 rounded border border-[#2e271f] shrink-0 self-end sm:self-auto">
+                                <span className="type-l6 font-mono text-[var(--text-muted)] bg-[#171513] px-1.5 py-0.5 rounded border border-[#2b251e] shrink-0 self-end sm:self-auto">
                                   {entry.duration_minutes >= 60
                                     ? `${Math.floor(entry.duration_minutes / 60)}h ${
                                         entry.duration_minutes % 60 > 0 ? `${entry.duration_minutes % 60}m` : ''
@@ -310,10 +305,10 @@ export const HistoryView: React.FC<HistoryViewProps> = ({
 
                     {/* Day Close Reflection Note */}
                     {dayClose && (
-                      <div className="ml-5 sm:ml-28 pl-4 py-2 border-l-2 border-[#c69956]/40 type-l5 text-[var(--text-secondary)] italic space-y-1 font-sans bg-[#161412]/40 rounded-r my-2">
+                      <div className="ml-5 sm:ml-28 pl-4 py-2 border-l-2 border-[#c69956]/30 type-l5 text-[var(--text-secondary)] italic space-y-1 font-sans bg-[#161513]/60 rounded-r my-2">
                         {dayClose.note && <div>💭 「{dayClose.note}」</div>}
                         {dayClose.carry_forward && (
-                          <div className="text-[#dfbf85] not-italic">
+                          <div className="text-[#dfbf85] not-italic font-normal">
                             ↳ 明天关注: {dayClose.carry_forward}
                           </div>
                         )}

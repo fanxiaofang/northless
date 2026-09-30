@@ -8,17 +8,18 @@
     --font-sans: 'IBM Plex Sans', 'Noto Sans SC', 'PingFang SC', system-ui, -apple-system, sans-serif;
     --font-mono: 'IBM Plex Mono', 'JetBrains Mono', monospace;
 
-    /* Optical Contrast Hierarchy Tokens */
-    --text-hero:      #e4dacb;  /* Primary page titles, prominent dates, key track titles */
-    --text-primary:   #d2c7b8;  /* Main reading text, record body, action title */
-    --text-secondary: #b7aa99;  /* Subtitles, purpose, secondary descriptions */
-    --text-muted:     #8f8477;  /* Metadata, timestamps, counts, captions */
-    --text-ghost:     #62584d;  /* Backgrounded tags, subtle brackets, empty hints */
+    /* Rebuilt Neutral & Optical Contrast Hierarchy Tokens (Strict 6-Level Gradient) */
+    --text-hero:      #ede4d4;  /* Only primary page anchors (Today date, main page title) */
+    --text-title:     #c9bead;  /* Partition titles, key object names ("现在做什么", "今天发生的现实") */
+    --text-primary:   #b4a896;  /* Main reading text, event content, normal body */
+    --text-secondary: #8e8271;  /* Explanations, subtitles, secondary prose */
+    --text-muted:     #6b6154;  /* Timestamps, counts, metadata, secondary tags */
+    --text-ghost:     #4e463c;  /* Empty state descriptions, subtle brackets, backgrounded notes */
 
     /* Primary Accent: Aged Brass (方向 / 权重 / 主线 / 重要动作 - Visual Weight 100%) */
     --brass-bright: #d4ab6a;
-    --brass: #b98a4a;
-    --brass-dim: #7f6645;
+    --brass:        #b98a4a;
+    --brass-dim:    #7f6645;
 
     /* Secondary Cool Accent: Weathered Verdigris 氧化铜绿 (状态 / 运行中 / 轻量 / 恢复 - Visual Weight 70%) */
     --verdigris-strong: #86a69a;
@@ -30,7 +31,7 @@
     --copper:           #93654c;
     --copper-dim:       #6a4430;
 
-    /* 6-Level Typography Scale Tokens (Preconfigured for density calibration) */
+    /* 6-Level Typography Scale Tokens */
     --text-scale-l1: 1.875rem; /* 30px, range 28-32px */
     --line-height-l1: 2.25rem; /* 36px */
 
@@ -49,31 +50,29 @@
     --text-scale-l6: 0.71875rem; /* 11.5px, range 11-12px */
     --line-height-l6: 1.05rem;   /* 17px */
 
-    /* Layout & Viewport Foundation Tokens (6th Foundation) */
-    --sidebar-width: 220px;
-    --sidebar-rail-width: 64px;
-    --main-max-width: 960px;
-    --main-reading-width: 880px;
+    /* Layout & Viewport Foundation Tokens */
+    --sidebar-width: 240px;
+    --main-max-width: 880px;
 
     /* Semantic Effort Palette (Chemical Patina & Metals) */
     --effort-light: #86a69a;        /* Weathered Verdigris 氧化铜绿 */
-    --effort-light-bg: rgba(107, 135, 124, 0.14);
-    --effort-light-border: rgba(107, 135, 124, 0.35);
+    --effort-light-bg: rgba(107, 135, 124, 0.12);
+    --effort-light-border: rgba(107, 135, 124, 0.28);
 
     --effort-normal: #c69956;       /* Aged Brass 原色黄铜 */
-    --effort-normal-bg: rgba(198, 153, 86, 0.12);
-    --effort-normal-border: rgba(198, 153, 86, 0.28);
+    --effort-normal-bg: rgba(198, 153, 86, 0.10);
+    --effort-normal-border: rgba(198, 153, 86, 0.24);
 
     --effort-deep: #c87a3e;         /* Darker Copper 紫铜色 */
-    --effort-deep-bg: rgba(200, 122, 62, 0.12);
-    --effort-deep-border: rgba(200, 122, 62, 0.28);
+    --effort-deep-bg: rgba(200, 122, 62, 0.10);
+    --effort-deep-border: rgba(200, 122, 62, 0.24);
   }
 
   body {
     font-family: var(--font-sans);
     font-size: var(--text-scale-l4);
     line-height: var(--line-height-l4);
-    background-color: #11100f;
+    background-color: #151413;
     color: var(--text-primary);
   }
 }
@@ -90,28 +89,31 @@
   font-family: var(--font-mono);
 }
 
-/* Atmospheric Cockpit Viewport Depth */
+.font-sans {
+  font-family: var(--font-sans);
+}
+
+/* Warm Graphite Chassis: Atmospheric Main Viewport Depth (Zero dead-black hole, restrained 2%-5% diffuse ambient reflection) */
 .cockpit-main {
-  background:
+  background-color: #161514;
+  background-image:
     radial-gradient(
-      1000px 620px at 50% -80px,
-      rgba(198, 153, 86, 0.04) 0%,
-      transparent 58%
+      1100px 700px at 50% -60px,
+      rgba(198, 153, 86, 0.035) 0%,
+      rgba(198, 153, 86, 0.012) 35%,
+      transparent 65%
     ),
     radial-gradient(
-      850px 650px at 82% 65%,
+      900px 600px at 88% 65%,
       rgba(107, 135, 124, 0.018) 0%,
-      transparent 72%
+      transparent 60%
     ),
     linear-gradient(
       180deg,
-      #131210 0%,
-      #100f0e 100%
+      #181715 0%,
+      #161513 50%,
+      #141312 100%
     );
-}
-
-.font-sans {
-  font-family: var(--font-sans);
 }
 
 /* 6-level typography scale utility classes */
@@ -154,89 +156,90 @@
   line-height: var(--line-height-l6);
 }
 
-/* Tiered Surfaces (Matte physical surfaces, calibrated for zero glare) */
+/* ========================================================================= */
+/* Physical Optics Surface Hierarchy                                        */
+/* ========================================================================= */
+
 /* Level 1: Standard Cockpit Surface (Matte, quiet, grounded) */
 .surface-flat,
 .brass-panel {
-  background: linear-gradient(180deg, #161513 0%, #121110 100%);
-  border: 1px solid rgba(198, 153, 86, 0.14);
-  box-shadow: 0 3px 12px -2px rgba(0, 0, 0, 0.45), inset 0 1px 0 rgba(255, 230, 180, 0.05);
+  background: linear-gradient(180deg, #191715 0%, #151412 100%);
+  border: 1px solid rgba(198, 153, 86, 0.10);
+  box-shadow: 0 2px 8px -2px rgba(0, 0, 0, 0.3), inset 0 1px 0 rgba(255, 230, 180, 0.03);
   transition: border-color 0.15s ease;
 }
 
 .surface-flat:hover,
 .brass-panel:hover {
-  border-color: rgba(198, 153, 86, 0.25);
+  border-color: rgba(198, 153, 86, 0.20);
 }
 
-/* Soft Optical Surface (50%–70% of Matrix intensity - subtle physical depth without competing with matrix) */
+/* Soft Optical Surface (30%–50% softer than Matrix - subtle physical chassis without competing with matrix) */
 .surface-optic-soft {
   background:
     radial-gradient(
-      ellipse at 50% 0%,
-      rgba(198, 153, 86, 0.028) 0%,
-      transparent 68%
+      ellipse at 50% -10%,
+      rgba(198, 153, 86, 0.024) 0%,
+      transparent 60%
     ),
     linear-gradient(
       180deg,
-      #161412 0%,
-      #12110f 100%
+      #1a1816 0%,
+      #161513 100%
     );
-
-  border:
-    1px solid rgba(198, 153, 86, 0.10);
-
+  border: 1px solid rgba(198, 153, 86, 0.11);
   box-shadow:
-    0 3px 12px -4px rgba(0, 0, 0, 0.35),
-    inset 0 1px 0 rgba(255, 230, 180, 0.045);
+    0 2px 10px -3px rgba(0, 0, 0, 0.32),
+    inset 0 1px 0 rgba(255, 230, 180, 0.035);
 }
 
-/* Weekly Touch Matrix (Dedicated physical optics: Radial ambient top light, inset bevel highlight & brass rim) */
+/* Weekly Touch Matrix (Strongest optical reference: Radial ambient top light, inset bevel highlight & brass rim) */
 .matrix-panel {
-  background: radial-gradient(circle at 50% 0%, rgba(198, 153, 86, 0.055) 0%, transparent 70%),
-              linear-gradient(180deg, #181614 0%, #131210 100%);
+  background: radial-gradient(circle at 50% 0%, rgba(198, 153, 86, 0.05) 0%, transparent 68%),
+              linear-gradient(180deg, #1d1a17 0%, #171513 100%);
   border: 1px solid rgba(198, 153, 86, 0.16);
-  box-shadow: 0 4px 18px -2px rgba(0, 0, 0, 0.45),
-              inset 0 1px 0 rgba(255, 230, 180, 0.08);
+  box-shadow: 0 4px 16px -2px rgba(0, 0, 0, 0.38),
+              inset 0 1px 0 rgba(255, 230, 180, 0.06);
   transition: border-color 0.2s ease, box-shadow 0.2s ease;
 }
 
 .matrix-panel:hover {
-  border-color: rgba(198, 153, 86, 0.28);
-  box-shadow: 0 6px 20px -2px rgba(0, 0, 0, 0.5),
-              inset 0 1px 0 rgba(255, 230, 180, 0.12);
+  border-color: rgba(198, 153, 86, 0.26);
+  box-shadow: 0 5px 18px -2px rgba(0, 0, 0, 0.45),
+              inset 0 1px 0 rgba(255, 230, 180, 0.09);
 }
 
 /* Level 2: Featured Surface (Restrained, subtle top bevel, zero glare) */
 .surface-featured,
 .brass-panel-elevated {
-  background: radial-gradient(ellipse at 50% 0%, rgba(198, 153, 86, 0.045) 0%, transparent 65%),
-              linear-gradient(180deg, #1b1815 0%, #131210 100%);
-  border: 1px solid rgba(198, 153, 86, 0.25);
-  box-shadow: 0 5px 16px -2px rgba(0, 0, 0, 0.5), inset 0 1px 0 rgba(255, 230, 180, 0.08);
+  background: radial-gradient(ellipse at 50% 0%, rgba(198, 153, 86, 0.035) 0%, transparent 65%),
+              linear-gradient(180deg, #1c1a17 0%, #161513 100%);
+  border: 1px solid rgba(198, 153, 86, 0.18);
+  box-shadow: 0 4px 14px -2px rgba(0, 0, 0, 0.38), inset 0 1px 0 rgba(255, 230, 180, 0.05);
   transition: border-color 0.15s ease;
 }
 
 .surface-featured:hover,
 .brass-panel-elevated:hover {
-  border-color: rgba(198, 153, 86, 0.38);
+  border-color: rgba(198, 153, 86, 0.30);
 }
 
 /* Level 3: Instrument Surface (Active live chronometer - clean matte chassis) */
 .surface-instrument {
-  background: linear-gradient(180deg, #17201d 0%, #121614 100%);
-  border: 1px solid rgba(107, 135, 124, 0.35);
-  box-shadow: 0 6px 18px -3px rgba(0, 0, 0, 0.55), inset 0 1px 1px rgba(215, 245, 235, 0.08);
+  background: radial-gradient(ellipse at 50% 0%, rgba(107, 135, 124, 0.04) 0%, transparent 60%),
+              linear-gradient(180deg, #181f1c 0%, #141816 100%);
+  border: 1px solid rgba(107, 135, 124, 0.30);
+  box-shadow: 0 4px 16px -3px rgba(0, 0, 0, 0.45), inset 0 1px 1px rgba(215, 245, 235, 0.06);
 }
 
 /* Phosphor Optical Glow for Indicators & Chronometer Beacons */
 .phosphor-glow,
 .brass-glow {
-  box-shadow: 0 0 6px rgba(198, 153, 86, 0.35);
+  box-shadow: 0 0 5px rgba(198, 153, 86, 0.3);
 }
 
 .verdigris-glow {
-  box-shadow: 0 0 6px rgba(134, 166, 154, 0.35);
+  box-shadow: 0 0 5px rgba(134, 166, 154, 0.3);
 }
 
 /* Tactile Instrument Switch (7-8px engineered chamfer, physical toggle instead of SaaS pill) */
@@ -270,27 +273,27 @@
 }
 
 .brass-button {
-  background: linear-gradient(180deg, #2c251c 0%, #1f1a14 100%);
-  border: 1px solid rgba(198, 153, 86, 0.35);
-  box-shadow: inset 0 1px 0 rgba(255, 235, 195, 0.16), 0 2px 4px rgba(0, 0, 0, 0.4);
+  background: linear-gradient(180deg, #2a241c 0%, #1d1914 100%);
+  border: 1px solid rgba(198, 153, 86, 0.30);
+  box-shadow: inset 0 1px 0 rgba(255, 235, 195, 0.12), 0 2px 4px rgba(0, 0, 0, 0.35);
   transition: all 0.15s cubic-bezier(0.16, 1, 0.3, 1);
 }
 
 .brass-button:hover {
-  background: linear-gradient(180deg, #362d22 0%, #241e17 100%);
-  border-color: rgba(212, 171, 106, 0.55);
-  box-shadow: inset 0 1px 0 rgba(255, 235, 195, 0.22), 0 2px 6px rgba(0, 0, 0, 0.45);
+  background: linear-gradient(180deg, #332b20 0%, #221c15 100%);
+  border-color: rgba(212, 171, 106, 0.48);
+  box-shadow: inset 0 1px 0 rgba(255, 235, 195, 0.18), 0 2px 6px rgba(0, 0, 0, 0.4);
 }
 
 .brass-button:active {
   transform: translateY(1px);
-  box-shadow: inset 0 2px 4px rgba(0, 0, 0, 0.5);
+  box-shadow: inset 0 2px 4px rgba(0, 0, 0, 0.45);
 }
 
 .brass-tag {
   background: rgba(198, 153, 86, 0.08);
-  border: 1px solid rgba(198, 153, 86, 0.22);
-  color: #dfbf85;
+  border: 1px solid rgba(198, 153, 86, 0.18);
+  color: #cfab72;
 }
 
 /* Brass Rivet Detail (Matte mechanical rivet) */
@@ -298,8 +301,8 @@
   width: 6px;
   height: 6px;
   border-radius: 50%;
-  background: radial-gradient(circle at 30% 30%, #d4ab6a 0%, #7d5e30 60%, #3a2810 100%);
-  box-shadow: 0 1px 2px rgba(0, 0, 0, 0.8), inset 0 0.5px 0.5px rgba(255, 255, 255, 0.4);
+  background: radial-gradient(circle at 30% 30%, #cfa565 0%, #75572c 60%, #35240e 100%);
+  box-shadow: 0 1px 2px rgba(0, 0, 0, 0.7), inset 0 0.5px 0.5px rgba(255, 255, 255, 0.3);
   display: inline-block;
 }
 
@@ -309,13 +312,13 @@
   height: 6px;
 }
 ::-webkit-scrollbar-track {
-  background: #11100f;
+  background: #141312;
 }
 ::-webkit-scrollbar-thumb {
-  background: #2a251e;
+  background: #28241e;
   border-radius: 3px;
-  border: 1px solid rgba(198, 153, 86, 0.15);
+  border: 1px solid rgba(198, 153, 86, 0.12);
 }
 ::-webkit-scrollbar-thumb:hover {
-  background: #3d3429;
+  background: #383126;
 }

@@ -1,12 +1,10 @@
 import React, { useState, useRef, useEffect } from 'react';
 import {
-  Inbox,
   Plus,
   ArrowRight,
   Archive,
   Trash2,
   Check,
-  Tag,
   ChevronDown
 } from 'lucide-react';
 import { InboxItem, Track } from '../types';
@@ -52,7 +50,7 @@ const CustomTrackSelect: React.FC<CustomTrackSelectProps> = ({
       <button
         type="button"
         onClick={() => setIsOpen(prev => !prev)}
-        className="flex items-center justify-between gap-2 bg-[#181512] hover:bg-[#1f1b16] border border-[#c69956]/25 hover:border-[#c69956]/50 rounded px-2.5 py-1.5 type-l5 text-[var(--text-primary)] transition-colors focus:outline-none focus:border-[#dfbf85] w-full text-left"
+        className="flex items-center justify-between gap-2 bg-[#151412] hover:bg-[#1c1a17] border border-[#c69956]/20 hover:border-[#c69956]/40 rounded px-2.5 py-1.5 type-l5 text-[var(--text-primary)] transition-colors focus:outline-none focus:border-[#c69956] w-full text-left cursor-pointer"
       >
         <span className="truncate">
           {selectedTrack ? `#${selectedTrack.name}` : emptyLabel}
@@ -61,7 +59,7 @@ const CustomTrackSelect: React.FC<CustomTrackSelectProps> = ({
       </button>
 
       {isOpen && (
-        <div className="absolute left-0 mt-1 min-w-[220px] w-full max-h-56 overflow-y-auto bg-[#181512] border border-[#c69956]/35 rounded-md shadow-2xl py-1 z-50">
+        <div className="absolute left-0 mt-1 min-w-[220px] w-full max-h-56 overflow-y-auto bg-[#171513] border border-[#c69956]/30 rounded-md shadow-2xl py-1 z-50">
           {allowEmpty && (
             <button
               type="button"
@@ -69,8 +67,8 @@ const CustomTrackSelect: React.FC<CustomTrackSelectProps> = ({
                 onChange('');
                 setIsOpen(false);
               }}
-              className={`w-full text-left px-3 py-1.5 type-l5 transition-colors flex items-center justify-between ${
-                !value ? 'bg-[#2a2218] text-[#dfbf85] font-medium' : 'text-[var(--text-muted)] hover:bg-[#201c17] hover:text-[var(--text-primary)]'
+              className={`w-full text-left px-3 py-1.5 type-l5 transition-colors flex items-center justify-between cursor-pointer ${
+                !value ? 'bg-[#251f18] text-[#dfbf85] font-medium' : 'text-[var(--text-muted)] hover:bg-[#1e1a16] hover:text-[var(--text-primary)]'
               }`}
             >
               <span>{emptyLabel}</span>
@@ -88,12 +86,12 @@ const CustomTrackSelect: React.FC<CustomTrackSelectProps> = ({
                   onChange(t.id);
                   setIsOpen(false);
                 }}
-                className={`w-full text-left px-3 py-1.5 type-l5 transition-colors flex items-center justify-between ${
-                  isSelected ? 'bg-[#2a2218] text-[#dfbf85] font-medium' : 'text-[var(--text-primary)] hover:bg-[#201c17]'
+                className={`w-full text-left px-3 py-1.5 type-l5 transition-colors flex items-center justify-between cursor-pointer ${
+                  isSelected ? 'bg-[#251f18] text-[#dfbf85] font-medium' : 'text-[var(--text-primary)] hover:bg-[#1e1a16]'
                 }`}
               >
                 <div className="flex items-center gap-2 truncate">
-                  <span className={`w-1.5 h-1.5 rounded-full shrink-0 ${t.role === 'main' ? 'bg-[#dfbf85]' : 'bg-[#7a6f60]'}`} />
+                  <span className={`w-1.5 h-1.5 rounded-full shrink-0 ${t.role === 'main' ? 'bg-[#c69956]' : 'bg-[#615749]'}`} />
                   <span className="truncate">#{t.name}</span>
                 </div>
                 {isSelected && <Check className="w-3.5 h-3.5 text-[#dfbf85] shrink-0" />}
@@ -160,8 +158,8 @@ export const InboxView: React.FC<InboxViewProps> = ({
   return (
     <div className="flex-1 overflow-y-auto min-h-screen bg-transparent text-[var(--text-primary)] p-6 lg:p-10">
       <div className="max-w-[880px] mx-auto space-y-8">
-        {/* Header - Deliberately no unread count! */}
-        <header className="pb-6 border-b border-[#c69956]/20">
+        {/* Header - Deliberately no unread count */}
+        <header className="pb-6 border-b border-[#c69956]/15">
           <div className="flex items-center gap-2 type-l6 font-mono text-[var(--text-muted)] tracking-wider uppercase mb-1">
             <span>FREE CAPTURE / 允许自由腐烂，无需清零压力</span>
           </div>
@@ -174,9 +172,9 @@ export const InboxView: React.FC<InboxViewProps> = ({
           </p>
         </header>
 
-        {/* Quick Capture Input (Low intensity surface-optic-soft) */}
-        <form onSubmit={handleSubmit} className="surface-optic-soft p-5 rounded-lg space-y-3">
-          <div className="flex items-start gap-3">
+        {/* Quick Capture Input Tray (surface-optic-soft) */}
+        <form onSubmit={handleSubmit} className="surface-optic-soft p-4 sm:p-5 rounded-lg space-y-3">
+          <div>
             <textarea
               placeholder="随时捕捉闪念（如：看看 MCP transport 实现细节、interval DP 专题...）"
               value={content}
@@ -187,12 +185,12 @@ export const InboxView: React.FC<InboxViewProps> = ({
                 }
               }}
               rows={2}
-              className="w-full bg-[#161412] border border-[#c69956]/20 rounded-md p-3 type-l4 text-[var(--text-primary)] focus:outline-none focus:border-[#dfbf85] resize-none"
+              className="w-full bg-[#141311] border border-[#c69956]/18 rounded-md p-3 type-l4 text-[var(--text-primary)] placeholder:text-[var(--text-ghost)] focus:outline-none focus:border-[#c69956] resize-none"
               autoFocus
             />
           </div>
 
-          <div className="flex flex-wrap items-center justify-between gap-3 pt-1">
+          <div className="flex flex-wrap items-center justify-between gap-3 pt-0.5">
             <div className="flex items-center gap-2 type-l5">
               <span className="text-[var(--text-muted)]">可选主线:</span>
               <CustomTrackSelect
@@ -204,11 +202,11 @@ export const InboxView: React.FC<InboxViewProps> = ({
               />
             </div>
 
-            <div className="flex items-center gap-2">
-              <span className="type-l6 font-mono text-[var(--text-muted)] hidden sm:inline">⌘ + Enter</span>
+            <div className="flex items-center gap-2.5">
+              <span className="type-l6 font-mono text-[var(--text-ghost)] hidden sm:inline">⌘ + Enter</span>
               <button
                 type="submit"
-                className="brass-button px-4 py-1.5 rounded type-l5 font-semibold text-[var(--text-hero)] flex items-center gap-1.5"
+                className="brass-button px-4 py-1.5 rounded type-l5 font-semibold text-[var(--text-hero)] flex items-center gap-1.5 cursor-pointer"
               >
                 <Plus className="w-3.5 h-3.5 text-[#dfbf85]" />
                 <span>投掷记录</span>
@@ -217,12 +215,12 @@ export const InboxView: React.FC<InboxViewProps> = ({
           </div>
         </form>
 
-        {/* Capture Stream (Standard surface-flat to keep matrix prominent) */}
+        {/* Capture Stream */}
         <div className="space-y-3">
           {activeItems.length === 0 ? (
-            <div className="py-14 text-center text-[var(--text-ghost)] space-y-1.5 select-none border border-dashed border-[#c69956]/15 rounded-lg bg-[#141210]/20">
-              <div className="type-l6 font-mono text-[var(--text-muted)] tracking-widest uppercase">[ CAPTURE TRAY EMPTY ]</div>
-              <p className="type-l5 text-[var(--text-secondary)]">暂无未归整的灵感碎片 · 闪念可随时在此停泊</p>
+            <div className="py-10 text-center text-[var(--text-ghost)] space-y-1.5 select-none border border-dashed border-[#c69956]/12 rounded-lg bg-[#151412]/30">
+              <div className="type-l6 font-mono text-[var(--text-ghost)] tracking-widest uppercase">[ CAPTURE TRAY EMPTY ]</div>
+              <p className="type-l5 text-[var(--text-muted)]">暂无未归整的灵感碎片 · 闪念可随时在此停泊</p>
             </div>
           ) : (
             activeItems.map(item => {
@@ -241,8 +239,8 @@ export const InboxView: React.FC<InboxViewProps> = ({
                       <span>{item.created_at}</span>
                       {track && (
                         <>
-                          <span aria-hidden="true">·</span>
-                          <span className="text-[#c69956] font-medium">#{track.name}</span>
+                          <span aria-hidden="true" className="text-[var(--text-ghost)]">·</span>
+                          <span className="text-[#b38a48] font-medium">#{track.name}</span>
                         </>
                       )}
                     </div>
@@ -251,7 +249,7 @@ export const InboxView: React.FC<InboxViewProps> = ({
                   <div className="flex items-center gap-2 shrink-0 self-end sm:self-auto">
                     <button
                       onClick={() => handleStartPromote(item)}
-                      className="px-2.5 py-1 rounded type-l5 text-[#dfbf85] bg-[#221c15] hover:bg-[#2b241c] border border-[#c69956]/30 transition-colors flex items-center gap-1"
+                      className="px-2.5 py-1 rounded type-l5 text-[#dfbf85] bg-[#221c15] hover:bg-[#2b241c] border border-[#c69956]/25 transition-colors flex items-center gap-1 cursor-pointer"
                     >
                       <ArrowRight className="w-3 h-3" />
                       <span>转为 Next</span>
@@ -259,7 +257,7 @@ export const InboxView: React.FC<InboxViewProps> = ({
 
                     <button
                       onClick={() => onArchiveInboxItem(item.id)}
-                      className="p-1 text-[var(--text-muted)] hover:text-[var(--text-primary)] transition-colors"
+                      className="p-1 text-[var(--text-muted)] hover:text-[var(--text-primary)] transition-colors cursor-pointer"
                       title="归档"
                     >
                       <Archive className="w-3.5 h-3.5" />
@@ -267,7 +265,7 @@ export const InboxView: React.FC<InboxViewProps> = ({
 
                     <button
                       onClick={() => onDeleteInboxItem(item.id)}
-                      className="p-1 text-[var(--text-muted)] hover:text-[#e06c75] transition-colors opacity-0 group-hover:opacity-100"
+                      className="p-1 text-[var(--text-muted)] hover:text-[#e06c75] transition-colors opacity-0 group-hover:opacity-100 cursor-pointer"
                       title="删除"
                     >
                       <Trash2 className="w-3.5 h-3.5" />
@@ -283,7 +281,7 @@ export const InboxView: React.FC<InboxViewProps> = ({
       {/* Promote to Track Action Modal */}
       {promotingItemId && (
         <div className="fixed inset-0 z-50 bg-black/70 backdrop-blur-xs flex items-center justify-center p-4">
-          <div className="brass-panel-elevated p-6 rounded-lg max-w-md w-full space-y-4 shadow-2xl border border-[#c69956]/40">
+          <div className="brass-panel-elevated p-6 rounded-lg max-w-md w-full space-y-4 shadow-2xl border border-[#c69956]/35">
             <h3 className="type-l3 font-bold text-[var(--text-hero)]">
               将想法转化为清晰的 Next 行动
             </h3>
@@ -305,7 +303,7 @@ export const InboxView: React.FC<InboxViewProps> = ({
                   type="text"
                   value={actionTitle}
                   onChange={e => setActionTitle(e.target.value)}
-                  className="w-full bg-[#11100f] border border-[#c69956]/25 rounded px-3 py-2 text-[var(--text-primary)] focus:outline-none focus:border-[#dfbf85]"
+                  className="w-full bg-[#141311] border border-[#c69956]/20 rounded px-3 py-2 text-[var(--text-primary)] focus:outline-none focus:border-[#c69956]"
                   required
                 />
               </div>
@@ -318,14 +316,14 @@ export const InboxView: React.FC<InboxViewProps> = ({
                       key={eff}
                       type="button"
                       onClick={() => setActionEffort(eff)}
-                      className={`flex-1 py-1.5 rounded type-l5 transition-colors ${
+                      className={`flex-1 py-1.5 rounded type-l5 transition-colors cursor-pointer ${
                         actionEffort === eff
                           ? eff === 'light'
                             ? 'tag-effort-light font-medium'
                             : eff === 'deep'
                             ? 'tag-effort-deep font-medium'
                             : 'tag-effort-normal font-medium'
-                          : 'bg-[#181512] text-[var(--text-muted)] border border-[#c69956]/15'
+                          : 'bg-[#151412] text-[var(--text-muted)] border border-[#c69956]/15'
                       }`}
                     >
                       {eff === 'light' ? '轻量' : eff === 'normal' ? '正常' : '深入'}
@@ -338,13 +336,13 @@ export const InboxView: React.FC<InboxViewProps> = ({
                 <button
                   type="button"
                   onClick={() => setPromotingItemId(null)}
-                  className="px-3 py-1.5 text-[var(--text-muted)] hover:text-[var(--text-primary)]"
+                  className="px-3 py-1.5 text-[var(--text-muted)] hover:text-[var(--text-primary)] cursor-pointer"
                 >
                   取消
                 </button>
                 <button
                   type="submit"
-                  className="brass-button px-4 py-1.5 font-semibold text-[var(--text-hero)] rounded flex items-center gap-1.5"
+                  className="brass-button px-4 py-1.5 font-semibold text-[var(--text-hero)] rounded flex items-center gap-1.5 cursor-pointer"
                 >
                   <Check className="w-3.5 h-3.5 text-[#dfbf85]" />
                   <span>转化并收纳</span>
