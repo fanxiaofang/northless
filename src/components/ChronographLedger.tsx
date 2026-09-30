@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React from 'react';
 import { Trash2 } from 'lucide-react';
 import { ActiveSession, LogEntry, Track } from '../types';
 
@@ -25,8 +25,6 @@ export const ChronographLedger: React.FC<ChronographLedgerProps> = ({
   emptySubtext = '发生的现实由人亲手留下。',
   onOpenCreate,
 }) => {
-  const [hoveredLogId, setHoveredLogId] = useState<string | null>(null);
-
   // Format duration into quiet instrument string without box/badge
   const formatDuration = (minutes?: number) => {
     if (!minutes || minutes <= 0) return null;
@@ -48,7 +46,7 @@ export const ChronographLedger: React.FC<ChronographLedgerProps> = ({
 
   if (entries.length === 0 && !activeSession) {
     return (
-      <div className="py-8 px-4 text-center space-y-2 max-w-[700px]">
+      <div className="py-6 px-1 space-y-2 max-w-[700px]">
         <div className="type-l6 font-mono text-[var(--text-ghost)] tracking-widest uppercase select-none">
           ···· NO RECORDS ····
         </div>
@@ -70,12 +68,7 @@ export const ChronographLedger: React.FC<ChronographLedgerProps> = ({
   const activeTrack = activeSession ? tracks.find(t => t.id === activeSession.track_id) : null;
 
   return (
-    <div
-      className={`relative max-w-[700px] w-full space-y-1 ${
-        isArchive ? 'opacity-90' : ''
-      }`}
-      data-mode={mode}
-    >
+    <div className="relative max-w-[700px] w-full space-y-1" data-mode={mode}>
       {/* Active Session Live Marker (Grid Layout) */}
       {mode === 'live' && activeSession && (
         <div className="grid grid-cols-[68px_72px_minmax(0,1fr)_44px_24px] sm:grid-cols-[72px_76px_minmax(0,1fr)_46px_24px] items-start gap-2.5 sm:gap-3 py-1.5 px-2 -mx-2 rounded bg-white/[0.012]">
@@ -96,7 +89,7 @@ export const ChronographLedger: React.FC<ChronographLedgerProps> = ({
               {activeSession.task_title || '自由专注 Session'}
             </div>
             {activeTrack && (
-              <div className="type-l6 font-sans text-[#86a69a]/90 flex items-center gap-1.5 mt-0.5">
+              <div className="type-l6 font-sans text-[#86a69a]/80 flex items-center gap-1.5 mt-0.5">
                 <span className="font-medium">{activeTrack.name}</span>
                 <span aria-hidden="true" className="text-[var(--text-ghost)]">·</span>
                 <span>正在进行中</span>
@@ -126,7 +119,6 @@ export const ChronographLedger: React.FC<ChronographLedgerProps> = ({
 
         const durationTier = getDurationTier(log.duration_minutes);
         const durationLabel = formatDuration(log.duration_minutes);
-        const isHovered = hoveredLogId === log.id;
 
         // Physical rail width: short (24px), medium (36px), long (48px)
         const getRailWidthStyle = () => {
@@ -138,8 +130,6 @@ export const ChronographLedger: React.FC<ChronographLedgerProps> = ({
         return (
           <div
             key={log.id}
-            onMouseEnter={() => setHoveredLogId(log.id)}
-            onMouseLeave={() => setHoveredLogId(null)}
             className="group relative grid grid-cols-[68px_72px_minmax(0,1fr)_44px_24px] sm:grid-cols-[72px_76px_minmax(0,1fr)_46px_24px] items-start gap-2.5 sm:gap-3 py-1.5 px-2 -mx-2 rounded transition-colors hover:bg-white/[0.012]"
           >
             {/* 1. Time Column: Fixed width, start time default, full span on hover without layout jump */}
@@ -202,7 +192,13 @@ export const ChronographLedger: React.FC<ChronographLedgerProps> = ({
                 </>
               ) : (
                 /* C. LIFE / FREE NOTE: Dotted tape ONLY (No node, no morse-code double mark) */
-                <span className="font-mono text-[11px] text-[var(--text-ghost)] select-none opacity-60 group-hover:opacity-85 transition-opacity tracking-widest mr-1">
+                <span
+                  className={`font-mono text-[11px] text-[var(--text-ghost)] select-none transition-opacity tracking-widest mr-1 ${
+                    isArchive
+                      ? 'opacity-45 group-hover:opacity-75'
+                      : 'opacity-60 group-hover:opacity-85'
+                  }`}
+                >
                   ····
                 </span>
               )}
@@ -212,13 +208,13 @@ export const ChronographLedger: React.FC<ChronographLedgerProps> = ({
             <div className="min-w-0">
               {/* Event Content Typography Separation:
                   Session / Track Note -> Sans 500 (Machine / Engineering Context)
-                  Life Note -> LXGW WenKai 400 (Human Reality Note)
+                  Life Note -> LXGW WenKai 400 (Human Reality Note, calibrated brightness)
               */}
               {kind === 'session' || hasTrack ? (
                 <div
                   className={`font-sans font-medium text-[14px] sm:text-[14.5px] leading-[22px] break-words transition-colors ${
                     isArchive
-                      ? 'text-[var(--text-primary)]/90 group-hover:text-[var(--text-hero)]'
+                      ? 'text-[var(--text-primary)]/88 group-hover:text-[var(--text-hero)]'
                       : 'text-[var(--text-primary)] group-hover:text-[var(--text-hero)]'
                   }`}
                 >
@@ -228,8 +224,8 @@ export const ChronographLedger: React.FC<ChronographLedgerProps> = ({
                 <div
                   className={`font-journal text-[15px] leading-[22px] font-normal break-words transition-colors ${
                     isArchive
-                      ? 'text-[var(--text-secondary)]/90 group-hover:text-[var(--text-primary)]'
-                      : 'text-[var(--text-secondary)] group-hover:text-[var(--text-primary)]'
+                      ? 'text-[var(--text-primary)]/72 group-hover:text-[var(--text-primary)]/90'
+                      : 'text-[var(--text-primary)]/86 group-hover:text-[var(--text-primary)]'
                   }`}
                 >
                   {log.content}
@@ -238,15 +234,21 @@ export const ChronographLedger: React.FC<ChronographLedgerProps> = ({
 
               {/* Subordinate Contextual Metadata:
                   Only render when it genuinely adds context (Track name + role).
-                  Do NOT render redundant "自由专注" or "生活随笔" labels.
+                  Softened brass presence (70-75% in live, ~65% in archive) so it never overtakes the title.
               */}
               {hasTrack && track && (
                 <div className="type-l6 font-sans text-[var(--text-muted)] flex items-center gap-1.5 mt-0.5">
-                  <span className={`${isArchive ? 'text-[#a6824b]' : 'text-[#b38a48]'} font-medium`}>
+                  <span
+                    className={`font-medium ${
+                      isArchive
+                        ? 'text-[#a6824b]/65 group-hover:text-[#a6824b]/80'
+                        : 'text-[#b38a48]/75 group-hover:text-[#b38a48]/90'
+                    } transition-colors`}
+                  >
                     {track.name}
                   </span>
                   <span aria-hidden="true" className="text-[var(--text-ghost)]">·</span>
-                  <span>
+                  <span className={isArchive ? 'text-[var(--text-muted)]/80' : 'text-[var(--text-muted)]'}>
                     {track.role === 'main' ? '主线' : track.role === 'maintenance' ? '保温' : '暂缓'}
                   </span>
                 </div>
@@ -254,7 +256,13 @@ export const ChronographLedger: React.FC<ChronographLedgerProps> = ({
             </div>
 
             {/* 4. Duration Column: Instrument reading directly adjacent to content */}
-            <div className="w-full text-right type-l6 font-mono tabular-nums text-[var(--text-muted)] group-hover:text-[var(--text-primary)] transition-colors select-none pt-0.5">
+            <div
+              className={`w-full text-right type-l6 font-mono tabular-nums select-none pt-0.5 transition-colors ${
+                isArchive
+                  ? 'text-[var(--text-muted)]/75 group-hover:text-[var(--text-primary)]'
+                  : 'text-[var(--text-muted)] group-hover:text-[var(--text-primary)]'
+              }`}
+            >
               {durationLabel || ''}
             </div>
 
