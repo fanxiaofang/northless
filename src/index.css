@@ -189,11 +189,6 @@
   box-shadow:
     0 3px 12px -4px rgba(0, 0, 0, 0.35),
     inset 0 1px 0 rgba(255, 230, 180, 0.045);
-  transition: border-color 0.15s ease;
-}
-
-.surface-optic-soft:hover {
-  border-color: rgba(198, 153, 86, 0.18);
 }
 
 /* Weekly Touch Matrix (Dedicated physical optics: Radial ambient top light, inset bevel highlight & brass rim) */

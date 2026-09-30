@@ -152,7 +152,7 @@ export const HistoryView: React.FC<HistoryViewProps> = ({
                   {weekDays.map(d => (
                     <th key={d.dateStr} className="py-2.5 text-center type-l6 text-[var(--text-muted)] font-normal">
                       <div>{d.dayName}</div>
-                      <div className="text-[10px] text-[var(--text-muted)] tracking-normal">{d.shortDate}</div>
+                      <div className="text-[10px] text-[var(--text-ghost)] tracking-normal">{d.shortDate}</div>
                     </th>
                   ))}
                   <th className="py-2.5 text-right type-l6 text-[var(--text-muted)] font-normal pl-4">本周 Touch</th>

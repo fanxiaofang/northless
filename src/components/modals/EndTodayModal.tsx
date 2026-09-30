@@ -96,7 +96,7 @@ export const EndTodayModal: React.FC<EndTodayModalProps> = ({
           <div>
             <div className="flex items-center justify-between mb-1">
               <label className="text-[var(--text-muted)]">今天一句话？ (Optional)</label>
-              <span className="text-[10px] text-[var(--text-muted)]">可不填</span>
+              <span className="text-[10px] text-[var(--text-ghost)]">可不填</span>
             </div>
             <input
               type="text"
@@ -110,7 +110,7 @@ export const EndTodayModal: React.FC<EndTodayModalProps> = ({
           <div>
             <div className="flex items-center justify-between mb-1">
               <label className="text-[var(--text-muted)]">明天有什么想接着做？ (Optional)</label>
-              <span className="text-[10px] text-[var(--text-muted)]">可不填</span>
+              <span className="text-[10px] text-[var(--text-ghost)]">可不填</span>
             </div>
             <input
               type="text"
