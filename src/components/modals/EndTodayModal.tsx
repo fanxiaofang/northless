@@ -58,7 +58,7 @@ export const EndTodayModal: React.FC<EndTodayModalProps> = ({
         <div className="space-y-1">
           <div className="flex items-center gap-2">
             <Moon className="w-4 h-4 text-[#dfbf85]" />
-            <h3 className="font-display text-xl font-bold text-[var(--text-hero)]">
+            <h3 className="font-display text-xl font-semibold text-[var(--text-hero)]">
               End Today · 给今天一个安静的边界
             </h3>
           </div>

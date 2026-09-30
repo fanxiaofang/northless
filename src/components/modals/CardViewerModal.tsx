@@ -16,7 +16,7 @@ export const CardViewerModal: React.FC<CardViewerModalProps> = ({ card, onClose 
         {/* Modal Header */}
         <div className="p-4 border-b border-[#c69956]/20 flex items-center justify-between bg-[#161411]">
           <div className="space-y-0.5">
-            <h3 className="font-display font-bold text-base text-[var(--text-hero)] flex items-center gap-2">
+            <h3 className="font-display font-semibold text-base text-[var(--text-hero)] flex items-center gap-2">
               <span>{card.title}</span>
               <span className="text-xs font-mono font-normal text-[#c69956]">Handy Portal</span>
             </h3>

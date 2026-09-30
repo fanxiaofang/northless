@@ -46,7 +46,7 @@ export const ReentryModal: React.FC<ReentryModalProps> = ({
         <div className="space-y-1">
           <div className="flex items-center gap-2">
             <Compass className="w-4 h-4 text-[#86a69a]" />
-            <h3 className="font-display text-xl font-bold text-[var(--text-hero)]">
+            <h3 className="font-display text-xl font-semibold text-[var(--text-hero)]">
               欢迎回来 · 平稳接回现实
             </h3>
           </div>

@@ -74,7 +74,7 @@ export const LogModal: React.FC<LogModalProps> = ({ tracks, onClose, onSubmit })
         <div className="space-y-1">
           <div className="flex items-center gap-2">
             <span className="rivet" />
-            <h3 className="font-display text-lg font-bold text-[var(--text-hero)]">
+            <h3 className="font-display text-lg font-semibold text-[var(--text-hero)]">
               记一下刚刚发生了什么
             </h3>
           </div>

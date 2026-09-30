@@ -109,7 +109,7 @@ export const SettingsModal: React.FC<SettingsModalProps> = ({
         <div className="pb-4 border-b border-[#c69956]/20">
           <div className="flex items-center gap-2">
             <Settings className="w-4 h-4 text-[#dfbf85]" />
-            <h3 className="font-display text-lg font-bold text-[var(--text-hero)]">
+            <h3 className="font-display text-lg font-semibold text-[var(--text-hero)]">
               驾驶舱配置与本地数据
             </h3>
           </div>

@@ -159,11 +159,11 @@ export const InboxView: React.FC<InboxViewProps> = ({
     <div className="flex-1 overflow-y-auto min-h-screen bg-transparent text-[var(--text-primary)] p-6 lg:p-10">
       <div className="max-w-[880px] mx-auto space-y-8">
         {/* Header - Deliberately no unread count */}
-        <header className="pb-6 border-b border-[#c69956]/15">
+        <header className="pb-6 border-b border-[#c69956]/12">
           <div className="flex items-center gap-2 type-l6 font-mono text-[var(--text-muted)] tracking-wider uppercase mb-1">
             <span>FREE CAPTURE / 允许自由腐烂，无需清零压力</span>
           </div>
-          <h1 className="type-l1 font-display font-bold text-[var(--text-hero)] flex items-baseline gap-2.5">
+          <h1 className="type-l1 font-display font-semibold text-[var(--text-hero)] flex items-baseline gap-2.5">
             <span>收集箱</span>
             <span className="type-l6 font-mono font-normal text-[var(--text-ghost)] tracking-widest">/ INBOX</span>
           </h1>
@@ -172,7 +172,7 @@ export const InboxView: React.FC<InboxViewProps> = ({
           </p>
         </header>
 
-        {/* Quick Capture Input Tray (surface-optic-soft) */}
+        {/* Quick Capture Input Tray (Clean single writing slot, no nested inner boxes) */}
         <form onSubmit={handleSubmit} className="surface-optic-soft p-4 sm:p-5 rounded-lg space-y-3">
           <div>
             <textarea
@@ -185,12 +185,12 @@ export const InboxView: React.FC<InboxViewProps> = ({
                 }
               }}
               rows={2}
-              className="w-full bg-[#141311] border border-[#c69956]/18 rounded-md p-3 type-l4 text-[var(--text-primary)] placeholder:text-[var(--text-ghost)] focus:outline-none focus:border-[#c69956] resize-none"
+              className="w-full bg-transparent border-0 p-0 type-l4 text-[var(--text-primary)] placeholder:text-[var(--text-ghost)] focus:outline-none focus:ring-0 resize-none leading-relaxed"
               autoFocus
             />
           </div>
 
-          <div className="flex flex-wrap items-center justify-between gap-3 pt-0.5">
+          <div className="border-t border-[#c69956]/10 pt-3 flex flex-wrap items-center justify-between gap-3">
             <div className="flex items-center gap-2 type-l5">
               <span className="text-[var(--text-muted)]">可选主线:</span>
               <CustomTrackSelect
@@ -218,7 +218,7 @@ export const InboxView: React.FC<InboxViewProps> = ({
         {/* Capture Stream */}
         <div className="space-y-3">
           {activeItems.length === 0 ? (
-            <div className="py-10 text-center text-[var(--text-ghost)] space-y-1.5 select-none border border-dashed border-[#c69956]/12 rounded-lg bg-[#151412]/30">
+            <div className="py-6 text-center text-[var(--text-ghost)] space-y-1 select-none border border-dashed border-[#c69956]/10 rounded-lg bg-[#151412]/15">
               <div className="type-l6 font-mono text-[var(--text-ghost)] tracking-widest uppercase">[ CAPTURE TRAY EMPTY ]</div>
               <p className="type-l5 text-[var(--text-muted)]">暂无未归整的灵感碎片 · 闪念可随时在此停泊</p>
             </div>
@@ -229,7 +229,7 @@ export const InboxView: React.FC<InboxViewProps> = ({
               return (
                 <div
                   key={item.id}
-                  className="surface-flat p-4 rounded-lg flex flex-col sm:flex-row sm:items-center justify-between gap-3 group transition-colors"
+                  className="surface-flat p-3.5 rounded-lg flex flex-col sm:flex-row sm:items-center justify-between gap-3 group transition-colors"
                 >
                   <div className="space-y-1">
                     <p className="type-l4 text-[var(--text-primary)] leading-relaxed">
@@ -249,7 +249,7 @@ export const InboxView: React.FC<InboxViewProps> = ({
                   <div className="flex items-center gap-2 shrink-0 self-end sm:self-auto">
                     <button
                       onClick={() => handleStartPromote(item)}
-                      className="px-2.5 py-1 rounded type-l5 text-[#dfbf85] bg-[#221c15] hover:bg-[#2b241c] border border-[#c69956]/25 transition-colors flex items-center gap-1 cursor-pointer"
+                      className="btn-secondary px-2.5 py-1 rounded type-l5 text-[#dfbf85] hover:text-[var(--text-hero)] transition-colors flex items-center gap-1 cursor-pointer"
                     >
                       <ArrowRight className="w-3 h-3" />
                       <span>转为 Next</span>
@@ -282,7 +282,7 @@ export const InboxView: React.FC<InboxViewProps> = ({
       {promotingItemId && (
         <div className="fixed inset-0 z-50 bg-black/70 backdrop-blur-xs flex items-center justify-center p-4">
           <div className="brass-panel-elevated p-6 rounded-lg max-w-md w-full space-y-4 shadow-2xl border border-[#c69956]/35">
-            <h3 className="type-l3 font-bold text-[var(--text-hero)]">
+            <h3 className="type-l3 font-semibold text-[var(--text-hero)]">
               将想法转化为清晰的 Next 行动
             </h3>
             <form onSubmit={handleConfirmPromote} className="space-y-3 type-l5">

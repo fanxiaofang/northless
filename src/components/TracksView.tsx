@@ -142,12 +142,12 @@ export const TracksView: React.FC<TracksViewProps> = ({
       {/* Main Container: Fixed 880px max-width for crisp desktop engineering dossier presence */}
       <div className="max-w-[880px] mx-auto space-y-8">
         {/* Page Header */}
-        <header className="flex flex-col sm:flex-row sm:items-baseline justify-between pb-5 border-b border-[#c69956]/15 gap-4">
+        <header className="flex flex-col sm:flex-row sm:items-baseline justify-between pb-5 border-b border-[#c69956]/12 gap-4">
           <div>
             <div className="type-l6 font-mono text-[var(--text-muted)] tracking-wider uppercase mb-1">
               PHASE DIRECTION / 管方向，不管每天
             </div>
-            <h1 className="text-[30px] leading-[36px] font-display font-bold text-[var(--text-hero)] flex items-baseline gap-2.5">
+            <h1 className="text-[30px] leading-[36px] font-display font-semibold text-[var(--text-hero)] flex items-baseline gap-2.5">
               <span>主线脉络</span>
               <span className="type-l6 font-mono font-normal text-[var(--text-ghost)] tracking-widest">/ TRACKS</span>
             </h1>
@@ -156,13 +156,13 @@ export const TracksView: React.FC<TracksViewProps> = ({
           <div className="flex items-center gap-3 self-start sm:self-auto">
             <button
               onClick={onOpenPhaseSettings}
-              className="px-3 py-1.5 rounded type-l5 text-[var(--text-primary)] hover:text-[var(--text-hero)] hover:bg-[#1c1a17] border border-[#c69956]/20 transition-colors cursor-pointer"
+              className="btn-secondary px-3 py-1.5 rounded type-l5 text-[var(--text-primary)] hover:text-[var(--text-hero)] transition-colors cursor-pointer"
             >
               当前阶段: <strong className="text-[#c69956] font-normal">{currentPhase?.name || '探索期'}</strong>
             </button>
             <button
               onClick={() => setShowAddTrackModal(true)}
-              className="brass-button px-3.5 py-1.5 rounded type-l5 font-semibold text-[var(--text-hero)] flex items-center gap-1.5 shadow-xs cursor-pointer"
+              className="brass-button px-3.5 py-1.5 rounded type-l5 font-semibold text-[var(--text-hero)] flex items-center gap-1.5 cursor-pointer"
             >
               <Plus className="w-3.5 h-3.5 text-[#dfbf85]" />
               <span>新建主线</span>
@@ -173,8 +173,8 @@ export const TracksView: React.FC<TracksViewProps> = ({
         {/* Two-Column Structure with Subtle Vertical Dossier Divider */}
         <div className="flex flex-col md:flex-row gap-7 md:gap-8 items-start">
           {/* Left Column: Track Index / 主线目录 */}
-          <nav className="w-full md:w-[190px] shrink-0 space-y-2 md:border-r md:border-[#c69956]/12 md:pr-7">
-            <div className="type-l6 font-mono uppercase tracking-widest text-[var(--text-muted)] px-2 pb-2 border-b border-[#c69956]/15 flex items-center justify-between">
+          <nav className="w-full md:w-[190px] shrink-0 space-y-2 md:border-r md:border-[#c69956]/10 md:pr-7">
+            <div className="type-l6 font-mono uppercase tracking-widest text-[var(--text-muted)] px-2 pb-2 border-b border-[#c69956]/10 flex items-center justify-between">
               <span>ALL COURSES</span>
               <span className="text-[var(--text-muted)] font-mono text-[11px] font-semibold">{tracks.length}</span>
             </div>
@@ -236,14 +236,14 @@ export const TracksView: React.FC<TracksViewProps> = ({
                   </div>
 
                   {/* Segmented Role Control */}
-                  <div className="flex items-center gap-0.5 bg-[#151412] p-0.5 rounded border border-[#c69956]/15 self-start sm:self-auto">
+                  <div className="flex items-center gap-0.5 bg-[#151412] p-0.5 rounded border border-[#c69956]/12 self-start sm:self-auto">
                     {(['main', 'maintenance', 'paused'] as TrackRole[]).map(role => (
                       <button
                         key={role}
                         onClick={() => onUpdateTrackRole(selectedTrack.id, role)}
                         className={`px-2.5 py-0.5 type-l6 font-mono rounded transition-colors cursor-pointer ${
                           selectedTrack.role === role
-                            ? 'bg-[#251f18] text-[#c69956] border border-[#c69956]/30 shadow-2xs font-semibold'
+                            ? 'bg-[#251f18] text-[#c69956] border border-[#c69956]/25 shadow-2xs font-semibold'
                             : 'text-[var(--text-muted)] hover:text-[var(--text-primary)]'
                         }`}
                       >
@@ -254,7 +254,7 @@ export const TracksView: React.FC<TracksViewProps> = ({
                 </div>
 
                 {/* Track Title */}
-                <h2 className="text-[24px] leading-tight font-display font-bold text-[var(--text-title)] tracking-tight">
+                <h2 className="text-[24px] leading-tight font-display font-semibold text-[var(--text-title)] tracking-tight">
                   {selectedTrack.name}
                 </h2>
 
@@ -295,7 +295,7 @@ export const TracksView: React.FC<TracksViewProps> = ({
                               isCompleted
                                 ? 'text-[#729185]'
                                 : isCurrent
-                                ? 'text-[#cfa565] font-bold'
+                                ? 'text-[#cfa565] font-semibold'
                                 : 'text-[var(--text-ghost)] group-hover:text-[var(--text-muted)]'
                             }`}
                           >
@@ -334,7 +334,7 @@ export const TracksView: React.FC<TracksViewProps> = ({
                                 isCompleted
                                   ? 'bg-[#15201c] border-2 border-[#4e6b60] text-[#86a69a]'
                                   : isCurrent
-                                  ? 'bg-[#261e14] border-2 border-[#c69956] text-[#dfbf85] shadow-[0_0_6px_rgba(198,153,86,0.25)]'
+                                  ? 'bg-[#261e14] border-2 border-[#c69956] text-[#dfbf85] shadow-2xs'
                                   : 'bg-[#161513] border-2 border-[#362e24] text-[var(--text-ghost)] group-hover:border-[#524434]'
                               }`}
                             >
@@ -376,7 +376,7 @@ export const TracksView: React.FC<TracksViewProps> = ({
 
               {/* NEXT ACTIONS Section */}
               <div className="space-y-3 pt-2">
-                <div className="flex items-center justify-between pb-2 border-b border-[#c69956]/15">
+                <div className="flex items-center justify-between pb-2 border-b border-[#c69956]/12">
                   <div>
                     <div className="flex items-center gap-2">
                       <span className="type-l6 font-mono uppercase tracking-wider text-[var(--text-muted)]">
@@ -391,7 +391,7 @@ export const TracksView: React.FC<TracksViewProps> = ({
                   {!isAddingAction && (
                     <button
                       onClick={() => setIsAddingAction(true)}
-                      className="flex items-center gap-1.5 type-l5 text-[#c69956] hover:text-[#dfbf85] transition-colors py-1 px-2.5 rounded hover:bg-[#1c1916] border border-[#c69956]/20 hover:border-[#c69956]/35 cursor-pointer"
+                      className="btn-secondary flex items-center gap-1.5 type-l5 text-[#c69956] hover:text-[var(--text-hero)] transition-colors py-1 px-2.5 rounded cursor-pointer"
                     >
                       <Plus className="w-3.5 h-3.5" />
                       <span>新增</span>
@@ -403,7 +403,7 @@ export const TracksView: React.FC<TracksViewProps> = ({
                 {isAddingAction ? (
                   <form
                     onSubmit={handleCreateAction}
-                    className="p-4 rounded-lg border border-[#c69956]/20 bg-[#161412] space-y-3.5 shadow-xs"
+                    className="p-4 rounded-lg border border-[#c69956]/18 bg-[#161412] space-y-3.5 shadow-2xs"
                   >
                     <div className="space-y-1">
                       <label className="type-l6 font-mono uppercase text-[var(--text-muted)] block">
@@ -414,7 +414,7 @@ export const TracksView: React.FC<TracksViewProps> = ({
                         placeholder="如：跑一个最小 MCP Server"
                         value={actionTitle}
                         onChange={e => setActionTitle(e.target.value)}
-                        className="w-full bg-[#121110] border border-[#c69956]/25 rounded px-3 py-1.5 type-l5 text-[var(--text-primary)] focus:outline-hidden focus:border-[#c69956]"
+                        className="w-full bg-[#121110] border border-[#c69956]/20 rounded px-3 py-1.5 type-l5 text-[var(--text-primary)] focus:outline-hidden focus:border-[#c69956]"
                         autoFocus
                       />
                     </div>
@@ -428,7 +428,7 @@ export const TracksView: React.FC<TracksViewProps> = ({
                         placeholder="如：昨天刚完成 tool calling，继续这里上下文最完整"
                         value={actionNote}
                         onChange={e => setActionNote(e.target.value)}
-                        className="w-full bg-[#121110] border border-[#c69956]/25 rounded px-3 py-1.5 type-l5 text-[var(--text-primary)] focus:outline-hidden focus:border-[#c69956]"
+                        className="w-full bg-[#121110] border border-[#c69956]/20 rounded px-3 py-1.5 type-l5 text-[var(--text-primary)] focus:outline-hidden focus:border-[#c69956]"
                       />
                     </div>
 
@@ -447,7 +447,7 @@ export const TracksView: React.FC<TracksViewProps> = ({
                                 : eff === 'normal'
                                 ? 'bg-[#282015] text-[#d4ab6a] border border-[#8a6a3b] font-semibold'
                                 : 'bg-[#291b14] text-[#c87a3e] border border-[#8a4e29] font-semibold'
-                              : 'text-[var(--text-muted)] hover:text-[var(--text-primary)]'
+                                : 'text-[var(--text-muted)] hover:text-[var(--text-primary)]'
                             }`}
                           >
                             {eff === 'light' ? '轻量' : eff === 'normal' ? '正常' : '深入'}
@@ -480,11 +480,11 @@ export const TracksView: React.FC<TracksViewProps> = ({
                     </p>
                   </div>
                 ) : (
-                  <div className="divide-y divide-[#c69956]/10">
+                  <div className="divide-y divide-[#c69956]/8">
                     {activeTrackActions.map((action, idx) => (
                       <div
                         key={action.id}
-                        className="py-3 flex flex-col sm:flex-row sm:items-center justify-between gap-3 group transition-colors hover:bg-[#181614]/40 px-2 -mx-2 rounded"
+                        className="py-2.5 flex flex-col sm:flex-row sm:items-center justify-between gap-3 group transition-colors hover:bg-[#181614]/30 px-2 -mx-2 rounded"
                       >
                         <div className="flex items-start gap-3.5 min-w-0">
                           <span className="type-l6 font-mono text-[var(--text-muted)] pt-0.5 shrink-0 select-none font-medium">
@@ -538,7 +538,7 @@ export const TracksView: React.FC<TracksViewProps> = ({
                                 `${selectedTrack.name} · ${action.title}`
                               )
                             }
-                            className="flex items-center gap-1.5 px-3 py-1 rounded type-l5 text-[#dfbf85] hover:text-[var(--text-hero)] hover:bg-[#221c16] border border-[#c69956]/20 transition-all cursor-pointer"
+                            className="btn-secondary flex items-center gap-1.5 px-3 py-1 rounded type-l5 text-[#dfbf85] hover:text-[var(--text-hero)] transition-all cursor-pointer"
                             title="开始此行动"
                           >
                             <span>开始</span>
@@ -566,15 +566,15 @@ export const TracksView: React.FC<TracksViewProps> = ({
 
                 {/* Later / Backlog candidates */}
                 {laterTrackActions.length > 0 && !isAddingAction && (
-                  <div className="pt-3 border-t border-[#c69956]/12 space-y-2">
+                  <div className="pt-3 border-t border-[#c69956]/10 space-y-2">
                     <div className="type-l6 font-mono text-[var(--text-muted)] uppercase tracking-wider">
                       LATER / 后续候选
                     </div>
-                    <div className="space-y-1.5">
+                    <div className="space-y-1">
                       {laterTrackActions.map(action => (
                         <div
                           key={action.id}
-                          className="flex items-center justify-between type-l5 text-[var(--text-secondary)] py-1 px-2 rounded hover:bg-[#181614]/40"
+                          className="flex items-center justify-between type-l5 text-[var(--text-secondary)] py-1 px-2 rounded hover:bg-[#181614]/30"
                         >
                           <span>{action.title}</span>
                           <span className="type-l6 font-mono text-[var(--text-muted)]">
@@ -587,29 +587,29 @@ export const TracksView: React.FC<TracksViewProps> = ({
                 )}
               </div>
 
-              {/* Recent Touches & Resources Sections */}
-              <div className="space-y-6 pt-2">
+              {/* Recent Touches & Resources Sections (Refined Editorial Journal without excessive lines) */}
+              <div className="space-y-7 pt-3">
                 {/* RECENT TOUCHES Chapter */}
-                <div className="space-y-2.5">
-                  <div className="flex items-center justify-between pb-1.5 border-b border-[#c69956]/15">
+                <div className="space-y-2">
+                  <div className="flex items-center justify-between">
                     <span className="type-l6 font-mono uppercase tracking-wider text-[var(--text-muted)] font-medium">
                       RECENT TOUCHES / 最近发生
                     </span>
-                    <span className="type-l6 font-mono text-[var(--text-muted)] text-[11px] font-semibold">
+                    <span className="type-l6 font-mono text-[var(--text-muted)] text-[11px]">
                       {trackLogs.length}
                     </span>
                   </div>
 
                   {trackLogs.length === 0 ? (
-                    <div className="type-l6 text-[var(--text-ghost)] py-2 font-sans">
-                      暂无主线记录
+                    <div className="type-l6 text-[var(--text-ghost)] py-1.5 font-sans">
+                      暂无记录
                     </div>
                   ) : (
-                    <div className="divide-y divide-[#c69956]/8">
+                    <div className="space-y-1">
                       {trackLogs.map((l, lIdx) => (
                         <div
                           key={l.id}
-                          className="py-2.5 flex items-start gap-3.5 text-left group hover:bg-[#181614]/30 px-1 -mx-1 rounded transition-colors"
+                          className="py-1.5 flex items-start gap-3.5 text-left group hover:bg-[#181614]/30 px-1 -mx-1 rounded transition-colors"
                         >
                           <div className="flex items-center gap-1.5 shrink-0 pt-0.5">
                             {lIdx === 0 && (
@@ -636,27 +636,27 @@ export const TracksView: React.FC<TracksViewProps> = ({
                 </div>
 
                 {/* RESOURCES Chapter */}
-                <div className="space-y-2.5">
-                  <div className="flex items-center justify-between pb-1.5 border-b border-[#c69956]/15">
+                <div className="space-y-2">
+                  <div className="flex items-center justify-between">
                     <span className="type-l6 font-mono uppercase tracking-wider text-[var(--text-muted)] font-medium">
                       RESOURCES / 关联资源
                     </span>
-                    <span className="type-l6 font-mono text-[var(--text-muted)] text-[11px] font-semibold">
+                    <span className="type-l6 font-mono text-[var(--text-muted)] text-[11px]">
                       {relatedCards.length}
                     </span>
                   </div>
 
                   {relatedCards.length === 0 ? (
-                    <div className="type-l6 text-[var(--text-ghost)] py-2 font-sans">
-                      暂无关联资源
+                    <div className="type-l6 text-[var(--text-ghost)] py-1.5 font-sans">
+                      暂无资源
                     </div>
                   ) : (
-                    <div className="divide-y divide-[#c69956]/8">
+                    <div className="space-y-0.5">
                       {relatedCards.map(c => (
                         <button
                           key={c.id}
                           onClick={() => onOpenCard(c)}
-                          className="w-full py-2 flex items-center justify-between text-left group hover:bg-[#181614]/30 px-1 -mx-1 rounded transition-colors cursor-pointer"
+                          className="w-full py-1.5 flex items-center justify-between text-left group hover:bg-[#181614]/30 px-1 -mx-1 rounded transition-colors cursor-pointer"
                         >
                           <span className="type-l4 text-[var(--text-primary)] group-hover:text-[var(--text-hero)] transition-colors truncate pr-4">
                             {c.title}
@@ -681,7 +681,7 @@ export const TracksView: React.FC<TracksViewProps> = ({
       {showAddTrackModal && (
         <div className="fixed inset-0 z-50 bg-black/75 backdrop-blur-xs flex items-center justify-center p-4">
           <div className="brass-panel-elevated p-6 rounded-lg max-w-md w-full space-y-4 border border-[#c69956]/35 shadow-2xl">
-            <h3 className="font-display text-lg font-bold text-[var(--text-hero)]">
+            <h3 className="font-display text-lg font-semibold text-[var(--text-hero)]">
               新建探索主线
             </h3>
             <form onSubmit={handleCreateTrack} className="space-y-3 text-xs">

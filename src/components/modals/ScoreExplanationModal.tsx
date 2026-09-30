@@ -28,7 +28,7 @@ export const ScoreExplanationModal: React.FC<ScoreExplanationModalProps> = ({
             <ShieldCheck className="w-4 h-4 text-[#dfbf85]" />
             <span>DETERMINISTIC RECOMMENDATION</span>
           </div>
-          <h3 className="type-l3 font-bold text-[var(--text-hero)]">
+          <h3 className="type-l3 font-semibold text-[var(--text-hero)]">
             为什么系统推荐这个动作？
           </h3>
           <p className="type-l6 text-[var(--text-secondary)]">

@@ -30,7 +30,7 @@ export const AiExportModal: React.FC<AiExportModalProps> = ({ content, onClose }
             <Sparkles className="w-3.5 h-3.5 text-[#dfbf85]" />
             <span>AI CONTEXT PROMPT GENERATOR</span>
           </div>
-          <h3 className="font-display text-lg font-bold text-[var(--text-hero)]">
+          <h3 className="font-display text-lg font-semibold text-[var(--text-hero)]">
             复制驾驶舱当前上下文
           </h3>
           <p className="text-xs text-[var(--text-secondary)]">

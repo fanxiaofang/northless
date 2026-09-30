@@ -78,19 +78,19 @@ export const HistoryView: React.FC<HistoryViewProps> = ({
     <div className="flex-1 overflow-y-auto min-h-screen bg-transparent text-[var(--text-primary)] p-6 lg:p-10">
       <div className="max-w-[880px] mx-auto space-y-8">
         {/* Header */}
-        <header className="flex flex-col sm:flex-row sm:items-center justify-between pb-6 border-b border-[#c69956]/15 gap-4">
+        <header className="flex flex-col sm:flex-row sm:items-center justify-between pb-6 border-b border-[#c69956]/12 gap-4">
           <div>
             <div className="flex items-center gap-2 type-l6 font-mono text-[var(--text-muted)] tracking-wider uppercase mb-1">
               <span>TRAJECTORY / 轨迹，不是成绩单</span>
             </div>
-            <h1 className="type-l1 font-display font-bold text-[var(--text-hero)] flex items-baseline gap-2.5">
+            <h1 className="type-l1 font-display font-semibold text-[var(--text-hero)] flex items-baseline gap-2.5">
               <span>历史轨迹</span>
               <span className="type-l6 font-mono font-normal text-[var(--text-ghost)] tracking-widest">/ ARCHIVE</span>
             </h1>
           </div>
 
           {/* Week Navigator */}
-          <div className="flex items-center gap-2 bg-[#161513] px-3 py-1.5 rounded-lg border border-[#c69956]/20 self-start sm:self-auto">
+          <div className="flex items-center gap-2 bg-[#161513] px-3 py-1.5 rounded-lg border border-[#c69956]/15 self-start sm:self-auto">
             <button
               onClick={() => setWeekOffset(prev => prev - 1)}
               className="p-1 text-[var(--text-muted)] hover:text-[#dfbf85] transition-colors cursor-pointer"
@@ -121,7 +121,7 @@ export const HistoryView: React.FC<HistoryViewProps> = ({
         <div className="matrix-panel p-6 rounded-lg space-y-6">
           <div className="flex items-center justify-between">
             <div>
-              <h2 className="type-l3 font-bold text-[var(--text-title)] flex items-center gap-2">
+              <h2 className="type-l3 font-semibold text-[var(--text-title)] flex items-center gap-2">
                 <span>周主线触达矩阵</span>
               </h2>
               <p className="type-l6 text-[var(--text-secondary)] font-sans mt-0.5">
@@ -158,7 +158,7 @@ export const HistoryView: React.FC<HistoryViewProps> = ({
               </thead>
               <tbody className="divide-y divide-[#c69956]/8">
                 {trackMatrix.map(({ track, touchedDays, touchCount, totalMinutes }) => (
-                  <tr key={track.id} className="hover:bg-[#191715]/50 transition-colors">
+                  <tr key={track.id} className="hover:bg-[#191715]/40 transition-colors">
                     <td className="py-3 font-medium text-[var(--text-primary)] flex items-center gap-2 type-l5">
                       <span className="truncate">{track.name}</span>
                       <span className="type-l6 text-[var(--text-muted)] font-sans">
@@ -202,8 +202,8 @@ export const HistoryView: React.FC<HistoryViewProps> = ({
 
         {/* Daily Archive Logs */}
         <div className="space-y-6 pt-4">
-          <div className="flex items-center justify-between border-b border-[#c69956]/15 pb-2">
-            <h2 className="type-l3 font-bold text-[var(--text-title)]">
+          <div className="flex items-center justify-between border-b border-[#c69956]/12 pb-2">
+            <h2 className="type-l3 font-semibold text-[var(--text-title)]">
               本周日常记录存根
             </h2>
             <span className="type-l6 font-mono text-[var(--text-muted)] uppercase tracking-wider">
@@ -227,7 +227,7 @@ export const HistoryView: React.FC<HistoryViewProps> = ({
                     <div className="flex items-center justify-between border-b border-[#c69956]/10 pb-1.5">
                       <div className="flex items-center gap-2">
                         <span className="w-1.5 h-1.5 rounded-full bg-[#a6824b]" />
-                        <span className="type-l4 font-bold text-[var(--text-title)] font-display">
+                        <span className="type-l4 font-semibold text-[var(--text-title)] font-display">
                           {d.dateStr} · {d.dayName}
                         </span>
                       </div>
@@ -236,8 +236,8 @@ export const HistoryView: React.FC<HistoryViewProps> = ({
                       </span>
                     </div>
 
-                    {/* Timeline Rail Entries */}
-                    <div className="space-y-0">
+                    {/* Timeline Rail Entries (Clean engineering journal without line borders) */}
+                    <div className="space-y-1.5 py-1">
                       {dayEntries.map((entry, idx) => {
                         const track = tracks.find(t => t.id === entry.track_id);
                         const isSession = entry.type === 'session';
@@ -245,14 +245,14 @@ export const HistoryView: React.FC<HistoryViewProps> = ({
                         const isLast = idx === dayEntries.length - 1 && !dayClose;
 
                         return (
-                          <div key={entry.id} className="relative flex items-stretch gap-3 sm:gap-4 group">
+                          <div key={entry.id} className="relative flex items-center gap-3 sm:gap-4 py-1.5 group">
                             {/* Left Column: Timestamp */}
-                            <div className="w-16 sm:w-24 text-right shrink-0 type-l6 font-mono text-[var(--text-muted)] select-none pt-2">
+                            <div className="w-16 sm:w-24 text-right shrink-0 type-l6 font-mono text-[var(--text-muted)] select-none">
                               {entry.started_at ? (
                                 <span>
                                   {entry.started_at}
                                   {entry.ended_at && (
-                                    <span className="hidden sm:inline text-[var(--text-muted)]"> ─ {entry.ended_at}</span>
+                                    <span className="hidden sm:inline text-[var(--text-muted)]/70"> ─ {entry.ended_at}</span>
                                   )}
                                 </span>
                               ) : (
@@ -260,27 +260,23 @@ export const HistoryView: React.FC<HistoryViewProps> = ({
                               )}
                             </div>
 
-                            {/* Center Column: Precision Guide Rail & Node */}
-                            <div className="relative flex flex-col items-center shrink-0 w-4">
-                              <div className={`w-[1px] flex-1 ${isFirst ? 'bg-transparent' : 'bg-[rgba(198,153,86,0.12)]'}`} />
+                            {/* Center Column: Neutral Guide Rail & Node */}
+                            <div className="relative flex flex-col items-center justify-center shrink-0 w-4 h-full self-stretch">
+                              <div className={`w-[1px] flex-1 ${isFirst ? 'bg-transparent' : 'bg-[rgba(140,125,110,0.18)]'}`} />
                               <div
-                                className={`w-2 h-2 rounded-full border shrink-0 my-1 transition-transform group-hover:scale-125 ${
+                                className={`shrink-0 my-0.5 transition-transform group-hover:scale-110 ${
                                   isSession
-                                    ? 'border-[#8f6e3c] bg-[#ba9258] shadow-[0_0_3px_rgba(198,153,86,0.20)]'
-                                    : 'border-[#4a4237] bg-[#1a1816]'
+                                    ? 'w-2 h-2 rounded-full bg-[#a8834a] border border-[#6b5430]'
+                                    : 'w-1.5 h-1.5 rounded-full bg-[#3d372e] border border-[#2b2722]'
                                 }`}
                               />
-                              <div className={`w-[1px] flex-1 ${isLast ? 'bg-transparent' : 'bg-[rgba(198,153,86,0.12)]'}`} />
+                              <div className={`w-[1px] flex-1 ${isLast ? 'bg-transparent' : 'bg-[rgba(140,125,110,0.18)]'}`} />
                             </div>
 
                             {/* Right Column: Content */}
-                            <div className="flex-1 min-w-0 flex flex-col sm:flex-row sm:items-baseline justify-between gap-2 border-b border-[#c69956]/8 py-2 group-hover:border-[#c69956]/20 transition-colors">
+                            <div className="flex-1 min-w-0 flex items-center justify-between gap-3">
                               <div className="flex items-baseline gap-2 min-w-0 flex-wrap">
-                                <span
-                                  className={`type-l5 shrink-0 ${
-                                    track ? 'text-[#b89156] font-medium' : 'text-[var(--text-muted)] font-normal'
-                                  }`}
-                                >
+                                <span className="type-l5 shrink-0 text-[var(--text-muted)] font-normal group-hover:text-[#a8824a] transition-colors">
                                   [{track ? track.name : '生活'}]
                                 </span>
                                 <span className="type-l4 text-[var(--text-primary)] leading-relaxed break-words">
@@ -289,7 +285,7 @@ export const HistoryView: React.FC<HistoryViewProps> = ({
                               </div>
 
                               {entry.duration_minutes && (
-                                <span className="type-l6 font-mono text-[var(--text-muted)] bg-[#171513] px-1.5 py-0.5 rounded border border-[#2b251e] shrink-0 self-end sm:self-auto">
+                                <span className="type-l6 font-mono text-[var(--text-muted)] bg-transparent px-1.5 py-0.2 rounded border border-[#332b22]/40 shrink-0">
                                   {entry.duration_minutes >= 60
                                     ? `${Math.floor(entry.duration_minutes / 60)}h ${
                                         entry.duration_minutes % 60 > 0 ? `${entry.duration_minutes % 60}m` : ''
@@ -305,7 +301,7 @@ export const HistoryView: React.FC<HistoryViewProps> = ({
 
                     {/* Day Close Reflection Note */}
                     {dayClose && (
-                      <div className="ml-5 sm:ml-28 pl-4 py-2 border-l-2 border-[#c69956]/30 type-l5 text-[var(--text-secondary)] italic space-y-1 font-sans bg-[#161513]/60 rounded-r my-2">
+                      <div className="ml-5 sm:ml-28 pl-4 py-2 border-l-2 border-[#c69956]/30 type-l5 text-[var(--text-secondary)] italic space-y-1 font-sans bg-[#161513]/40 rounded-r my-2">
                         {dayClose.note && <div>💭 「{dayClose.note}」</div>}
                         {dayClose.carry_forward && (
                           <div className="text-[#dfbf85] not-italic font-normal">
