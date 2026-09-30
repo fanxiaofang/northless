@@ -6,6 +6,7 @@ import {
   ChevronUp
 } from 'lucide-react';
 import { DayClose, LogEntry, Track } from '../types';
+import { ChronographLedger } from './ChronographLedger';
 
 interface HistoryViewProps {
   tracks: Track[];
@@ -236,67 +237,13 @@ export const HistoryView: React.FC<HistoryViewProps> = ({
                       </span>
                     </div>
 
-                    {/* Timeline Rail Entries (Clean engineering journal without line borders) */}
-                    <div className="space-y-1.5 py-1">
-                      {dayEntries.map((entry, idx) => {
-                        const track = tracks.find(t => t.id === entry.track_id);
-                        const isSession = entry.type === 'session';
-                        const isFirst = idx === 0;
-                        const isLast = idx === dayEntries.length - 1 && !dayClose;
-
-                        return (
-                          <div key={entry.id} className="relative flex items-center gap-3 sm:gap-4 py-1.5 group">
-                            {/* Left Column: Timestamp */}
-                            <div className="w-16 sm:w-24 text-right shrink-0 type-l6 font-mono text-[var(--text-muted)] select-none">
-                              {entry.started_at ? (
-                                <span>
-                                  {entry.started_at}
-                                  {entry.ended_at && (
-                                    <span className="hidden sm:inline text-[var(--text-muted)]/70"> ─ {entry.ended_at}</span>
-                                  )}
-                                </span>
-                              ) : (
-                                <span className="text-[var(--text-ghost)] tracking-widest">····</span>
-                              )}
-                            </div>
-
-                            {/* Center Column: Neutral Guide Rail & Node */}
-                            <div className="relative flex flex-col items-center justify-center shrink-0 w-4 h-full self-stretch">
-                              <div className={`w-[1px] flex-1 ${isFirst ? 'bg-transparent' : 'bg-[rgba(140,125,110,0.18)]'}`} />
-                              <div
-                                className={`shrink-0 my-0.5 transition-transform group-hover:scale-110 ${
-                                  isSession
-                                    ? 'w-2 h-2 rounded-full bg-[#a8834a] border border-[#6b5430]'
-                                    : 'w-1.5 h-1.5 rounded-full bg-[#3d372e] border border-[#2b2722]'
-                                }`}
-                              />
-                              <div className={`w-[1px] flex-1 ${isLast ? 'bg-transparent' : 'bg-[rgba(140,125,110,0.18)]'}`} />
-                            </div>
-
-                            {/* Right Column: Content */}
-                            <div className="flex-1 min-w-0 flex items-center justify-between gap-3">
-                              <div className="flex items-baseline gap-2 min-w-0 flex-wrap">
-                                <span className="type-l5 shrink-0 text-[var(--text-muted)] font-normal group-hover:text-[#a8824a] transition-colors">
-                                  [{track ? track.name : '生活'}]
-                                </span>
-                                <span className="type-l4 text-[var(--text-primary)] leading-relaxed break-words">
-                                  {entry.content}
-                                </span>
-                              </div>
-
-                              {entry.duration_minutes && (
-                                <span className="type-l6 font-mono text-[var(--text-muted)] bg-transparent px-1.5 py-0.2 rounded border border-[#332b22]/40 shrink-0">
-                                  {entry.duration_minutes >= 60
-                                    ? `${Math.floor(entry.duration_minutes / 60)}h ${
-                                        entry.duration_minutes % 60 > 0 ? `${entry.duration_minutes % 60}m` : ''
-                                      }`
-                                    : `${entry.duration_minutes}m`}
-                                </span>
-                              )}
-                            </div>
-                          </div>
-                        );
-                      })}
+                    {/* Timeline Archive Entries (Chronograph Ledger Archive Slip) */}
+                    <div className="py-1">
+                      <ChronographLedger
+                        mode="archive"
+                        entries={dayEntries}
+                        tracks={tracks}
+                      />
                     </div>
 
                     {/* Day Close Reflection Note */}

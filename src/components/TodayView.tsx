@@ -23,6 +23,7 @@ import {
   Track
 } from '../types';
 import { EffortFilter, calculateStalenessDays } from '../lib/recommendation';
+import { ChronographLedger } from './ChronographLedger';
 
 interface TodayViewProps {
   currentDateStr: string;
@@ -593,99 +594,15 @@ export const TodayView: React.FC<TodayViewProps> = ({
             </div>
           </div>
 
-          {todayLogs.length === 0 ? (
-            <div className="surface-flat p-8 rounded-lg text-center space-y-2.5 border border-[#c69956]/12">
-              <Clock className="w-6 h-6 text-[#52483a] mx-auto" />
-              <p className="type-l4 text-[var(--text-muted)]">今天还没有留下任何痕迹。</p>
-              <p className="type-l6 text-[var(--text-ghost)] font-sans">
-                完成了一段小练习？或是刚刚散步打了一会游戏？都可以轻松记下一笔。
-              </p>
-              <button
-                onClick={onOpenLogModal}
-                className="brass-button px-4 py-1.5 type-l5 text-[var(--text-hero)] rounded inline-flex items-center gap-1.5 cursor-pointer mt-1"
-              >
-                <Plus className="w-3.5 h-3.5 text-[#dfbf85]" />
-                <span>留下第一笔记录</span>
-              </button>
-            </div>
-          ) : (
-            <div className="space-y-1.5 py-1">
-              {todayLogs.map((log, idx) => {
-                const track = tracks.find(t => t.id === log.track_id);
-                const isSession = log.type === 'session';
-                const isFirst = idx === 0;
-                const isLast = idx === todayLogs.length - 1;
-
-                return (
-                  <div key={log.id} className="relative flex items-center gap-3 sm:gap-4 py-1.5 group">
-                    {/* Left Column: Timestamp (Precision mono tabular-nums) */}
-                    <div className="w-16 sm:w-28 text-right shrink-0 type-l6 font-mono text-[var(--text-muted)] select-none">
-                      {log.started_at ? (
-                        <span>
-                          {log.started_at}
-                          {log.ended_at && (
-                            <span className="hidden sm:inline text-[var(--text-muted)]/70"> ─ {log.ended_at}</span>
-                          )}
-                        </span>
-                      ) : (
-                        <span className="text-[var(--text-ghost)] tracking-widest">····</span>
-                      )}
-                    </div>
-
-                    {/* Center Column: Neutral Engineering Short Guide Rail & Node */}
-                    <div className="relative flex flex-col items-center justify-center shrink-0 w-4 h-full self-stretch">
-                      {/* Top rail connector: neutral warm gray */}
-                      <div className={`w-[1px] flex-1 ${isFirst ? 'bg-transparent' : 'bg-[rgba(140,125,110,0.18)]'}`} />
-
-                      {/* Node: Restrained brass for session, neutral muted for note */}
-                      <div
-                        className={`shrink-0 my-0.5 transition-transform group-hover:scale-110 ${
-                          isSession
-                            ? 'w-2 h-2 rounded-full bg-[#a8834a] border border-[#6b5430]'
-                            : 'w-1.5 h-1.5 rounded-full bg-[#3d372e] border border-[#2b2722]'
-                        }`}
-                      />
-
-                      {/* Bottom rail connector */}
-                      <div className={`w-[1px] flex-1 ${isLast ? 'bg-transparent' : 'bg-[rgba(140,125,110,0.18)]'}`} />
-                    </div>
-
-                    {/* Right Column: Engineering Journal Content (Clean, quiet, no row border-bottom) */}
-                    <div className="flex-1 min-w-0 flex items-center justify-between gap-3">
-                      <div className="flex items-baseline gap-2 min-w-0 flex-wrap">
-                        <span className="type-l5 shrink-0 text-[var(--text-muted)] font-normal group-hover:text-[#a8824a] transition-colors">
-                          [{track ? track.name : '随手记'}]
-                        </span>
-                        <span className="type-l4 text-[var(--text-primary)] leading-relaxed break-words">
-                          {log.content}
-                        </span>
-                      </div>
-
-                      <div className="flex items-center gap-2.5 shrink-0">
-                        {log.duration_minutes && (
-                          <span className="type-l6 font-mono text-[var(--text-muted)] bg-transparent px-1.5 py-0.2 rounded border border-[#332b22]/40">
-                            {log.duration_minutes >= 60
-                              ? `${Math.floor(log.duration_minutes / 60)}h ${
-                                  log.duration_minutes % 60 > 0 ? `${log.duration_minutes % 60}m` : ''
-                                }`
-                              : `${log.duration_minutes}m`}
-                          </span>
-                        )}
-
-                        <button
-                          onClick={() => onDeleteLog(log.id)}
-                          className="opacity-0 group-hover:opacity-100 transition-opacity p-1 text-[var(--text-muted)] hover:text-[#e06c75] cursor-pointer"
-                          title="删除该记录"
-                        >
-                          <Trash2 className="w-3.5 h-3.5" />
-                        </button>
-                      </div>
-                    </div>
-                  </div>
-                );
-              })}
-            </div>
-          )}
+          <ChronographLedger
+            mode="live"
+            entries={todayLogs}
+            tracks={tracks}
+            onDeleteLog={onDeleteLog}
+            emptyMessage="今天还没有留下任何痕迹。"
+            emptySubtext="完成了一段专注？或是刚刚散步打了一会游戏？都可以轻松记下一笔。"
+            onOpenCreate={onOpenLogModal}
+          />
         </section>
 
         {/* SECTION 3: Current Phase Minimalist Log Footer */}
