@@ -191,87 +191,69 @@
 
 .rail-session {
   height: 1.5px;
-  background: linear-gradient(90deg, rgba(120, 110, 98, 0.18) 0%, rgba(155, 140, 122, 0.45) 50%, rgba(185, 138, 74, 0.65) 100%);
+  background: linear-gradient(90deg, rgba(85, 78, 70, 0.2) 0%, rgba(128, 118, 106, 0.45) 50%, rgba(162, 142, 120, 0.6) 100%);
 }
 
 .rail-track {
   height: 1.5px;
-  background: linear-gradient(90deg, rgba(100, 125, 118, 0.2) 0%, rgba(134, 166, 154, 0.5) 50%, rgba(185, 138, 74, 0.65) 100%);
+  background: linear-gradient(90deg, rgba(72, 86, 81, 0.2) 0%, rgba(108, 128, 120, 0.45) 50%, rgba(130, 152, 142, 0.55) 100%);
 }
 
 .rail-active {
   height: 1.5px;
-  background: linear-gradient(90deg, rgba(107, 135, 124, 0.25) 0%, rgba(134, 166, 154, 0.8) 100%);
+  background: linear-gradient(90deg, rgba(90, 118, 108, 0.25) 0%, rgba(134, 166, 154, 0.75) 100%);
 }
 
 .rail-archive {
   height: 1px;
-  background: linear-gradient(90deg, rgba(90, 82, 72, 0.15) 0%, rgba(120, 110, 98, 0.35) 60%, rgba(140, 120, 95, 0.45) 100%);
+  background: linear-gradient(90deg, rgba(70, 64, 58, 0.15) 0%, rgba(98, 90, 80, 0.3) 60%, rgba(120, 110, 98, 0.38) 100%);
 }
 
 /* Mechanical Punch Mark Nodes */
 .punch-node-session {
-  width: 6.5px;
-  height: 6.5px;
+  width: 6px;
+  height: 6px;
   border-radius: 50%;
   border: 1.5px solid #b98a4a;
   background: #161514;
-  box-shadow: 0 0 0 1px rgba(22, 21, 20, 0.8);
   flex-shrink: 0;
 }
 
 .punch-node-track {
-  width: 6px;
-  height: 6px;
+  width: 5.5px;
+  height: 5.5px;
   transform: rotate(45deg);
-  border: 1.5px solid #86a69a;
+  border: 1.2px solid #86a69a;
   background: #161514;
-  box-shadow: 0 0 0 1px rgba(22, 21, 20, 0.8);
   flex-shrink: 0;
 }
 
 .punch-node-active {
-  width: 7px;
-  height: 7px;
+  width: 6.5px;
+  height: 6.5px;
   border-radius: 50%;
   border: 1.5px solid #86a69a;
-  background: #23352f;
-  box-shadow: 0 0 4px rgba(134, 166, 154, 0.45);
-  flex-shrink: 0;
-}
-
-.punch-node-life {
-  width: 3px;
-  height: 3px;
-  border-radius: 50%;
-  background: #5c5244;
+  background: #1b2924;
+  box-shadow: 0 0 3px rgba(134, 166, 154, 0.35);
   flex-shrink: 0;
 }
 
 /* Archive Mode Desaturated Punch Nodes */
 .punch-node-session-archive {
-  width: 5.5px;
-  height: 5.5px;
+  width: 5px;
+  height: 5px;
   border-radius: 50%;
-  border: 1px solid #7f6645;
+  border: 1px solid #7a6649;
   background: #161514;
   flex-shrink: 0;
 }
 
 .punch-node-track-archive {
-  width: 5px;
-  height: 5px;
+  width: 4.5px;
+  height: 4.5px;
   transform: rotate(45deg);
-  border: 1px solid #5a7369;
+  border: 1px solid #5a736a;
   background: #161514;
-  flex-shrink: 0;
-}
-
-.punch-node-life-archive {
-  width: 2.5px;
-  height: 2.5px;
-  border-radius: 50%;
-  background: #443c32;
   flex-shrink: 0;
 }
 

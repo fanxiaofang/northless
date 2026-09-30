@@ -48,11 +48,13 @@ export const LogModal: React.FC<LogModalProps> = ({ tracks, onClose, onSubmit })
         started_at = parts[0];
         ended_at = parts[1];
       }
+    } else if (timeRange.trim()) {
+      started_at = timeRange.trim();
     }
 
     onSubmit({
       type,
-      track_id: type === 'session' && trackId ? trackId : undefined,
+      track_id: trackId ? trackId : undefined,
       content: content.trim(),
       duration_minutes: type === 'session' ? durationMinutes : undefined,
       started_at,
@@ -112,57 +114,82 @@ export const LogModal: React.FC<LogModalProps> = ({ tracks, onClose, onSubmit })
         </div>
 
         <form onSubmit={handleSubmit} className="space-y-3.5 text-xs">
-          {type === 'session' && (
-            <>
-              <div>
-                <label className="block text-[var(--text-muted)] mb-1 font-medium">关联主线</label>
-                <select
-                  value={trackId}
-                  onChange={e => setTrackId(e.target.value)}
-                  className="w-full bg-[#11100f] border border-[#c69956]/25 rounded px-3 py-2 text-[var(--text-primary)] focus:outline-none focus:border-[#dfbf85]"
-                >
-                  <option value="">不关联主线 (自由专注)</option>
-                  {tracks.map(t => (
-                    <option key={t.id} value={t.id}>
-                      {t.name} ({t.role === 'main' ? '主线' : t.role === 'maintenance' ? '保温' : '暂缓'})
-                    </option>
-                  ))}
-                </select>
-              </div>
+          <div>
+            <label className="block text-[var(--text-muted)] mb-1 font-medium">
+              关联主线 (可选)
+            </label>
+            <select
+              value={trackId}
+              onChange={e => setTrackId(e.target.value)}
+              className="w-full bg-[#11100f] border border-[#c69956]/25 rounded px-3 py-2 text-[var(--text-primary)] focus:outline-none focus:border-[#dfbf85]"
+            >
+              <option value="">{type === 'session' ? '不关联主线 (自由专注)' : '不关联主线 (日常生活随笔)'}</option>
+              {tracks.map(t => (
+                <option key={t.id} value={t.id}>
+                  {t.name} ({t.role === 'main' ? '主线' : t.role === 'maintenance' ? '保温' : '暂缓'})
+                </option>
+              ))}
+            </select>
+          </div>
 
-              <div className="grid grid-cols-2 gap-3">
-                <div>
-                  <label className="block text-[var(--text-muted)] mb-1 font-medium">时长 (分钟)</label>
-                  <input
-                    type="number"
-                    min="1"
-                    step="5"
-                    value={durationMinutes}
-                    onChange={e => setDurationMinutes(Number(e.target.value))}
-                    className="w-full bg-[#11100f] border border-[#c69956]/25 rounded px-3 py-2 text-[var(--text-primary)] font-mono focus:outline-none focus:border-[#dfbf85]"
-                  />
-                </div>
-                <div>
-                  <div className="flex items-center justify-between mb-1">
-                    <label className="text-[var(--text-muted)] font-medium">起止时间 (可选)</label>
-                    <button
-                      type="button"
-                      onClick={handleUseRecentTime}
-                      className="text-[10px] text-[#c69956] hover:underline"
-                    >
-                      填入刚刚
-                    </button>
-                  </div>
-                  <input
-                    type="text"
-                    placeholder="如: 14:10 - 15:05"
-                    value={timeRange}
-                    onChange={e => setTimeRange(e.target.value)}
-                    className="w-full bg-[#11100f] border border-[#c69956]/25 rounded px-3 py-2 text-[var(--text-primary)] font-mono focus:outline-none focus:border-[#dfbf85]"
-                  />
-                </div>
+          {type === 'session' ? (
+            <div className="grid grid-cols-2 gap-3">
+              <div>
+                <label className="block text-[var(--text-muted)] mb-1 font-medium">时长 (分钟)</label>
+                <input
+                  type="number"
+                  min="1"
+                  step="5"
+                  value={durationMinutes}
+                  onChange={e => setDurationMinutes(Number(e.target.value))}
+                  className="w-full bg-[#11100f] border border-[#c69956]/25 rounded px-3 py-2 text-[var(--text-primary)] font-mono focus:outline-none focus:border-[#dfbf85]"
+                />
               </div>
-            </>
+              <div>
+                <div className="flex items-center justify-between mb-1">
+                  <label className="text-[var(--text-muted)] font-medium">起止时间 (可选)</label>
+                  <button
+                    type="button"
+                    onClick={handleUseRecentTime}
+                    className="text-[10px] text-[#c69956] hover:underline cursor-pointer"
+                  >
+                    填入刚刚
+                  </button>
+                </div>
+                <input
+                  type="text"
+                  placeholder="如: 14:10 - 15:05"
+                  value={timeRange}
+                  onChange={e => setTimeRange(e.target.value)}
+                  className="w-full bg-[#11100f] border border-[#c69956]/25 rounded px-3 py-2 text-[var(--text-primary)] font-mono focus:outline-none focus:border-[#dfbf85]"
+                />
+              </div>
+            </div>
+          ) : (
+            <div>
+              <div className="flex items-center justify-between mb-1">
+                <label className="text-[var(--text-muted)] font-medium">记录时间点 (可选)</label>
+                <button
+                  type="button"
+                  onClick={() => {
+                    const now = new Date();
+                    const h = String(now.getHours()).padStart(2, '0');
+                    const m = String(now.getMinutes()).padStart(2, '0');
+                    setTimeRange(`${h}:${m}`);
+                  }}
+                  className="text-[10px] text-[#c69956] hover:underline cursor-pointer"
+                >
+                  填入此刻
+                </button>
+              </div>
+              <input
+                type="text"
+                placeholder="如: 16:30"
+                value={timeRange}
+                onChange={e => setTimeRange(e.target.value)}
+                className="w-full bg-[#11100f] border border-[#c69956]/25 rounded px-3 py-2 text-[var(--text-primary)] font-mono focus:outline-none focus:border-[#dfbf85]"
+              />
+            </div>
           )}
 
           <div>
