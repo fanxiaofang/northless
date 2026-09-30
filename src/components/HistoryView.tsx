@@ -80,17 +80,17 @@ export const HistoryView: React.FC<HistoryViewProps> = ({
   });
 
   return (
-    <div className="flex-1 overflow-y-auto min-h-screen bg-transparent text-[#e6ddd0] p-6 lg:p-10">
+    <div className="flex-1 overflow-y-auto min-h-screen bg-transparent text-[var(--text-primary)] p-6 lg:p-10">
       <div className="max-w-[880px] mx-auto space-y-8">
         {/* Header */}
         <header className="flex flex-col sm:flex-row sm:items-center justify-between pb-6 border-b border-[#c69956]/20 gap-4">
           <div>
-            <div className="flex items-center gap-2 type-l6 font-mono text-[#82776b] tracking-wider uppercase mb-1">
+            <div className="flex items-center gap-2 type-l6 font-mono text-[var(--text-muted)] tracking-wider uppercase mb-1">
               <span>TRAJECTORY / 轨迹，不是成绩单</span>
             </div>
-            <h1 className="type-l1 font-display font-bold text-[#f7f0e5] flex items-baseline gap-2.5">
+            <h1 className="type-l1 font-display font-bold text-[var(--text-hero)] flex items-baseline gap-2.5">
               <span>历史轨迹</span>
-              <span className="type-l6 font-mono font-normal text-[#82776b] tracking-widest">/ ARCHIVE</span>
+              <span className="type-l6 font-mono font-normal text-[var(--text-muted)] tracking-widest">/ ARCHIVE</span>
             </h1>
           </div>
 
@@ -98,13 +98,13 @@ export const HistoryView: React.FC<HistoryViewProps> = ({
           <div className="flex items-center gap-2 bg-[#181512] px-3 py-1.5 rounded-lg border border-[#c69956]/25 self-start sm:self-auto">
             <button
               onClick={() => setWeekOffset(prev => prev - 1)}
-              className="p-1 text-[#8a7f72] hover:text-[#dfbf85] transition-colors"
+              className="p-1 text-[var(--text-muted)] hover:text-[#dfbf85] transition-colors"
               title="上一周"
             >
               <ChevronLeft className="w-4 h-4" />
             </button>
 
-            <span className="type-l6 font-medium text-[#ded7cd] px-2">
+            <span className="type-l6 font-medium text-[var(--text-primary)] px-2">
               {weekDays[0].shortDate} ─ {weekDays[6].shortDate}
               {weekOffset === 0 && <span className="text-[#c69956] ml-1.5">(本周)</span>}
             </span>
@@ -113,7 +113,7 @@ export const HistoryView: React.FC<HistoryViewProps> = ({
               onClick={() => setWeekOffset(prev => prev + 1)}
               disabled={weekOffset >= 0}
               className={`p-1 transition-colors ${
-                weekOffset >= 0 ? 'text-[#3d362d] cursor-not-allowed' : 'text-[#8a7f72] hover:text-[#dfbf85]'
+                weekOffset >= 0 ? 'text-[var(--text-ghost)] cursor-not-allowed' : 'text-[var(--text-muted)] hover:text-[#dfbf85]'
               }`}
               title="下一周"
             >
@@ -126,17 +126,17 @@ export const HistoryView: React.FC<HistoryViewProps> = ({
         <div className="matrix-panel p-6 rounded-lg space-y-6">
           <div className="flex items-center justify-between">
             <div>
-              <h2 className="type-l3 font-bold text-[#f7f2ea] flex items-center gap-2">
+              <h2 className="type-l3 font-bold text-[var(--text-hero)] flex items-center gap-2">
                 <span>周主线触达矩阵</span>
               </h2>
-              <p className="type-l6 text-[#9c9183] font-sans mt-0.5">
+              <p className="type-l6 text-[var(--text-secondary)] font-sans mt-0.5">
                 看见哪条主线在这周移动了，没有红黄绿考核，没有打卡焦虑
               </p>
             </div>
 
             <button
               onClick={() => setShowDurationStats(prev => !prev)}
-              className="type-l5 text-[#8a7f72] hover:text-[#dfbf85] flex items-center gap-1 transition-colors"
+              className="type-l5 text-[var(--text-muted)] hover:text-[#dfbf85] flex items-center gap-1 transition-colors"
             >
               <span>{showDurationStats ? '隐藏时间明细' : '查看投入时间'}</span>
               {showDurationStats ? <ChevronUp className="w-3.5 h-3.5" /> : <ChevronDown className="w-3.5 h-3.5" />}
@@ -148,14 +148,14 @@ export const HistoryView: React.FC<HistoryViewProps> = ({
             <table className="w-full text-left">
               <thead>
                 <tr className="border-b border-[#c69956]/20">
-                  <th className="py-2.5 type-l5 font-display text-[#9c9183] font-normal w-40">主线</th>
+                  <th className="py-2.5 type-l5 font-display text-[var(--text-muted)] font-normal w-40">主线</th>
                   {weekDays.map(d => (
-                    <th key={d.dateStr} className="py-2.5 text-center type-l6 text-[#9c9183] font-normal">
+                    <th key={d.dateStr} className="py-2.5 text-center type-l6 text-[var(--text-muted)] font-normal">
                       <div>{d.dayName}</div>
-                      <div className="text-[10px] text-[#635748] tracking-normal">{d.shortDate}</div>
+                      <div className="text-[10px] text-[var(--text-ghost)] tracking-normal">{d.shortDate}</div>
                     </th>
                   ))}
-                  <th className="py-2.5 text-right type-l6 text-[#9c9183] font-normal pl-4">本周 Touch</th>
+                  <th className="py-2.5 text-right type-l6 text-[var(--text-muted)] font-normal pl-4">本周 Touch</th>
                   {showDurationStats && (
                     <th className="py-2.5 text-right type-l6 text-[#c69956] font-normal pl-4">总时长</th>
                   )}
@@ -164,9 +164,9 @@ export const HistoryView: React.FC<HistoryViewProps> = ({
               <tbody className="divide-y divide-[#c69956]/10">
                 {trackMatrix.map(({ track, touchedDays, touchCount, totalMinutes }) => (
                   <tr key={track.id} className="hover:bg-[#181512]/50 transition-colors">
-                    <td className="py-3 font-medium text-[#f2ede4] flex items-center gap-2 type-l5">
+                    <td className="py-3 font-medium text-[var(--text-primary)] flex items-center gap-2 type-l5">
                       <span className="truncate">{track.name}</span>
-                      <span className="type-l6 text-[#8a7f72] font-sans">
+                      <span className="type-l6 text-[var(--text-muted)] font-sans">
                         {track.role === 'main' ? '主线' : track.role === 'maintenance' ? '保温' : '暂缓'}
                       </span>
                     </td>
@@ -176,16 +176,16 @@ export const HistoryView: React.FC<HistoryViewProps> = ({
                         {touched ? (
                           <div className="w-2 h-2 rounded-full bg-[#ba9258] mx-auto shadow-[0_0_4px_rgba(198,153,86,0.22)]" />
                         ) : (
-                          <span className="text-[#473d32] type-l5">·</span>
+                          <span className="text-[var(--text-ghost)] type-l5">·</span>
                         )}
                       </td>
                     ))}
 
-                    <td className="py-3 text-right type-l6 text-[#a89b8a] pl-4">
+                    <td className="py-3 text-right type-l6 text-[var(--text-muted)] pl-4">
                       {touchCount > 0 ? (
-                        <span className="text-[#ded7cd] font-medium">{touchCount} 次</span>
+                        <span className="text-[var(--text-primary)] font-medium">{touchCount} 次</span>
                       ) : (
-                        <span className="text-[#5e5344]">—</span>
+                        <span className="text-[var(--text-ghost)]">—</span>
                       )}
                     </td>
 
@@ -208,10 +208,10 @@ export const HistoryView: React.FC<HistoryViewProps> = ({
         {/* Daily Archive Logs */}
         <div className="space-y-6 pt-4">
           <div className="flex items-center justify-between border-b border-[#c69956]/20 pb-2">
-            <h2 className="type-l3 font-bold text-[#f7f2ea]">
+            <h2 className="type-l3 font-bold text-[var(--text-hero)]">
               本周日常记录存根
             </h2>
-            <span className="type-l6 font-mono text-[#8a7f72] uppercase tracking-wider">
+            <span className="type-l6 font-mono text-[var(--text-muted)] uppercase tracking-wider">
               DAILY ARCHIVE · 工程日志
             </span>
           </div>
@@ -232,11 +232,11 @@ export const HistoryView: React.FC<HistoryViewProps> = ({
                     <div className="flex items-center justify-between border-b border-[#c69956]/15 pb-1.5">
                       <div className="flex items-center gap-2">
                         <span className="w-1.5 h-1.5 rounded-full bg-[#a6824b]" />
-                        <span className="type-l4 font-bold text-[#f5f1ea] font-display">
+                        <span className="type-l4 font-bold text-[var(--text-hero)] font-display">
                           {d.dateStr} · {d.dayName}
                         </span>
                       </div>
-                      <span className="type-l6 font-mono text-[#8a7f72]">
+                      <span className="type-l6 font-mono text-[var(--text-muted)]">
                         {dayEntries.length} 笔记录
                       </span>
                     </div>
@@ -252,16 +252,16 @@ export const HistoryView: React.FC<HistoryViewProps> = ({
                         return (
                           <div key={entry.id} className="relative flex items-stretch gap-3 sm:gap-4 group">
                             {/* Left Column: Timestamp */}
-                            <div className="w-16 sm:w-24 text-right shrink-0 type-l6 font-mono text-[#82776b] select-none pt-2">
+                            <div className="w-16 sm:w-24 text-right shrink-0 type-l6 font-mono text-[var(--text-muted)] select-none pt-2">
                               {entry.started_at ? (
                                 <span>
                                   {entry.started_at}
                                   {entry.ended_at && (
-                                    <span className="hidden sm:inline text-[#5f574e]"> ─ {entry.ended_at}</span>
+                                    <span className="hidden sm:inline text-[var(--text-ghost)]"> ─ {entry.ended_at}</span>
                                   )}
                                 </span>
                               ) : (
-                                <span className="text-[#473e34] tracking-widest">····</span>
+                                <span className="text-[var(--text-ghost)] tracking-widest">····</span>
                               )}
                             </div>
 
@@ -283,18 +283,18 @@ export const HistoryView: React.FC<HistoryViewProps> = ({
                               <div className="flex items-baseline gap-2 min-w-0 flex-wrap">
                                 <span
                                   className={`type-l5 shrink-0 ${
-                                    track ? 'text-[#d4ab6a] font-medium' : 'text-[#5f574e] font-normal'
+                                    track ? 'text-[#d4ab6a] font-medium' : 'text-[var(--text-ghost)] font-normal'
                                   }`}
                                 >
                                   [{track ? track.name : '生活'}]
                                 </span>
-                                <span className="type-l4 text-[#e6ddd0] leading-relaxed break-words">
+                                <span className="type-l4 text-[var(--text-primary)] leading-relaxed break-words">
                                   {entry.content}
                                 </span>
                               </div>
 
                               {entry.duration_minutes && (
-                                <span className="type-l6 font-mono text-[#82776b] bg-[#161412] px-1.5 py-0.5 rounded border border-[#2e271f] shrink-0 self-end sm:self-auto">
+                                <span className="type-l6 font-mono text-[var(--text-muted)] bg-[#161412] px-1.5 py-0.5 rounded border border-[#2e271f] shrink-0 self-end sm:self-auto">
                                   {entry.duration_minutes >= 60
                                     ? `${Math.floor(entry.duration_minutes / 60)}h ${
                                         entry.duration_minutes % 60 > 0 ? `${entry.duration_minutes % 60}m` : ''
@@ -310,7 +310,7 @@ export const HistoryView: React.FC<HistoryViewProps> = ({
 
                     {/* Day Close Reflection Note */}
                     {dayClose && (
-                      <div className="ml-5 sm:ml-28 pl-4 py-2 border-l-2 border-[#c69956]/40 type-l5 text-[#b8ada0] italic space-y-1 font-sans bg-[#161412]/40 rounded-r my-2">
+                      <div className="ml-5 sm:ml-28 pl-4 py-2 border-l-2 border-[#c69956]/40 type-l5 text-[var(--text-secondary)] italic space-y-1 font-sans bg-[#161412]/40 rounded-r my-2">
                         {dayClose.note && <div>💭 「{dayClose.note}」</div>}
                         {dayClose.carry_forward && (
                           <div className="text-[#dfbf85] not-italic">

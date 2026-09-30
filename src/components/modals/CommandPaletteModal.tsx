@@ -188,10 +188,10 @@ export const CommandPaletteModal: React.FC<CommandPaletteModalProps> = ({
             placeholder="输入指令或搜索动作..."
             value={query}
             onChange={e => setQuery(e.target.value)}
-            className="w-full bg-transparent text-sm text-[#f7f2ea] focus:outline-none placeholder:text-[#6e6354]"
+            className="w-full bg-transparent text-sm text-[var(--text-primary)] focus:outline-none placeholder:text-[var(--text-ghost)]"
             autoFocus
           />
-          <kbd className="px-1.5 py-0.5 text-[10px] font-mono bg-[#201c18] border border-[#3b3226] rounded text-[#8a7f72]">
+          <kbd className="px-1.5 py-0.5 text-[10px] font-mono bg-[#201c18] border border-[#3b3226] rounded text-[var(--text-muted)]">
             ESC
           </kbd>
         </div>
@@ -199,7 +199,7 @@ export const CommandPaletteModal: React.FC<CommandPaletteModalProps> = ({
         {/* Command List */}
         <div className="max-h-80 overflow-y-auto p-2 space-y-1">
           {filtered.length === 0 ? (
-            <div className="p-4 text-center text-xs text-[#8a7f72]">
+            <div className="p-4 text-center text-xs text-[var(--text-muted)]">
               未找到匹配指令
             </div>
           ) : (
@@ -212,13 +212,13 @@ export const CommandPaletteModal: React.FC<CommandPaletteModalProps> = ({
                   className="w-full flex items-center justify-between p-2.5 rounded hover:bg-[#201c17] text-left transition-colors group"
                 >
                   <div className="flex items-center gap-3">
-                    <Icon className="w-4 h-4 text-[#a89b8a] group-hover:text-[#dfbf85] transition-colors" />
+                    <Icon className="w-4 h-4 text-[var(--text-secondary)] group-hover:text-[#dfbf85] transition-colors" />
                     <div>
-                      <div className="text-xs font-medium text-[#f2ede4]">{cmd.title}</div>
-                      <div className="text-[10px] text-[#7d7162]">{cmd.category}</div>
+                      <div className="text-xs font-medium text-[var(--text-primary)]">{cmd.title}</div>
+                      <div className="text-[10px] text-[var(--text-muted)]">{cmd.category}</div>
                     </div>
                   </div>
-                  <kbd className="px-1.5 py-0.5 text-[10px] font-mono bg-[#161411] border border-[#30271c] rounded text-[#8a7f72]">
+                  <kbd className="px-1.5 py-0.5 text-[10px] font-mono bg-[#161411] border border-[#30271c] rounded text-[var(--text-muted)]">
                     {cmd.shortcut}
                   </kbd>
                 </button>

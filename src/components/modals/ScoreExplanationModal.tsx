@@ -18,7 +18,7 @@ export const ScoreExplanationModal: React.FC<ScoreExplanationModalProps> = ({
       <div className="brass-panel-elevated p-6 rounded-lg max-w-md w-full space-y-5 border border-[#c69956]/40 shadow-2xl relative">
         <button
           onClick={onClose}
-          className="absolute top-4 right-4 text-[#8a7f72] hover:text-[#f4efe8]"
+          className="absolute top-4 right-4 text-[var(--text-muted)] hover:text-[var(--text-hero)]"
         >
           <X className="w-4 h-4" />
         </button>
@@ -28,16 +28,16 @@ export const ScoreExplanationModal: React.FC<ScoreExplanationModalProps> = ({
             <ShieldCheck className="w-4 h-4 text-[#dfbf85]" />
             <span>DETERMINISTIC RECOMMENDATION</span>
           </div>
-          <h3 className="type-l3 font-bold text-[#f7f2ea]">
+          <h3 className="type-l3 font-bold text-[var(--text-hero)]">
             为什么系统推荐这个动作？
           </h3>
-          <p className="type-l6 text-[#9c9183]">
+          <p className="type-l6 text-[var(--text-secondary)]">
             {track.name} · {action.title}
           </p>
         </div>
 
         {/* Breakdown Table */}
-        <div className="brass-panel p-4 rounded-lg space-y-2.5 type-l6 text-[#ded7cd]">
+        <div className="brass-panel p-4 rounded-lg space-y-2.5 type-l6 text-[var(--text-primary)]">
           <div className="flex items-center justify-between">
             <span>主线权重 ({track.role === 'main' ? '主线' : track.role === 'maintenance' ? '保温' : '暂缓'})</span>
             <span className="text-[#dfbf85]">+{explanation.trackWeight}</span>
@@ -81,13 +81,13 @@ export const ScoreExplanationModal: React.FC<ScoreExplanationModalProps> = ({
           )}
 
           <div className="pt-2 border-t border-[#c69956]/20 flex items-center justify-between font-bold type-l5">
-            <span className="text-[#f7f2ea]">综合推荐得分 (Total Score)</span>
+            <span className="text-[var(--text-hero)]">综合推荐得分 (Total Score)</span>
             <span className="text-[#e6c17d] font-mono type-l3 font-bold">{score}</span>
           </div>
         </div>
 
         {/* Explain in human words */}
-        <div className="p-3 bg-[#181512] rounded border border-[#c69956]/15 space-y-1.5 type-l5 text-[#a89b8a] leading-relaxed">
+        <div className="p-3 bg-[#181512] rounded border border-[#c69956]/15 space-y-1.5 type-l5 text-[var(--text-secondary)] leading-relaxed">
           <div className="font-semibold text-[#c69956]">系统决策依据：</div>
           <ul className="list-disc list-inside space-y-0.5">
             {explanation.reasons.map((r, i) => (
@@ -99,7 +99,7 @@ export const ScoreExplanationModal: React.FC<ScoreExplanationModalProps> = ({
         <div className="flex justify-end pt-1">
           <button
             onClick={onClose}
-            className="brass-button px-4 py-1.5 type-l5 font-semibold text-[#fcf9f2] rounded"
+            className="brass-button px-4 py-1.5 type-l5 font-semibold text-[var(--text-hero)] rounded"
           >
             明白，继续
           </button>

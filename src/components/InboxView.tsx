@@ -174,8 +174,8 @@ export const InboxView: React.FC<InboxViewProps> = ({
           </p>
         </header>
 
-        {/* Quick Capture Input */}
-        <form onSubmit={handleSubmit} className="matrix-panel p-5 rounded-lg space-y-3">
+        {/* Quick Capture Input (Low intensity surface-optic-soft) */}
+        <form onSubmit={handleSubmit} className="surface-optic-soft p-5 rounded-lg space-y-3">
           <div className="flex items-start gap-3">
             <textarea
               placeholder="随时捕捉闪念（如：看看 MCP transport 实现细节、interval DP 专题...）"
@@ -187,14 +187,14 @@ export const InboxView: React.FC<InboxViewProps> = ({
                 }
               }}
               rows={2}
-              className="w-full bg-[#161412] border border-[#c69956]/20 rounded-md p-3 type-l4 text-[#f7f0e5] focus:outline-none focus:border-[#dfbf85] resize-none"
+              className="w-full bg-[#161412] border border-[#c69956]/20 rounded-md p-3 type-l4 text-[var(--text-primary)] focus:outline-none focus:border-[#dfbf85] resize-none"
               autoFocus
             />
           </div>
 
           <div className="flex flex-wrap items-center justify-between gap-3 pt-1">
             <div className="flex items-center gap-2 type-l5">
-              <span className="text-[#82776b]">可选主线:</span>
+              <span className="text-[var(--text-muted)]">可选主线:</span>
               <CustomTrackSelect
                 tracks={tracks}
                 value={selectedTrackId}
@@ -205,10 +205,10 @@ export const InboxView: React.FC<InboxViewProps> = ({
             </div>
 
             <div className="flex items-center gap-2">
-              <span className="type-l6 font-mono text-[#82776b] hidden sm:inline">⌘ + Enter</span>
+              <span className="type-l6 font-mono text-[var(--text-muted)] hidden sm:inline">⌘ + Enter</span>
               <button
                 type="submit"
-                className="brass-button px-4 py-1.5 rounded type-l5 font-semibold text-[#fcf9f2] flex items-center gap-1.5"
+                className="brass-button px-4 py-1.5 rounded type-l5 font-semibold text-[var(--text-hero)] flex items-center gap-1.5"
               >
                 <Plus className="w-3.5 h-3.5 text-[#dfbf85]" />
                 <span>投掷记录</span>
@@ -217,12 +217,12 @@ export const InboxView: React.FC<InboxViewProps> = ({
           </div>
         </form>
 
-        {/* Capture Stream */}
+        {/* Capture Stream (Standard surface-flat to keep matrix prominent) */}
         <div className="space-y-3">
           {activeItems.length === 0 ? (
-            <div className="py-14 text-center text-[#544b41] space-y-1.5 select-none border border-dashed border-[#c69956]/15 rounded-lg bg-[#141210]/20">
-              <div className="type-l6 font-mono text-[#82776b] tracking-widest uppercase">[ CAPTURE TRAY EMPTY ]</div>
-              <p className="type-l5 text-[#82776b]">暂无未归整的灵感碎片 · 闪念可随时在此停泊</p>
+            <div className="py-14 text-center text-[var(--text-ghost)] space-y-1.5 select-none border border-dashed border-[#c69956]/15 rounded-lg bg-[#141210]/20">
+              <div className="type-l6 font-mono text-[var(--text-muted)] tracking-widest uppercase">[ CAPTURE TRAY EMPTY ]</div>
+              <p className="type-l5 text-[var(--text-secondary)]">暂无未归整的灵感碎片 · 闪念可随时在此停泊</p>
             </div>
           ) : (
             activeItems.map(item => {
@@ -231,13 +231,13 @@ export const InboxView: React.FC<InboxViewProps> = ({
               return (
                 <div
                   key={item.id}
-                  className="matrix-panel p-4 rounded-lg flex flex-col sm:flex-row sm:items-center justify-between gap-3 group transition-colors"
+                  className="surface-flat p-4 rounded-lg flex flex-col sm:flex-row sm:items-center justify-between gap-3 group transition-colors"
                 >
                   <div className="space-y-1">
-                    <p className="type-l4 text-[#f2ede4] leading-relaxed">
+                    <p className="type-l4 text-[var(--text-primary)] leading-relaxed">
                       {item.content}
                     </p>
-                    <div className="flex items-center gap-2 type-l6 text-[#8a7f72]">
+                    <div className="flex items-center gap-2 type-l6 text-[var(--text-muted)]">
                       <span>{item.created_at}</span>
                       {track && (
                         <>
@@ -259,7 +259,7 @@ export const InboxView: React.FC<InboxViewProps> = ({
 
                     <button
                       onClick={() => onArchiveInboxItem(item.id)}
-                      className="p-1 text-[#8a7f72] hover:text-[#ded7cd] transition-colors"
+                      className="p-1 text-[var(--text-muted)] hover:text-[var(--text-primary)] transition-colors"
                       title="归档"
                     >
                       <Archive className="w-3.5 h-3.5" />
@@ -267,7 +267,7 @@ export const InboxView: React.FC<InboxViewProps> = ({
 
                     <button
                       onClick={() => onDeleteInboxItem(item.id)}
-                      className="p-1 text-[#8a7f72] hover:text-[#e06c75] transition-colors opacity-0 group-hover:opacity-100"
+                      className="p-1 text-[var(--text-muted)] hover:text-[#e06c75] transition-colors opacity-0 group-hover:opacity-100"
                       title="删除"
                     >
                       <Trash2 className="w-3.5 h-3.5" />
@@ -283,13 +283,13 @@ export const InboxView: React.FC<InboxViewProps> = ({
       {/* Promote to Track Action Modal */}
       {promotingItemId && (
         <div className="fixed inset-0 z-50 bg-black/70 backdrop-blur-xs flex items-center justify-center p-4">
-          <div className="matrix-panel p-6 rounded-lg max-w-md w-full space-y-4 shadow-2xl">
-            <h3 className="type-l3 font-bold text-[#f7f2ea]">
+          <div className="brass-panel-elevated p-6 rounded-lg max-w-md w-full space-y-4 shadow-2xl border border-[#c69956]/40">
+            <h3 className="type-l3 font-bold text-[var(--text-hero)]">
               将想法转化为清晰的 Next 行动
             </h3>
             <form onSubmit={handleConfirmPromote} className="space-y-3 type-l5">
               <div>
-                <label className="block text-[#9c9183] mb-1">目标主线</label>
+                <label className="block text-[var(--text-muted)] mb-1">目标主线</label>
                 <CustomTrackSelect
                   tracks={tracks}
                   value={targetTrackId}
@@ -300,18 +300,18 @@ export const InboxView: React.FC<InboxViewProps> = ({
               </div>
 
               <div>
-                <label className="block text-[#9c9183] mb-1">Action 标题 (可执行的小动作)</label>
+                <label className="block text-[var(--text-muted)] mb-1">Action 标题 (可执行的小动作)</label>
                 <input
                   type="text"
                   value={actionTitle}
                   onChange={e => setActionTitle(e.target.value)}
-                  className="w-full bg-[#11100f] border border-[#c69956]/25 rounded px-3 py-2 text-[#f7f2ea] focus:outline-none focus:border-[#dfbf85]"
+                  className="w-full bg-[#11100f] border border-[#c69956]/25 rounded px-3 py-2 text-[var(--text-primary)] focus:outline-none focus:border-[#dfbf85]"
                   required
                 />
               </div>
 
               <div>
-                <label className="block text-[#9c9183] type-l6 mb-1">复杂度负荷</label>
+                <label className="block text-[var(--text-muted)] type-l6 mb-1">复杂度负荷</label>
                 <div className="flex gap-2">
                   {(['light', 'normal', 'deep'] as const).map(eff => (
                     <button
@@ -325,7 +325,7 @@ export const InboxView: React.FC<InboxViewProps> = ({
                             : eff === 'deep'
                             ? 'tag-effort-deep font-medium'
                             : 'tag-effort-normal font-medium'
-                          : 'bg-[#181512] text-[#8a7f72] border border-[#c69956]/15'
+                          : 'bg-[#181512] text-[var(--text-muted)] border border-[#c69956]/15'
                       }`}
                     >
                       {eff === 'light' ? '轻量' : eff === 'normal' ? '正常' : '深入'}
@@ -338,13 +338,13 @@ export const InboxView: React.FC<InboxViewProps> = ({
                 <button
                   type="button"
                   onClick={() => setPromotingItemId(null)}
-                  className="px-3 py-1.5 text-[#8a7f72] hover:text-[#ded7cd]"
+                  className="px-3 py-1.5 text-[var(--text-muted)] hover:text-[var(--text-primary)]"
                 >
                   取消
                 </button>
                 <button
                   type="submit"
-                  className="brass-button px-4 py-1.5 font-semibold text-[#fcf9f2] rounded flex items-center gap-1.5"
+                  className="brass-button px-4 py-1.5 font-semibold text-[var(--text-hero)] rounded flex items-center gap-1.5"
                 >
                   <Check className="w-3.5 h-3.5 text-[#dfbf85]" />
                   <span>转化并收纳</span>

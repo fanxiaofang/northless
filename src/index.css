@@ -9,11 +9,11 @@
     --font-mono: 'IBM Plex Mono', 'JetBrains Mono', monospace;
 
     /* Optical Contrast Hierarchy Tokens */
-    --text-hero: #f7f0e5;       /* Primary page titles, prominent dates */
-    --text-primary: #e6ddd0;    /* Main reading text, record body */
-    --text-secondary: #b8ab9a;  /* Subtitles, secondary descriptions */
-    --text-muted: #82776b;      /* Metadata, timestamps, counts */
-    --text-ghost: #544b41;      /* Backgrounded tags, subtle brackets, borders */
+    --text-hero:      #e4dacb;  /* Primary page titles, prominent dates, key track titles */
+    --text-primary:   #d2c7b8;  /* Main reading text, record body, action title */
+    --text-secondary: #b7aa99;  /* Subtitles, purpose, secondary descriptions */
+    --text-muted:     #8f8477;  /* Metadata, timestamps, counts, captions */
+    --text-ghost:     #62584d;  /* Backgrounded tags, subtle brackets, empty hints */
 
     /* Primary Accent: Aged Brass (方向 / 权重 / 主线 / 重要动作 - Visual Weight 100%) */
     --brass-bright: #d4ab6a;
@@ -74,7 +74,7 @@
     font-size: var(--text-scale-l4);
     line-height: var(--line-height-l4);
     background-color: #11100f;
-    color: #e6ddd0;
+    color: var(--text-primary);
   }
 }
 
@@ -92,11 +92,22 @@
 
 /* Atmospheric Cockpit Viewport Depth */
 .cockpit-main {
-  background-color: #11100f;
-  background-image:
-    radial-gradient(900px 520px at 52% -5%, rgba(198, 153, 86, 0.028) 0%, transparent 72%),
-    radial-gradient(700px 500px at 85% 65%, rgba(90, 112, 103, 0.015) 0%, transparent 75%),
-    linear-gradient(180deg, #121110 0%, #100f0e 100%);
+  background:
+    radial-gradient(
+      1000px 620px at 50% -80px,
+      rgba(198, 153, 86, 0.04) 0%,
+      transparent 58%
+    ),
+    radial-gradient(
+      850px 650px at 82% 65%,
+      rgba(107, 135, 124, 0.018) 0%,
+      transparent 72%
+    ),
+    linear-gradient(
+      180deg,
+      #131210 0%,
+      #100f0e 100%
+    );
 }
 
 .font-sans {
@@ -156,6 +167,33 @@
 .surface-flat:hover,
 .brass-panel:hover {
   border-color: rgba(198, 153, 86, 0.25);
+}
+
+/* Soft Optical Surface (50%–70% of Matrix intensity - subtle physical depth without competing with matrix) */
+.surface-optic-soft {
+  background:
+    radial-gradient(
+      ellipse at 50% 0%,
+      rgba(198, 153, 86, 0.028) 0%,
+      transparent 68%
+    ),
+    linear-gradient(
+      180deg,
+      #161412 0%,
+      #12110f 100%
+    );
+
+  border:
+    1px solid rgba(198, 153, 86, 0.10);
+
+  box-shadow:
+    0 3px 12px -4px rgba(0, 0, 0, 0.35),
+    inset 0 1px 0 rgba(255, 230, 180, 0.045);
+  transition: border-color 0.15s ease;
+}
+
+.surface-optic-soft:hover {
+  border-color: rgba(198, 153, 86, 0.18);
 }
 
 /* Weekly Touch Matrix (Dedicated physical optics: Radial ambient top light, inset bevel highlight & brass rim) */

@@ -100,7 +100,7 @@ export const SettingsModal: React.FC<SettingsModalProps> = ({
       <div className="brass-panel-elevated p-6 rounded-lg max-w-2xl w-full h-[80vh] flex flex-col border border-[#c69956]/40 shadow-2xl relative">
         <button
           onClick={onClose}
-          className="absolute top-4 right-4 text-[#8a7f72] hover:text-[#f4efe8]"
+          className="absolute top-4 right-4 text-[var(--text-muted)] hover:text-[var(--text-hero)]"
         >
           <X className="w-4 h-4" />
         </button>
@@ -109,11 +109,11 @@ export const SettingsModal: React.FC<SettingsModalProps> = ({
         <div className="pb-4 border-b border-[#c69956]/20">
           <div className="flex items-center gap-2">
             <Settings className="w-4 h-4 text-[#dfbf85]" />
-            <h3 className="font-display text-lg font-bold text-[#f7f2ea]">
+            <h3 className="font-display text-lg font-bold text-[var(--text-hero)]">
               驾驶舱配置与本地数据
             </h3>
           </div>
-          <p className="text-xs text-[#9c9183]">
+          <p className="text-xs text-[var(--text-secondary)]">
             本地优先 (Local-First)。数据完全保留在你的浏览器本地，无隐私外泄与云端依赖。
           </p>
         </div>
@@ -124,8 +124,8 @@ export const SettingsModal: React.FC<SettingsModalProps> = ({
             onClick={() => setActiveTab('phase')}
             className={`px-3 py-1.5 rounded transition-colors ${
               activeTab === 'phase'
-                ? 'bg-[#2b241c] text-[#f7f2ea] border border-[#c69956]/40 font-semibold'
-                : 'text-[#8a7f72] hover:text-[#ded7cd]'
+                ? 'bg-[#2b241c] text-[var(--text-hero)] border border-[#c69956]/40 font-semibold'
+                : 'text-[var(--text-muted)] hover:text-[var(--text-primary)]'
             }`}
           >
             探索阶段 (Phase)
@@ -134,8 +134,8 @@ export const SettingsModal: React.FC<SettingsModalProps> = ({
             onClick={() => setActiveTab('cards')}
             className={`px-3 py-1.5 rounded transition-colors ${
               activeTab === 'cards'
-                ? 'bg-[#2b241c] text-[#f7f2ea] border border-[#c69956]/40 font-semibold'
-                : 'text-[#8a7f72] hover:text-[#ded7cd]'
+                ? 'bg-[#2b241c] text-[var(--text-hero)] border border-[#c69956]/40 font-semibold'
+                : 'text-[var(--text-muted)] hover:text-[var(--text-primary)]'
             }`}
           >
             手边入口 (Cards)
@@ -144,8 +144,8 @@ export const SettingsModal: React.FC<SettingsModalProps> = ({
             onClick={() => setActiveTab('data')}
             className={`px-3 py-1.5 rounded transition-colors ${
               activeTab === 'data'
-                ? 'bg-[#2b241c] text-[#f7f2ea] border border-[#c69956]/40 font-semibold'
-                : 'text-[#8a7f72] hover:text-[#ded7cd]'
+                ? 'bg-[#2b241c] text-[var(--text-hero)] border border-[#c69956]/40 font-semibold'
+                : 'text-[var(--text-muted)] hover:text-[var(--text-primary)]'
             }`}
           >
             数据备份 / 导入
@@ -154,8 +154,8 @@ export const SettingsModal: React.FC<SettingsModalProps> = ({
             onClick={() => setActiveTab('about')}
             className={`px-3 py-1.5 rounded transition-colors ${
               activeTab === 'about'
-                ? 'bg-[#2b241c] text-[#f7f2ea] border border-[#c69956]/40 font-semibold'
-                : 'text-[#8a7f72] hover:text-[#ded7cd]'
+                ? 'bg-[#2b241c] text-[var(--text-hero)] border border-[#c69956]/40 font-semibold'
+                : 'text-[var(--text-muted)] hover:text-[var(--text-primary)]'
             }`}
           >
             设计宪章 (Charter)
@@ -184,7 +184,7 @@ export const SettingsModal: React.FC<SettingsModalProps> = ({
                         }`}
                       >
                         <div>
-                          <div className="font-semibold text-[#f7f2ea] flex items-center gap-2">
+                          <div className="font-semibold text-[var(--text-primary)] flex items-center gap-2">
                             <span>{p.name}</span>
                             {isCurrent && (
                               <span className="text-[10px] text-[#dfbf85] px-1.5 py-0.2 bg-[#2d241a] rounded border border-[#c69956]/30">
@@ -192,9 +192,9 @@ export const SettingsModal: React.FC<SettingsModalProps> = ({
                               </span>
                             )}
                           </div>
-                          {p.note && <p className="text-[11px] text-[#9c9183] mt-0.5">{p.note}</p>}
+                          {p.note && <p className="text-[11px] text-[var(--text-secondary)] mt-0.5">{p.note}</p>}
                         </div>
-                        <div className="text-[11px] font-mono text-[#7d7162]">
+                        <div className="text-[11px] font-mono text-[var(--text-muted)]">
                           自 {p.started_at}
                         </div>
                       </div>
@@ -209,29 +209,29 @@ export const SettingsModal: React.FC<SettingsModalProps> = ({
                   开启新探索阶段
                 </div>
                 <div>
-                  <label className="block text-[#9c9183] mb-1">阶段名称</label>
+                  <label className="block text-[var(--text-muted)] mb-1">阶段名称</label>
                   <input
                     type="text"
                     placeholder="如: Job Hunting 冲刺期"
                     value={newPhaseName}
                     onChange={e => setNewPhaseName(e.target.value)}
-                    className="w-full bg-[#11100f] border border-[#c69956]/25 rounded px-3 py-1.5 text-[#f7f2ea] focus:outline-none focus:border-[#dfbf85]"
+                    className="w-full bg-[#11100f] border border-[#c69956]/25 rounded px-3 py-1.5 text-[var(--text-primary)] focus:outline-none focus:border-[#dfbf85]"
                     required
                   />
                 </div>
                 <div>
-                  <label className="block text-[#9c9183] mb-1">阶段目标备注 (可选)</label>
+                  <label className="block text-[var(--text-muted)] mb-1">阶段目标备注 (可选)</label>
                   <input
                     type="text"
                     placeholder="如: 重点转向简历包装、项目实战复盘与算法高频题巩固。"
                     value={newPhaseNote}
                     onChange={e => setNewPhaseNote(e.target.value)}
-                    className="w-full bg-[#11100f] border border-[#c69956]/25 rounded px-3 py-1.5 text-[#f7f2ea] focus:outline-none focus:border-[#dfbf85]"
+                    className="w-full bg-[#11100f] border border-[#c69956]/25 rounded px-3 py-1.5 text-[var(--text-primary)] focus:outline-none focus:border-[#dfbf85]"
                   />
                 </div>
                 <button
                   type="submit"
-                  className="brass-button px-4 py-1.5 font-semibold text-[#fcf9f2] rounded flex items-center gap-1.5"
+                  className="brass-button px-4 py-1.5 font-semibold text-[var(--text-hero)] rounded flex items-center gap-1.5"
                 >
                   <Plus className="w-3.5 h-3.5 text-[#dfbf85]" />
                   <span>添加新阶段</span>
@@ -254,13 +254,13 @@ export const SettingsModal: React.FC<SettingsModalProps> = ({
                       className="brass-panel p-3 rounded-lg flex items-center justify-between gap-3"
                     >
                       <div className="space-y-0.5">
-                        <div className="font-semibold text-[#f7f2ea] flex items-center gap-2">
+                        <div className="font-semibold text-[var(--text-primary)] flex items-center gap-2">
                           <span>{card.title}</span>
                           {card.pinned && (
                             <span className="text-[10px] text-[#dfbf85] font-mono">固定在侧边栏</span>
                           )}
                         </div>
-                        <div className="text-[11px] text-[#8a7f72] truncate max-w-sm">
+                        <div className="text-[11px] text-[var(--text-muted)] truncate max-w-sm">
                           {card.url}
                         </div>
                       </div>
@@ -268,14 +268,14 @@ export const SettingsModal: React.FC<SettingsModalProps> = ({
                       <div className="flex items-center gap-2">
                         <button
                           onClick={() => onTogglePinCard(card.id)}
-                          className="p-1.5 text-[#8a7f72] hover:text-[#dfbf85] transition-colors rounded"
+                          className="p-1.5 text-[var(--text-muted)] hover:text-[#dfbf85] transition-colors rounded"
                           title={card.pinned ? '取消固定' : '固定到侧边栏'}
                         >
                           {card.pinned ? <PinOff className="w-3.5 h-3.5" /> : <Pin className="w-3.5 h-3.5" />}
                         </button>
                         <button
                           onClick={() => onDeleteCard(card.id)}
-                          className="p-1.5 text-[#8a7f72] hover:text-[#e06c75] transition-colors rounded"
+                          className="p-1.5 text-[var(--text-muted)] hover:text-[#e06c75] transition-colors rounded"
                           title="删除"
                         >
                           <Trash2 className="w-3.5 h-3.5" />
@@ -293,41 +293,41 @@ export const SettingsModal: React.FC<SettingsModalProps> = ({
                 </div>
                 <div className="grid grid-cols-2 gap-3">
                   <div>
-                    <label className="block text-[#9c9183] mb-1">入口标题</label>
+                    <label className="block text-[var(--text-muted)] mb-1">入口标题</label>
                     <input
                       type="text"
                       placeholder="如: Technical English"
                       value={newCardTitle}
                       onChange={e => setNewCardTitle(e.target.value)}
-                      className="w-full bg-[#11100f] border border-[#c69956]/25 rounded px-3 py-1.5 text-[#f7f2ea] focus:outline-none focus:border-[#dfbf85]"
+                      className="w-full bg-[#11100f] border border-[#c69956]/25 rounded px-3 py-1.5 text-[var(--text-primary)] focus:outline-none focus:border-[#dfbf85]"
                       required
                     />
                   </div>
                   <div>
-                    <label className="block text-[#9c9183] mb-1">目标 URL</label>
+                    <label className="block text-[var(--text-muted)] mb-1">目标 URL</label>
                     <input
                       type="url"
                       placeholder="https://..."
                       value={newCardUrl}
                       onChange={e => setNewCardUrl(e.target.value)}
-                      className="w-full bg-[#11100f] border border-[#c69956]/25 rounded px-3 py-1.5 text-[#f7f2ea] focus:outline-none focus:border-[#dfbf85]"
+                      className="w-full bg-[#11100f] border border-[#c69956]/25 rounded px-3 py-1.5 text-[var(--text-primary)] focus:outline-none focus:border-[#dfbf85]"
                       required
                     />
                   </div>
                 </div>
                 <div>
-                  <label className="block text-[#9c9183] mb-1">简要描述</label>
+                  <label className="block text-[var(--text-muted)] mb-1">简要描述</label>
                   <input
                     type="text"
                     placeholder="如: 技术文档与常用素材"
                     value={newCardDesc}
                     onChange={e => setNewCardDesc(e.target.value)}
-                    className="w-full bg-[#11100f] border border-[#c69956]/25 rounded px-3 py-1.5 text-[#f7f2ea] focus:outline-none focus:border-[#dfbf85]"
+                    className="w-full bg-[#11100f] border border-[#c69956]/25 rounded px-3 py-1.5 text-[var(--text-primary)] focus:outline-none focus:border-[#dfbf85]"
                   />
                 </div>
                 <button
                   type="submit"
-                  className="brass-button px-4 py-1.5 font-semibold text-[#fcf9f2] rounded flex items-center gap-1.5"
+                  className="brass-button px-4 py-1.5 font-semibold text-[var(--text-hero)] rounded flex items-center gap-1.5"
                 >
                   <Plus className="w-3.5 h-3.5 text-[#dfbf85]" />
                   <span>添加至手边</span>
@@ -343,7 +343,7 @@ export const SettingsModal: React.FC<SettingsModalProps> = ({
                 <div className="text-xs font-display uppercase tracking-wider text-[#c69956]">
                   人工 AI · 上下文导出
                 </div>
-                <p className="text-[#a89b8a]">
+                <p className="text-[var(--text-secondary)]">
                   无需绑定 API Key 或依赖远程 AI Agent。一键生成完整的阶段现状、主线进展与 7 天记录 Markdown，直接粘贴给外部大模型协助复盘。
                 </p>
                 <button
@@ -351,7 +351,7 @@ export const SettingsModal: React.FC<SettingsModalProps> = ({
                     onClose();
                     onOpenAiExport();
                   }}
-                  className="brass-button px-4 py-2 font-semibold text-[#fcf9f2] rounded flex items-center gap-2 mt-2"
+                  className="brass-button px-4 py-2 font-semibold text-[var(--text-hero)] rounded flex items-center gap-2 mt-2"
                 >
                   <Sparkles className="w-3.5 h-3.5 text-[#dfbf85]" />
                   <span>生成并复制 AI Prompt</span>
@@ -367,13 +367,13 @@ export const SettingsModal: React.FC<SettingsModalProps> = ({
                 <div className="flex flex-wrap items-center gap-3">
                   <button
                     onClick={onExportData}
-                    className="brass-button px-4 py-1.5 font-semibold text-[#fcf9f2] rounded flex items-center gap-1.5"
+                    className="brass-button px-4 py-1.5 font-semibold text-[var(--text-hero)] rounded flex items-center gap-1.5"
                   >
                     <Download className="w-3.5 h-3.5 text-[#dfbf85]" />
                     <span>导出 JSON 备份</span>
                   </button>
 
-                  <label className="px-4 py-1.5 rounded bg-[#201c18] hover:bg-[#2b241c] border border-[#c69956]/30 text-[#ded7cd] cursor-pointer flex items-center gap-1.5 transition-colors">
+                  <label className="px-4 py-1.5 rounded bg-[#201c18] hover:bg-[#2b241c] border border-[#c69956]/30 text-[var(--text-primary)] cursor-pointer flex items-center gap-1.5 transition-colors">
                     <Upload className="w-3.5 h-3.5 text-[#dfbf85]" />
                     <span>导入 JSON 备份</span>
                     <input
@@ -395,7 +395,7 @@ export const SettingsModal: React.FC<SettingsModalProps> = ({
                 <div className="text-xs font-display uppercase tracking-wider text-[#e06c75]">
                   重置演示数据
                 </div>
-                <p className="text-xs text-[#b8ada0]">
+                <p className="text-xs text-[var(--text-secondary)]">
                   清空当前改动并恢复初始的 Agent / 算法 / Linux 演示数据。
                 </p>
                 <button
@@ -415,9 +415,9 @@ export const SettingsModal: React.FC<SettingsModalProps> = ({
           )}
 
           {activeTab === 'about' && (
-            <div className="space-y-4 text-xs text-[#b8ada0] leading-relaxed">
+            <div className="space-y-4 text-xs text-[var(--text-secondary)] leading-relaxed">
               <div className="brass-panel p-4 rounded-lg space-y-2">
-                <div className="font-display font-bold text-sm text-[#f5f1ea]">
+                <div className="font-display font-bold text-sm text-[var(--text-hero)]">
                   Gap Cockpit V0 核心原则
                 </div>
                 <ul className="space-y-2 list-disc list-inside">
