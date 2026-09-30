@@ -52,12 +52,12 @@ const CustomTrackSelect: React.FC<CustomTrackSelectProps> = ({
       <button
         type="button"
         onClick={() => setIsOpen(prev => !prev)}
-        className="flex items-center justify-between gap-2 bg-[#181512] hover:bg-[#1f1b16] border border-[#c69956]/25 hover:border-[#c69956]/50 rounded px-2.5 py-1.5 type-l5 text-[#ded7cd] transition-colors focus:outline-none focus:border-[#dfbf85] w-full text-left"
+        className="flex items-center justify-between gap-2 bg-[#181512] hover:bg-[#1f1b16] border border-[#c69956]/25 hover:border-[#c69956]/50 rounded px-2.5 py-1.5 type-l5 text-[var(--text-primary)] transition-colors focus:outline-none focus:border-[#dfbf85] w-full text-left"
       >
         <span className="truncate">
           {selectedTrack ? `#${selectedTrack.name}` : emptyLabel}
         </span>
-        <ChevronDown className={`w-3.5 h-3.5 text-[#8a7f72] transition-transform shrink-0 ${isOpen ? 'rotate-180' : ''}`} />
+        <ChevronDown className={`w-3.5 h-3.5 text-[var(--text-muted)] transition-transform shrink-0 ${isOpen ? 'rotate-180' : ''}`} />
       </button>
 
       {isOpen && (
@@ -70,7 +70,7 @@ const CustomTrackSelect: React.FC<CustomTrackSelectProps> = ({
                 setIsOpen(false);
               }}
               className={`w-full text-left px-3 py-1.5 type-l5 transition-colors flex items-center justify-between ${
-                !value ? 'bg-[#2a2218] text-[#dfbf85] font-medium' : 'text-[#8a7f72] hover:bg-[#201c17] hover:text-[#ded7cd]'
+                !value ? 'bg-[#2a2218] text-[#dfbf85] font-medium' : 'text-[var(--text-muted)] hover:bg-[#201c17] hover:text-[var(--text-primary)]'
               }`}
             >
               <span>{emptyLabel}</span>
@@ -89,7 +89,7 @@ const CustomTrackSelect: React.FC<CustomTrackSelectProps> = ({
                   setIsOpen(false);
                 }}
                 className={`w-full text-left px-3 py-1.5 type-l5 transition-colors flex items-center justify-between ${
-                  isSelected ? 'bg-[#2a2218] text-[#dfbf85] font-medium' : 'text-[#ded7cd] hover:bg-[#201c17]'
+                  isSelected ? 'bg-[#2a2218] text-[#dfbf85] font-medium' : 'text-[var(--text-primary)] hover:bg-[#201c17]'
                 }`}
               >
                 <div className="flex items-center gap-2 truncate">
@@ -158,18 +158,18 @@ export const InboxView: React.FC<InboxViewProps> = ({
   const activeItems = inboxItems.filter(i => i.status === 'inbox');
 
   return (
-    <div className="flex-1 overflow-y-auto min-h-screen bg-transparent text-[#e6ddd0] p-6 lg:p-10">
+    <div className="flex-1 overflow-y-auto min-h-screen bg-transparent text-[var(--text-primary)] p-6 lg:p-10">
       <div className="max-w-[880px] mx-auto space-y-8">
         {/* Header - Deliberately no unread count! */}
         <header className="pb-6 border-b border-[#c69956]/20">
-          <div className="flex items-center gap-2 type-l6 font-mono text-[#82776b] tracking-wider uppercase mb-1">
+          <div className="flex items-center gap-2 type-l6 font-mono text-[var(--text-muted)] tracking-wider uppercase mb-1">
             <span>FREE CAPTURE / 允许自由腐烂，无需清零压力</span>
           </div>
-          <h1 className="type-l1 font-display font-bold text-[#f7f0e5] flex items-baseline gap-2.5">
+          <h1 className="type-l1 font-display font-bold text-[var(--text-hero)] flex items-baseline gap-2.5">
             <span>收集箱</span>
-            <span className="type-l6 font-mono font-normal text-[#82776b] tracking-widest">/ INBOX</span>
+            <span className="type-l6 font-mono font-normal text-[var(--text-ghost)] tracking-widest">/ INBOX</span>
           </h1>
-          <p className="type-l6 text-[#82776b] font-sans mt-0.5">
+          <p className="type-l6 text-[var(--text-secondary)] font-sans mt-0.5">
             想到什么，扔进去，结束。无需优先级、截止日或整理负担。
           </p>
         </header>

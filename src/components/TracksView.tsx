@@ -297,7 +297,7 @@ export const TracksView: React.FC<TracksViewProps> = ({
                                 ? 'text-[#86a69a]'
                                 : isCurrent
                                 ? 'text-[#d4ab6a] font-bold'
-                                : 'text-[var(--text-ghost)] group-hover:text-[var(--text-secondary)]'
+                                : 'text-[var(--text-muted)] group-hover:text-[var(--text-secondary)]'
                             }`}
                           >
                             {String(idx + 1).padStart(2, '0')}
@@ -336,7 +336,7 @@ export const TracksView: React.FC<TracksViewProps> = ({
                                   ? 'bg-[#14201c] border-2 border-[#557368] text-[#86a69a]'
                                   : isCurrent
                                   ? 'bg-[#292015] border-2 border-[#d4ab6a] text-[var(--text-hero)] shadow-[0_0_8px_rgba(212,171,106,0.35)]'
-                                  : 'bg-[#151311] border-2 border-[#3d3326] text-[var(--text-ghost)] group-hover:border-[#5c4e3b]'
+                                  : 'bg-[#151311] border-2 border-[#3d3326] text-[var(--text-muted)] group-hover:border-[#5c4e3b]'
                               }`}
                             >
                               {isCompleted ? (
@@ -477,7 +477,7 @@ export const TracksView: React.FC<TracksViewProps> = ({
                 ) : activeTrackActions.length === 0 ? (
                   /* State A: Clean Empty State without duplicate CTA button */
                   <div className="py-4 space-y-1 text-left">
-                    <div className="type-l4 text-[var(--text-hero)] font-medium">暂无清晰 Next</div>
+                    <div className="type-l4 text-[var(--text-primary)] font-medium">暂无清晰 Next</div>
                     <p className="type-l5 text-[var(--text-secondary)]">
                       先留下当前最确定、最容易启动的一步。
                     </p>
@@ -557,7 +557,7 @@ export const TracksView: React.FC<TracksViewProps> = ({
                           </button>
                           <button
                             onClick={() => onDeleteAction(action.id)}
-                            className="p-1.5 text-[var(--text-ghost)] hover:text-[#c87a3e] transition-colors rounded hover:bg-[#1a1714] opacity-0 group-hover:opacity-100 cursor-pointer"
+                            className="p-1.5 text-[var(--text-muted)] hover:text-[#c87a3e] transition-colors rounded hover:bg-[#1a1714] opacity-0 group-hover:opacity-100 cursor-pointer"
                             title="删除行动"
                           >
                             <Trash2 className="w-3.5 h-3.5" />
@@ -605,7 +605,7 @@ export const TracksView: React.FC<TracksViewProps> = ({
                   </div>
 
                   {trackLogs.length === 0 ? (
-                    <div className="type-l5 text-[var(--text-muted)] py-2 font-sans">
+                    <div className="type-l5 text-[var(--text-secondary)] py-2 font-sans">
                       暂无主线记录
                     </div>
                   ) : (
@@ -651,7 +651,7 @@ export const TracksView: React.FC<TracksViewProps> = ({
                   </div>
 
                   {relatedCards.length === 0 ? (
-                    <div className="type-l5 text-[var(--text-muted)] py-2 font-sans">
+                    <div className="type-l5 text-[var(--text-secondary)] py-2 font-sans">
                       暂无关联资源
                     </div>
                   ) : (
@@ -674,7 +674,7 @@ export const TracksView: React.FC<TracksViewProps> = ({
               </div>
             </div>
           ) : (
-            <div className="flex-1 py-12 text-center text-[var(--text-muted)] type-l4">
+            <div className="flex-1 py-12 text-center text-[var(--text-secondary)] type-l4">
               请选择或新建一条主线
             </div>
           )}

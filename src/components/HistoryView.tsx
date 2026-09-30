@@ -152,7 +152,7 @@ export const HistoryView: React.FC<HistoryViewProps> = ({
                   {weekDays.map(d => (
                     <th key={d.dateStr} className="py-2.5 text-center type-l6 text-[var(--text-muted)] font-normal">
                       <div>{d.dayName}</div>
-                      <div className="text-[10px] text-[var(--text-ghost)] tracking-normal">{d.shortDate}</div>
+                      <div className="text-[10px] text-[var(--text-muted)] tracking-normal">{d.shortDate}</div>
                     </th>
                   ))}
                   <th className="py-2.5 text-right type-l6 text-[var(--text-muted)] font-normal pl-4">本周 Touch</th>
@@ -257,7 +257,7 @@ export const HistoryView: React.FC<HistoryViewProps> = ({
                                 <span>
                                   {entry.started_at}
                                   {entry.ended_at && (
-                                    <span className="hidden sm:inline text-[var(--text-ghost)]"> ─ {entry.ended_at}</span>
+                                    <span className="hidden sm:inline text-[var(--text-muted)]"> ─ {entry.ended_at}</span>
                                   )}
                                 </span>
                               ) : (
@@ -283,7 +283,7 @@ export const HistoryView: React.FC<HistoryViewProps> = ({
                               <div className="flex items-baseline gap-2 min-w-0 flex-wrap">
                                 <span
                                   className={`type-l5 shrink-0 ${
-                                    track ? 'text-[#d4ab6a] font-medium' : 'text-[var(--text-ghost)] font-normal'
+                                    track ? 'text-[#d4ab6a] font-medium' : 'text-[var(--text-muted)] font-normal'
                                   }`}
                                 >
                                   [{track ? track.name : '生活'}]

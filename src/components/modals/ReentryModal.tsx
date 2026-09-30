@@ -118,7 +118,7 @@ export const ReentryModal: React.FC<ReentryModalProps> = ({
                     );
                     onClose();
                   }}
-                  className="px-3 py-1 rounded text-xs text-[#f2f8f5] bg-[rgba(107,135,124,0.22)] hover:bg-[rgba(107,135,124,0.36)] border border-[rgba(107,135,124,0.45)] flex items-center gap-1 shrink-0 transition-colors"
+                  className="px-3 py-1 rounded text-xs text-[var(--text-hero)] bg-[rgba(107,135,124,0.22)] hover:bg-[rgba(107,135,124,0.36)] border border-[rgba(107,135,124,0.45)] flex items-center gap-1 shrink-0 transition-colors"
                 >
                   <Play className="w-3 h-3 text-[#86a69a]" />
                   <span>以此开局</span>

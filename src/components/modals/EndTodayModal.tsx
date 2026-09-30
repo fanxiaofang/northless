@@ -74,7 +74,7 @@ export const EndTodayModal: React.FC<EndTodayModalProps> = ({
           </div>
 
           {touchedTracks.length === 0 ? (
-            <div className="text-xs text-[var(--text-muted)]">今天没有记录主线投入，静静休整也是探索的一部分。</div>
+            <div className="text-xs text-[var(--text-secondary)]">今天没有记录主线投入，静静休整也是探索的一部分。</div>
           ) : (
             <div className="space-y-2">
               {touchedTracks.map(t => (
@@ -96,7 +96,7 @@ export const EndTodayModal: React.FC<EndTodayModalProps> = ({
           <div>
             <div className="flex items-center justify-between mb-1">
               <label className="text-[var(--text-muted)]">今天一句话？ (Optional)</label>
-              <span className="text-[10px] text-[var(--text-ghost)]">可不填</span>
+              <span className="text-[10px] text-[var(--text-muted)]">可不填</span>
             </div>
             <input
               type="text"
@@ -110,7 +110,7 @@ export const EndTodayModal: React.FC<EndTodayModalProps> = ({
           <div>
             <div className="flex items-center justify-between mb-1">
               <label className="text-[var(--text-muted)]">明天有什么想接着做？ (Optional)</label>
-              <span className="text-[10px] text-[var(--text-ghost)]">可不填</span>
+              <span className="text-[10px] text-[var(--text-muted)]">可不填</span>
             </div>
             <input
               type="text"

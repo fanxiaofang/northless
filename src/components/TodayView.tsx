@@ -629,7 +629,7 @@ export const TodayView: React.FC<TodayViewProps> = ({
                         <span>
                           {log.started_at}
                           {log.ended_at && (
-                            <span className="hidden sm:inline text-[var(--text-ghost)]"> ─ {log.ended_at}</span>
+                            <span className="hidden sm:inline text-[var(--text-muted)]"> ─ {log.ended_at}</span>
                           )}
                         </span>
                       ) : (
@@ -660,7 +660,7 @@ export const TodayView: React.FC<TodayViewProps> = ({
                       <div className="flex items-baseline gap-2 min-w-0 flex-wrap">
                         <span
                           className={`type-l5 shrink-0 ${
-                            track ? 'text-[#d4ab6a] font-medium' : 'text-[var(--text-ghost)] font-normal'
+                            track ? 'text-[#d4ab6a] font-medium' : 'text-[var(--text-muted)] font-normal'
                           }`}
                         >
                           [{track ? track.name : '随手记'}]
