@@ -239,11 +239,11 @@ export const TodayView: React.FC<TodayViewProps> = ({
         <section className="space-y-4">
           <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-2">
             <div>
-              <h2 className="type-l3 font-semibold text-[var(--text-title)] flex items-center gap-2">
+              <h2 className="section-title flex items-center gap-2">
                 <span>现在做什么？</span>
                 <span className="type-l6 font-medium text-[#b8894f]">3 选 1 依据推荐</span>
               </h2>
-              <p className="type-l5 text-[var(--text-secondary)] font-sans mt-0.5">
+              <p className="section-description">
                 基于主线权重、停顿间隔、连续势头与复杂度透明算分
               </p>
             </div>
@@ -567,10 +567,10 @@ export const TodayView: React.FC<TodayViewProps> = ({
         <section className="space-y-4 pt-4 border-t border-[#b8894f]/15">
           <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-3">
             <div>
-              <h2 className="type-l3 font-semibold text-[var(--text-title)]">
+              <h2 className="section-title">
                 今天发生的现实
               </h2>
-              <p className="type-l5 text-[var(--text-secondary)] font-sans mt-0.5">
+              <p className="section-description">
                 记录现实，而不是审计生活。生活可以被记录，但不必被管理。
               </p>
             </div>
@@ -612,10 +612,10 @@ export const TodayView: React.FC<TodayViewProps> = ({
               <div className="type-l6 font-mono text-[var(--text-muted)] uppercase tracking-wider mb-1 font-medium">
                 CURRENT PHASE · 当前阶段
               </div>
-              <h3 className="type-l3 font-semibold text-[var(--text-title)]">
+              <h3 className="section-title">
                 {currentPhase?.name || '探索期'}
               </h3>
-              <p className="type-l5 text-[var(--text-secondary)] font-sans mt-0.5">
+              <p className="section-description">
                 {currentPhase?.note || '一条主线 + 多条保温线'}
               </p>
             </div>

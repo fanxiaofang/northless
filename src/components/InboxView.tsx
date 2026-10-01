@@ -167,7 +167,7 @@ export const InboxView: React.FC<InboxViewProps> = ({
             <span>收集箱</span>
             <span className="type-l6 font-mono font-normal text-[var(--text-ghost)] tracking-widest">/ INBOX</span>
           </h1>
-          <p className="type-l5 text-[var(--text-secondary)] font-sans mt-1">
+          <p className="section-description">
             想到什么，扔进去，结束。无需优先级、截止日或整理负担。
           </p>
         </header>
@@ -185,7 +185,7 @@ export const InboxView: React.FC<InboxViewProps> = ({
                 }
               }}
               rows={2}
-              className="w-full bg-transparent border-0 p-0 type-l4 text-[var(--text-primary)] placeholder:text-[var(--text-ghost)] focus:outline-none focus:ring-0 resize-none leading-relaxed font-sans font-medium"
+              className="w-full bg-transparent border-0 p-0 journal-input text-[var(--text-primary)] placeholder:text-[var(--text-ghost)] focus:outline-none focus:ring-0 resize-none"
               autoFocus
             />
           </div>
@@ -233,7 +233,7 @@ export const InboxView: React.FC<InboxViewProps> = ({
                   className="surface-card p-3.5 rounded-lg flex flex-col sm:flex-row sm:items-center justify-between gap-3 group transition-colors"
                 >
                   <div className="space-y-1">
-                    <p className="type-l4 text-[var(--text-primary)] leading-relaxed font-sans font-medium">
+                    <p className="journal-content text-[var(--text-primary)] leading-relaxed">
                       {item.content}
                     </p>
                     <div className="flex items-center gap-2 type-l6 text-[var(--text-muted)] font-mono font-medium">

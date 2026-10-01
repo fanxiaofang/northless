@@ -122,10 +122,10 @@ export const HistoryView: React.FC<HistoryViewProps> = ({
         <div className="matrix-panel p-6 rounded-lg space-y-6">
           <div className="flex items-center justify-between">
             <div>
-              <h2 className="type-l3 font-semibold text-[var(--text-title)] flex items-center gap-2">
+              <h2 className="section-title flex items-center gap-2">
                 <span>周主线触达矩阵</span>
               </h2>
-              <p className="type-l5 text-[var(--text-secondary)] font-sans mt-0.5 font-normal">
+              <p className="section-description">
                 看见哪条主线在这周移动了，没有红黄绿考核，没有打卡焦虑
               </p>
             </div>
@@ -204,7 +204,7 @@ export const HistoryView: React.FC<HistoryViewProps> = ({
         {/* Daily Archive Logs */}
         <div className="space-y-6 pt-4">
           <div className="flex items-center justify-between border-b border-[#b8894f]/15 pb-2">
-            <h2 className="type-l3 font-semibold text-[var(--text-title)]">
+            <h2 className="section-title">
               本周日常记录存根
             </h2>
             <span className="type-l6 font-mono text-[var(--text-muted)] uppercase tracking-wider font-medium">
@@ -228,7 +228,7 @@ export const HistoryView: React.FC<HistoryViewProps> = ({
                     <div className="flex items-center justify-between border-b border-[#b8894f]/12 pb-1.5">
                       <div className="flex items-center gap-2">
                         <span className="w-1.5 h-1.5 rounded-full bg-[#b8894f]" />
-                        <span className="type-l4 font-semibold text-[var(--text-title)] font-display">
+                        <span className="date-group-heading">
                           {d.dateStr} · {d.dayName}
                         </span>
                       </div>
