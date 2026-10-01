@@ -12,6 +12,7 @@ import {
   Plus
 } from 'lucide-react';
 import { Card, Phase } from '../types';
+import { CockpitTooltip } from './ui/CockpitTooltip';
 
 interface NavigationSidebarProps {
   currentView: 'today' | 'tracks' | 'history' | 'inbox';
@@ -53,9 +54,9 @@ export const NavigationSidebar: React.FC<NavigationSidebarProps> = ({
                 <span>Gap Cockpit</span>
                 <span className="text-[10px] text-[#b8894f] font-mono tracking-normal font-medium">v0</span>
               </div>
-              <div className="type-l6 text-[var(--text-muted)] truncate max-w-[115px] font-sans font-medium" title={currentPhase?.name}>
+              <CockpitTooltip content={currentPhase?.name || 'Local Pilot'}><div className="type-l6 text-[var(--text-muted)] truncate max-w-[115px] font-sans font-medium">
                 {currentPhase?.name || 'Local Pilot'}
-              </div>
+              </div></CockpitTooltip>
             </div>
           </div>
           {isSessionRunning && (
@@ -144,13 +145,13 @@ export const NavigationSidebar: React.FC<NavigationSidebarProps> = ({
         <div className="px-2.5 py-1.5">
           <div className="flex items-center justify-between px-2.5 mb-1.5 type-l6 font-mono uppercase tracking-widest text-[var(--text-muted)] font-medium">
             <span>CARDS · 手边入口</span>
-            <button
+            <CockpitTooltip content="添加快捷入口"><button
               onClick={onOpenAddCard}
               className="text-[var(--text-muted)] hover:text-[#c89a5a] transition-colors p-0.5 rounded cursor-pointer"
-              title="添加快捷入口"
+              aria-label="添加快捷入口"
             >
               <Plus className="w-3.5 h-3.5" />
-            </button>
+            </button></CockpitTooltip>
           </div>
           <div className="space-y-0.5">
             {pinnedCards.map(card => (
@@ -169,14 +170,14 @@ export const NavigationSidebar: React.FC<NavigationSidebarProps> = ({
 
       {/* Footer Controls */}
       <div className="p-2.5 border-t border-[#b8894f]/15 space-y-0.5">
-        <button
+        <CockpitTooltip content={'复制 AI Context\n生成阶段与主线的 Markdown 上下文'}><button
           onClick={onOpenAiExport}
           className="w-full flex items-center gap-2 px-2.5 py-1.5 rounded type-l5 text-[#b8894f] hover:bg-[#1a1713] hover:text-[#c89a5a] transition-colors cursor-pointer font-medium"
-          title="生成当前阶段与主线的完整 Markdown Context 供粘贴至 Claude / ChatGPT"
+          aria-label="复制 AI Context"
         >
           <Sparkles className="w-3.5 h-3.5 text-[#b8894f]" />
           <span>Copy AI Context</span>
-        </button>
+        </button></CockpitTooltip>
 
         <button
           onClick={onOpenCommandPalette}

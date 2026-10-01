@@ -11,6 +11,8 @@ import {
 import { Card, LogEntry, NextAction, Phase, Track, TrackRole } from '../types';
 import { calculateStalenessDays } from '../lib/recommendation';
 import { InlineEmptyState } from './InlineEmptyState';
+import { CockpitTooltip } from './ui/CockpitTooltip';
+import { CockpitConfirmAction } from './ui/CockpitConfirmAction';
 
 interface TracksViewProps {
   tracks: Track[];
@@ -562,7 +564,7 @@ export const TracksView: React.FC<TracksViewProps> = ({
                         </div>
 
                         <div className="flex items-center gap-2 shrink-0 self-end sm:self-center">
-                          <button
+                          <CockpitTooltip content="开始此行动"><button
                             onClick={() =>
                               onStartSession(
                                 selectedTrack.id,
@@ -571,25 +573,27 @@ export const TracksView: React.FC<TracksViewProps> = ({
                               )
                             }
                             className="btn-secondary flex items-center gap-1.5 px-3 py-1 rounded type-l5 text-[#b8894f] hover:text-[var(--text-hero)] transition-all cursor-pointer font-medium"
-                            title="开始此行动"
+                            aria-label="开始此行动"
                           >
                             <span>开始</span>
                             <ArrowRight className="w-3.5 h-3.5" />
-                          </button>
-                          <button
+                          </button></CockpitTooltip>
+                          <CockpitTooltip content="标记完成"><button
                             onClick={() => onCompleteAction(action.id)}
                             className="p-1.5 text-[var(--text-muted)] hover:text-[#78998d] transition-colors rounded hover:bg-[#1c1916] cursor-pointer"
-                            title="标记完成"
+                            aria-label="标记完成"
                           >
                             <CheckCircle2 className="w-4 h-4" />
-                          </button>
-                          <button
-                            onClick={() => onDeleteAction(action.id)}
+                          </button></CockpitTooltip>
+                          <CockpitConfirmAction tooltip="删除行动" title="删除这个行动？" description="行动会从当前主线中永久移除。" onConfirm={() => onDeleteAction(action.id)}>{({ ref, onClick, expanded }) => <button
+                            ref={ref}
+                            onClick={onClick}
                             className="p-1.5 text-[var(--text-muted)] hover:text-[#c87a3e] transition-colors rounded hover:bg-[#1c1916] opacity-0 group-hover:opacity-100 cursor-pointer"
-                            title="删除行动"
+                            aria-label="删除行动"
+                            aria-expanded={expanded}
                           >
                             <Trash2 className="w-3.5 h-3.5" />
-                          </button>
+                          </button>}</CockpitConfirmAction>
                         </div>
                       </div>
                     ))}
@@ -643,7 +647,7 @@ export const TracksView: React.FC<TracksViewProps> = ({
                         >
                           <div className="flex items-center gap-1.5 shrink-0 pt-0.5">
                             {lIdx === 0 && (
-                              <span className="w-1.5 h-1.5 rounded-full bg-[#78998d]" title="最近推进" />
+                              <CockpitTooltip content="最近推进"><span className="w-1.5 h-1.5 rounded-full bg-[#78998d]" aria-label="最近推进" /></CockpitTooltip>
                             )}
                             <span className="type-l6 font-mono text-[#78998d] font-medium">
                               {formatLogDate(l.date)}

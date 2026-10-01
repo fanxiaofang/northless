@@ -14,6 +14,9 @@ import {
   PinOff
 } from 'lucide-react';
 import { Card, Phase, Track } from '../../types';
+import { CockpitTooltip } from '../ui/CockpitTooltip';
+import { CockpitModal, CockpitModalFooter } from '../ui/CockpitModal';
+import { CockpitConfirmAction } from '../ui/CockpitConfirmAction';
 
 interface SettingsModalProps {
   onClose: () => void;
@@ -60,6 +63,7 @@ export const SettingsModal: React.FC<SettingsModalProps> = ({
 
   // Import JSON error state
   const [importStatus, setImportStatus] = useState<string | null>(null);
+  const [showResetConfirm, setShowResetConfirm] = useState(false);
 
   const handleCreatePhase = (e: React.FormEvent) => {
     e.preventDefault();
@@ -266,20 +270,22 @@ export const SettingsModal: React.FC<SettingsModalProps> = ({
                       </div>
 
                       <div className="flex items-center gap-2">
-                        <button
+                        <CockpitTooltip content={card.pinned ? '取消固定' : '固定到侧边栏'}><button
                           onClick={() => onTogglePinCard(card.id)}
                           className="p-1.5 text-[var(--text-muted)] hover:text-[#b8894f] transition-colors rounded cursor-pointer"
-                          title={card.pinned ? '取消固定' : '固定到侧边栏'}
+                          aria-label={card.pinned ? '取消固定' : '固定到侧边栏'}
                         >
                           {card.pinned ? <PinOff className="w-3.5 h-3.5" /> : <Pin className="w-3.5 h-3.5" />}
-                        </button>
-                        <button
-                          onClick={() => onDeleteCard(card.id)}
+                        </button></CockpitTooltip>
+                        <CockpitConfirmAction tooltip="删除入口" title="删除这个入口？" description="这个手边入口将被永久移除。" onConfirm={() => onDeleteCard(card.id)}>{({ ref, onClick, expanded }) => <button
+                          ref={ref}
+                          onClick={onClick}
                           className="p-1.5 text-[var(--text-muted)] hover:text-[#e06c75] transition-colors rounded cursor-pointer"
-                          title="删除"
+                          aria-label="删除入口"
+                          aria-expanded={expanded}
                         >
                           <Trash2 className="w-3.5 h-3.5" />
-                        </button>
+                        </button>}</CockpitConfirmAction>
                       </div>
                     </div>
                   ))}
@@ -399,12 +405,7 @@ export const SettingsModal: React.FC<SettingsModalProps> = ({
                   清空当前改动并恢复初始的 Agent / 算法 / Linux 演示数据。
                 </p>
                 <button
-                  onClick={() => {
-                    if (confirm('确定要重置为初始演示数据吗？')) {
-                      onResetData();
-                      window.location.reload();
-                    }
-                  }}
+                  onClick={() => setShowResetConfirm(true)}
                   className="px-3 py-1.5 rounded type-l5 text-[#e06c75] bg-[#3a1d1d] hover:bg-[#4a2424] border border-[#e06c75]/40 transition-colors flex items-center gap-1.5 cursor-pointer font-medium"
                 >
                   <RotateCcw className="w-3.5 h-3.5" />
@@ -439,6 +440,9 @@ export const SettingsModal: React.FC<SettingsModalProps> = ({
           )}
         </div>
       </div>
+      {showResetConfirm && <CockpitModal onClose={() => setShowResetConfirm(false)} title="重置演示数据？" subtitle="当前本地数据将被替换为初始演示内容，此操作无法撤销。" className="max-w-md">
+        <CockpitModalFooter><button type="button" className="btn-ghost" onClick={() => setShowResetConfirm(false)}>取消</button><button type="button" className="inline-confirm-destructive" onClick={() => { onResetData(); window.location.reload(); }}>重置数据</button></CockpitModalFooter>
+      </CockpitModal>}
     </div>
   );
 };

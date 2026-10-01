@@ -9,6 +9,8 @@ import {
 } from 'lucide-react';
 import { InboxItem, Track } from '../types';
 import { InlineEmptyState } from './InlineEmptyState';
+import { CockpitTooltip } from './ui/CockpitTooltip';
+import { CockpitConfirmAction } from './ui/CockpitConfirmAction';
 
 interface CustomTrackSelectProps {
   tracks: Track[];
@@ -249,7 +251,7 @@ export const InboxView: React.FC<InboxViewProps> = ({
                   </div>
 
                   <div className="flex items-center gap-2 shrink-0 self-end sm:self-auto">
-                    <button
+                    <CockpitTooltip content="归档碎片"><button
                       onClick={() => handleStartPromote(item)}
                       className="btn-secondary px-2.5 py-1 rounded type-l5 text-[var(--text-primary)] hover:text-[var(--text-hero)] transition-colors flex items-center gap-1 cursor-pointer font-medium"
                     >
@@ -260,18 +262,20 @@ export const InboxView: React.FC<InboxViewProps> = ({
                     <button
                       onClick={() => onArchiveInboxItem(item.id)}
                       className="p-1 text-[var(--text-muted)] hover:text-[var(--text-primary)] transition-colors cursor-pointer"
-                      title="归档"
+                      aria-label="归档碎片"
                     >
                       <Archive className="w-3.5 h-3.5" />
-                    </button>
+                    </button></CockpitTooltip>
 
-                    <button
-                      onClick={() => onDeleteInboxItem(item.id)}
+                    <CockpitConfirmAction tooltip="删除碎片" title="删除这条碎片？" description="这条收集箱内容将被永久移除。" onConfirm={() => onDeleteInboxItem(item.id)}>{({ ref, onClick, expanded }) => <button
+                      ref={ref}
+                      onClick={onClick}
                       className="p-1 text-[var(--text-muted)] hover:text-[#e06c75] transition-colors opacity-0 group-hover:opacity-100 cursor-pointer"
-                      title="删除"
+                      aria-label="删除碎片"
+                      aria-expanded={expanded}
                     >
                       <Trash2 className="w-3.5 h-3.5" />
-                    </button>
+                    </button>}</CockpitConfirmAction>
                   </div>
                 </div>
               );

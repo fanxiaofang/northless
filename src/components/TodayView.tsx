@@ -309,14 +309,14 @@ export const TodayView: React.FC<TodayViewProps> = ({
           </div>
 
           <div className="flex items-center gap-2.5">
-            <button
+            <CockpitTooltip content="数天未登录时的平稳接回模式"><button
               onClick={onOpenReentryModal}
               className="btn-secondary px-3 py-1.5 rounded type-l5 text-[#78998d] hover:text-[#88a99d] flex items-center gap-1.5 cursor-pointer font-medium"
-              title="数天未登录时的平稳接回模式"
+              aria-label="接回视角"
             >
               <RotateCw className="w-3.5 h-3.5 text-[#78998d]" />
               <span>接回视角</span>
-            </button>
+            </button></CockpitTooltip>
 
             <button
               onClick={onOpenEndTodayModal}
@@ -459,14 +459,14 @@ export const TodayView: React.FC<TodayViewProps> = ({
               >
                 想沉进去
               </button>
-              <button
+              <CockpitTooltip content="换一批候选"><button
                 onClick={onShuffleRecommendations}
                 className="segmented-item type-l5 text-[var(--text-muted)] hover:text-[var(--text-primary)] transition-colors flex items-center gap-1 border-l border-[#b8894f]/15 ml-0.5 pl-2 cursor-pointer font-medium"
-                title="换一批候选"
+                aria-label="换一批候选"
               >
                 <RotateCw className="w-3 h-3" />
                 <span>换一批</span>
-              </button>
+              </button></CockpitTooltip>
             </div>}
           </div>
 
@@ -536,14 +536,14 @@ export const TodayView: React.FC<TodayViewProps> = ({
               {primaryCandidate && (
                 <div className="surface-featured p-5 sm:p-6 rounded-lg relative group shadow-sm">
                   <div className="absolute top-3 right-3 flex items-center gap-2">
-                    <button
+                    <CockpitTooltip content="查看透明算分解释"><button
                       onClick={() => onOpenScoreExplanation(primaryCandidate)}
                       className="type-l6 text-[var(--text-muted)] hover:text-[#b8894f] flex items-center gap-1 px-2 py-0.5 rounded bg-[#181614] border border-[#b8894f]/15 transition-colors cursor-pointer font-mono font-medium"
-                      title="查看透明算分解释"
+                      aria-label="查看透明算分解释"
                     >
                       <HelpCircle className="w-3.5 h-3.5" />
                       <span>Score {primaryCandidate.score}</span>
-                    </button>
+                    </button></CockpitTooltip>
                     <span className="rivet" />
                   </div>
 
@@ -662,13 +662,13 @@ export const TodayView: React.FC<TodayViewProps> = ({
                     </div>
 
                     <div className="flex items-center gap-2 self-end sm:self-auto shrink-0">
-                      <button
+                      <CockpitTooltip content="查看算分解释"><button
                         onClick={() => onOpenScoreExplanation(candidate)}
                         className="p-1 text-[var(--text-muted)] hover:text-[#b8894f] type-l6 cursor-pointer font-medium"
-                        title="查看算分"
+                        aria-label="查看算分解释"
                       >
                         <HelpCircle className="w-3.5 h-3.5" />
-                      </button>
+                      </button></CockpitTooltip>
                       <button
                         onClick={() =>
                           onStartSession(

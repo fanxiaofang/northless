@@ -2,6 +2,7 @@ import React from 'react';
 import { Trash2 } from 'lucide-react';
 import { ActiveSession, LogEntry, Track } from '../types';
 import { InlineEmptyState } from './InlineEmptyState';
+import { CockpitConfirmAction } from './ui/CockpitConfirmAction';
 
 export type LedgerMode = 'live' | 'archive';
 
@@ -226,16 +227,18 @@ export const ChronographLedger: React.FC<ChronographLedgerProps> = ({
             {/* 5. Action Column: Quiet delete affordance on hover */}
             <div className="w-full flex items-center justify-center pt-0.5">
               {onDeleteLog && (
-                <button
+                <CockpitConfirmAction tooltip="删除记录" title="删除这条记录？" description="这条时间线记录将被永久移除。" onConfirm={() => onDeleteLog(log.id)}>{({ ref, onClick, expanded }) => <button
+                  ref={ref}
                   onClick={(e) => {
                     e.stopPropagation();
-                    onDeleteLog(log.id);
+                    onClick();
                   }}
                   className="opacity-0 group-hover:opacity-100 transition-opacity p-0.5 text-[var(--text-muted)] hover:text-[#e06c75] cursor-pointer"
-                  title="删除记录"
+                  aria-label="删除记录"
+                  aria-expanded={expanded}
                 >
                   <Trash2 className="w-3.5 h-3.5" />
-                </button>
+                </button>}</CockpitConfirmAction>
               )}
             </div>
           </div>

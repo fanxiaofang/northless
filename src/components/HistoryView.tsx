@@ -7,6 +7,7 @@ import {
 } from 'lucide-react';
 import { DayClose, LogEntry, Track } from '../types';
 import { ChronographLedger } from './ChronographLedger';
+import { CockpitTooltip } from './ui/CockpitTooltip';
 
 interface HistoryViewProps {
   tracks: Track[];
@@ -92,29 +93,29 @@ export const HistoryView: React.FC<HistoryViewProps> = ({
 
           {/* Week Navigator */}
           <div className="flex items-center gap-2 bg-[#161513] px-3 py-1.5 rounded-lg border border-[#b8894f]/20 self-start sm:self-auto">
-            <button
+            <CockpitTooltip content="上一周"><button
               onClick={() => setWeekOffset(prev => prev - 1)}
               className="p-1 text-[var(--text-muted)] hover:text-[#c89a5a] transition-colors cursor-pointer"
-              title="上一周"
+              aria-label="上一周"
             >
               <ChevronLeft className="w-4 h-4" />
-            </button>
+            </button></CockpitTooltip>
 
             <span className="type-l5 font-medium text-[var(--text-primary)] px-2 font-mono">
               {weekDays[0].shortDate} ─ {weekDays[6].shortDate}
               {weekOffset === 0 && <span className="text-[#b8894f] ml-1.5 font-sans font-medium">(本周)</span>}
             </span>
 
-            <button
+            <CockpitTooltip content="下一周"><button
               onClick={() => setWeekOffset(prev => prev + 1)}
               disabled={weekOffset >= 0}
               className={`p-1 transition-colors ${
                 weekOffset >= 0 ? 'text-[var(--text-ghost)] cursor-not-allowed' : 'text-[var(--text-muted)] hover:text-[#c89a5a] cursor-pointer'
               }`}
-              title="下一周"
+              aria-label="下一周"
             >
               <ChevronRight className="w-4 h-4" />
-            </button>
+            </button></CockpitTooltip>
           </div>
         </header>
 
