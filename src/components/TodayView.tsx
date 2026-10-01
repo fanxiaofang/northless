@@ -12,6 +12,7 @@ import {
   StopCircle,
   Pause,
   Trash2
+  ,ChevronDown, Check
 } from 'lucide-react';
 import {
   ActiveSession,
@@ -24,6 +25,7 @@ import {
 } from '../types';
 import { EffortFilter, calculateStalenessDays } from '../lib/recommendation';
 import { ChronographLedger } from './ChronographLedger';
+import { InlineEmptyState } from './InlineEmptyState';
 
 interface TodayViewProps {
   currentDateStr: string;
@@ -49,6 +51,7 @@ interface TodayViewProps {
   onOpenCard: (card: Card) => void;
   onDeleteLog: (logId: string) => void;
   onSelectTrackView: () => void;
+  onCreateFirstTrack: () => void;
   onAddNextAction?: (trackId: string, title: string, effort: 'light' | 'normal' | 'deep') => void;
 }
 
@@ -73,6 +76,7 @@ export const TodayView: React.FC<TodayViewProps> = ({
   onOpenScoreExplanation,
   onDeleteLog,
   onSelectTrackView,
+  onCreateFirstTrack,
   onAddNextAction,
 }) => {
   // Chronometer live time
@@ -85,6 +89,48 @@ export const TodayView: React.FC<TodayViewProps> = ({
     tracks.find(t => t.role === 'main')?.id || tracks[0]?.id || ''
   );
   const [quickAddEffort, setQuickAddEffort] = useState<'light' | 'normal' | 'deep'>('normal');
+  const [isQuickAddTrackListOpen, setIsQuickAddTrackListOpen] = useState(false);
+  const [quickAddOptionIndex, setQuickAddOptionIndex] = useState(0);
+
+  const hasTracks = tracks.length > 0;
+  const currentMainTrack = tracks.find(track => track.role === 'main');
+  const selectedQuickAddTrack = tracks.find(track => track.id === quickAddTrackId);
+  const canSaveQuickAdd = Boolean(quickAddTitle.trim() && selectedQuickAddTrack);
+  const quickAddTrackLabel = selectedQuickAddTrack
+    ? `${selectedQuickAddTrack.name} · ${selectedQuickAddTrack.role === 'main' ? '主线' : selectedQuickAddTrack.role === 'maintenance' ? '保温' : '暂缓'}`
+    : '选择主线';
+
+  const selectQuickAddTrack = (track: Track) => {
+    setQuickAddTrackId(track.id);
+    setQuickAddOptionIndex(tracks.findIndex(candidate => candidate.id === track.id));
+    setIsQuickAddTrackListOpen(false);
+  };
+
+  const handleQuickAddTrackKeyDown = (event: React.KeyboardEvent<HTMLButtonElement>) => {
+    if (event.key === 'Escape') { setIsQuickAddTrackListOpen(false); return; }
+    if (event.key === 'Enter' || event.key === ' ') { event.preventDefault(); setIsQuickAddTrackListOpen(open => !open); return; }
+    if (event.key === 'ArrowDown' || event.key === 'ArrowUp') {
+      event.preventDefault();
+      const direction = event.key === 'ArrowDown' ? 1 : -1;
+      const nextIndex = (quickAddOptionIndex + direction + tracks.length) % tracks.length;
+      setQuickAddOptionIndex(nextIndex);
+      setQuickAddTrackId(tracks[nextIndex].id);
+      setIsQuickAddTrackListOpen(true);
+    }
+  };
+
+  useEffect(() => {
+    if (!hasTracks) {
+      setShowQuickAddNext(false);
+      setQuickAddTitle('');
+      setQuickAddTrackId('');
+      return;
+    }
+
+    if (!tracks.some(track => track.id === quickAddTrackId)) {
+      setQuickAddTrackId(currentMainTrack?.id || tracks[0].id);
+    }
+  }, [hasTracks, tracks, quickAddTrackId, currentMainTrack]);
 
   useEffect(() => {
     const updateTime = () => {
@@ -249,12 +295,12 @@ export const TodayView: React.FC<TodayViewProps> = ({
             </div>
 
             {/* Effort & Filter switchers (Tactile instrument switches) */}
-            <div className="flex items-center gap-1 p-0.5 bg-[#151412] rounded-[7px] border border-[#b8894f]/15 self-start sm:self-auto overflow-x-auto max-w-full">
+            {hasTracks && <div className="flex items-center gap-1 p-0.5 bg-[#151412] rounded-[7px] border border-[#b8894f]/15 self-start sm:self-auto overflow-x-auto max-w-full">
               <button
                 onClick={() => onSetEffortFilter('all')}
                 className={`chip-semi-capsule type-l5 whitespace-nowrap cursor-pointer ${
                   effortFilter === 'all'
-                    ? 'bg-[#252019] text-[var(--text-hero)] border border-[#b8894f]/35 shadow-2xs font-medium'
+                    ? 'mode-auto-selected border font-medium'
                     : 'text-[var(--text-muted)] hover:text-[var(--text-primary)]'
                 }`}
               >
@@ -264,7 +310,7 @@ export const TodayView: React.FC<TodayViewProps> = ({
                 onClick={() => onSetEffortFilter('light')}
                 className={`chip-semi-capsule type-l5 whitespace-nowrap cursor-pointer ${
                   effortFilter === 'light'
-                    ? 'bg-[rgba(120,153,141,0.16)] text-[#78998d] border border-[rgba(120,153,141,0.35)] shadow-2xs font-medium'
+                    ? 'mode-light-selected border font-medium'
                     : 'text-[var(--text-muted)] hover:text-[#78998d]'
                 }`}
               >
@@ -274,7 +320,7 @@ export const TodayView: React.FC<TodayViewProps> = ({
                 onClick={() => onSetEffortFilter('normal')}
                 className={`chip-semi-capsule type-l5 whitespace-nowrap cursor-pointer ${
                   effortFilter === 'normal'
-                    ? 'bg-[#252019] text-[var(--text-hero)] border border-[#b8894f]/35 shadow-2xs font-medium'
+                    ? 'mode-normal-selected border font-medium'
                     : 'text-[var(--text-muted)] hover:text-[var(--text-primary)]'
                 }`}
               >
@@ -284,7 +330,7 @@ export const TodayView: React.FC<TodayViewProps> = ({
                 onClick={() => onSetEffortFilter('deep')}
                 className={`chip-semi-capsule type-l5 whitespace-nowrap cursor-pointer ${
                   effortFilter === 'deep'
-                    ? 'bg-[rgba(200,122,62,0.16)] text-[#c87a3e] border border-[rgba(200,122,62,0.35)] shadow-2xs font-medium'
+                    ? 'mode-deep-selected border font-medium'
                     : 'text-[var(--text-muted)] hover:text-[#c87a3e]'
                 }`}
               >
@@ -298,107 +344,71 @@ export const TodayView: React.FC<TodayViewProps> = ({
                 <RotateCw className="w-3 h-3" />
                 <span>换一批</span>
               </button>
-            </div>
+            </div>}
           </div>
 
           {/* Recommendations Content */}
-          {recommendations.length === 0 ? (
-            <div className="space-y-3">
-              <div className="surface-flat p-4 sm:p-5 rounded-lg border border-[#b8894f]/15 flex flex-col sm:flex-row sm:items-center justify-between gap-3 min-h-[80px]">
-                <div>
-                  <h3 className="type-l4 font-medium text-[var(--text-primary)] mb-0.5">暂无可推荐的 Next</h3>
-                  <div className="type-l5 text-[var(--text-secondary)] flex items-center gap-1.5 flex-wrap">
-                    <span>当前主线还没有清晰的下一步。</span>
-                    <button
-                      onClick={onSelectTrackView}
-                      className="text-[#b8894f] hover:underline inline-flex items-center gap-0.5 font-medium cursor-pointer"
-                    >
-                      去 Tracks 留下 1–3 个 Next <ArrowRight className="w-3 h-3" />
+          {!hasTracks ? (
+            <div className="surface-flat recommendation-empty-surface p-4 sm:p-5 rounded-lg min-h-[108px] flex flex-col sm:flex-row sm:items-end sm:justify-between gap-4">
+              <InlineEmptyState label="还没有主线" description="先留下一条想持续推进的方向。" />
+              <button onClick={onCreateFirstTrack} className="recommendation-link-action inline-flex items-center gap-0.5 type-l5 font-medium cursor-pointer shrink-0">
+                新建第一条主线 <ArrowRight className="w-3 h-3" />
+              </button>
+            </div>
+          ) : recommendations.length === 0 ? (
+            <div className="surface-flat recommendation-empty-surface rounded-lg">
+              <div className="p-4 sm:p-5 flex flex-col sm:flex-row sm:items-end sm:justify-between gap-4 min-h-[108px]">
+                <InlineEmptyState label="暂无推荐" description="当前主线还没有清晰的下一步。" />
+                <div className="recommendation-action-cluster shrink-0">
+                  {onAddNextAction && (
+                    <button onClick={() => setShowQuickAddNext(true)} className="btn-secondary recommendation-quick-add px-3 py-1.5 rounded type-l5 font-medium flex items-center gap-1.5 cursor-pointer">
+                      <Plus className="w-3.5 h-3.5" />
+                      <span>快速新增 Next</span>
                     </button>
-                  </div>
-                </div>
-
-                {onAddNextAction && (
-                  <button
-                    onClick={() => setShowQuickAddNext(true)}
-                    className="btn-secondary px-3.5 py-1.5 rounded type-l5 font-medium text-[var(--text-primary)] hover:text-[var(--text-hero)] flex items-center gap-1.5 shrink-0 self-start sm:self-auto cursor-pointer"
-                  >
-                    <Plus className="w-3.5 h-3.5 text-[#b8894f]" />
-                    <span>快速新增</span>
+                  )}
+                  <button onClick={onSelectTrackView} className="recommendation-link-action inline-flex items-center gap-0.5 type-l6 font-medium cursor-pointer">
+                    去主线页完整编辑 <ArrowRight className="w-3 h-3" />
                   </button>
-                )}
+                </div>
               </div>
-
-              {/* Inline Quick Add Next Action Form */}
               {showQuickAddNext && onAddNextAction && (
                 <form
                   onSubmit={(e) => {
                     e.preventDefault();
-                    if (!quickAddTitle.trim()) return;
-                    onAddNextAction(quickAddTrackId, quickAddTitle.trim(), quickAddEffort);
+                    if (!canSaveQuickAdd || !selectedQuickAddTrack) return;
+                    onAddNextAction(selectedQuickAddTrack.id, quickAddTitle.trim(), quickAddEffort);
                     setQuickAddTitle('');
                     setShowQuickAddNext(false);
                   }}
-                  className="surface-featured p-4 rounded-lg border border-[#b8894f]/25 space-y-3"
+                  className="quick-add-composer"
                 >
-                  <div className="flex items-center justify-between">
-                    <span className="type-l6 font-mono text-[#b8894f] uppercase tracking-wider font-medium">
-                      快速新增 Next 动作
-                    </span>
-                    <button
-                      type="button"
-                      onClick={() => setShowQuickAddNext(false)}
-                      className="type-l6 text-[var(--text-muted)] hover:text-[var(--text-primary)] cursor-pointer font-medium"
-                    >
-                      取消
-                    </button>
+                  <div className="quick-add-composer-header">
+                    <span>快速新增 Next</span>
+                    <button type="button" onClick={() => setShowQuickAddNext(false)} className="quick-add-cancel cursor-pointer">取消</button>
                   </div>
-                  <div className="flex flex-col sm:flex-row gap-2.5">
-                    <input
-                      type="text"
-                      placeholder="可执行的小动作（如：读完第 2 章、写完 API 接口...）"
-                      value={quickAddTitle}
-                      onChange={(e) => setQuickAddTitle(e.target.value)}
-                      className="flex-1 bg-[#151412] border border-[#b8894f]/20 rounded px-3 py-1.5 type-l4 text-[var(--text-primary)] focus:outline-none focus:border-[#b8894f]"
-                      autoFocus
-                    />
-                    <select
-                      value={quickAddTrackId}
-                      onChange={(e) => setQuickAddTrackId(e.target.value)}
-                      className="bg-[#151412] border border-[#b8894f]/20 rounded px-2.5 py-1.5 type-l5 text-[var(--text-primary)] focus:outline-none focus:border-[#b8894f]"
-                    >
-                      {tracks.map(t => (
-                        <option key={t.id} value={t.id}>
-                          {t.name} ({t.role === 'main' ? '主线' : t.role === 'maintenance' ? '保温' : '暂缓'})
-                        </option>
-                      ))}
-                    </select>
-                    <div className="flex items-center gap-1">
-                      {(['light', 'normal', 'deep'] as const).map(eff => (
-                        <button
-                          key={eff}
-                          type="button"
-                          onClick={() => setQuickAddEffort(eff)}
-                          className={`px-2.5 py-1.5 rounded type-l6 transition-colors cursor-pointer ${
-                            quickAddEffort === eff
-                              ? eff === 'light'
-                                ? 'tag-effort-light font-medium'
-                                : eff === 'deep'
-                                ? 'tag-effort-deep font-medium'
-                                : 'tag-effort-normal font-medium'
-                              : 'bg-[#151412] text-[var(--text-muted)] border border-[#b8894f]/15'
-                          }`}
-                        >
-                          {eff === 'light' ? '轻量' : eff === 'normal' ? '正常' : '深入'}
+                  <input type="text" placeholder="可执行的小动作（如：读完第 2 章、写完 API 接口...）" value={quickAddTitle} onChange={(e) => setQuickAddTitle(e.target.value)} className="quick-add-slot" autoFocus />
+                  <div className="quick-add-controls">
+                    <div className="quick-add-track-control">
+                      <span>主线</span>
+                      <div className="track-listbox">
+                        <button type="button" className="track-listbox-trigger" aria-haspopup="listbox" aria-expanded={isQuickAddTrackListOpen} onClick={() => setIsQuickAddTrackListOpen(open => !open)} onKeyDown={handleQuickAddTrackKeyDown}>
+                          <span>{quickAddTrackLabel}</span><ChevronDown className="w-3 h-3" />
+                        </button>
+                        {isQuickAddTrackListOpen && <div className="track-listbox-options" role="listbox" aria-label="选择主线">
+                          {tracks.map((track, index) => <button key={track.id} type="button" role="option" aria-selected={track.id === quickAddTrackId} className={track.id === quickAddTrackId ? 'is-selected' : ''} onMouseEnter={() => setQuickAddOptionIndex(index)} onClick={() => selectQuickAddTrack(track)}>
+                            <span>{track.name} · {track.role === 'main' ? '主线' : track.role === 'maintenance' ? '保温' : '暂缓'}</span>{track.id === quickAddTrackId && <Check className="w-3 h-3" />}
+                          </button>)}
+                        </div>}
+                      </div>
+                    </div>
+                    <div className="quick-add-effort" aria-label="投入程度">
+                      {(['light', 'normal', 'deep'] as const).map(effort => (
+                        <button key={effort} type="button" onClick={() => setQuickAddEffort(effort)} aria-pressed={quickAddEffort === effort} className={quickAddEffort === effort ? 'is-selected' : ''}>
+                          {effort === 'light' ? '轻量' : effort === 'normal' ? '正常' : '深入'}
                         </button>
                       ))}
                     </div>
-                    <button
-                      type="submit"
-                      className="brass-button px-4 py-1.5 rounded type-l5 font-medium text-[var(--text-hero)] shrink-0 cursor-pointer"
-                    >
-                      保存
-                    </button>
+                    <button type="submit" disabled={!canSaveQuickAdd} className="quick-add-save cursor-pointer">保存</button>
                   </div>
                 </form>
               )}
@@ -564,8 +574,8 @@ export const TodayView: React.FC<TodayViewProps> = ({
         </section>
 
         {/* SECTION 2: "今天发生的现实" (Engineering Journal - Reality Timeline) */}
-        <section className="space-y-4 pt-4 border-t border-[#b8894f]/15">
-          <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-3">
+        <section className="ledger-section pt-4 border-t border-[#b8894f]/15">
+          <header className="ledger-section-header">
             <div>
               <h2 className="section-title">
                 今天发生的现实
@@ -592,17 +602,18 @@ export const TodayView: React.FC<TodayViewProps> = ({
                 <span>Start Session</span>
               </button>
             </div>
-          </div>
+          </header>
 
-          <ChronographLedger
-            mode="live"
-            entries={todayLogs}
-            tracks={tracks}
-            onDeleteLog={onDeleteLog}
-            emptyMessage="今天还没有留下任何痕迹。"
-            emptySubtext="完成了一段专注？或是刚刚散步打了一会游戏？都可以轻松记下一笔。"
-            onOpenCreate={onOpenLogModal}
-          />
+          <div className="ledger-section-body">
+            <ChronographLedger
+              mode="live"
+              entries={todayLogs}
+              tracks={tracks}
+              onDeleteLog={onDeleteLog}
+              emptyMessage="暂无记录"
+              emptySubtext="完成一段专注，或者随手记下一件事，都可以。"
+            />
+          </div>
         </section>
 
         {/* SECTION 3: Current Phase Minimalist Log Footer */}

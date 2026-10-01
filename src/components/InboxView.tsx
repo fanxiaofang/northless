@@ -8,6 +8,7 @@ import {
   ChevronDown
 } from 'lucide-react';
 import { InboxItem, Track } from '../types';
+import { InlineEmptyState } from './InlineEmptyState';
 
 interface CustomTrackSelectProps {
   tracks: Track[];
@@ -172,11 +173,12 @@ export const InboxView: React.FC<InboxViewProps> = ({
           </p>
         </header>
 
-        {/* Quick Capture Input Tray (Clean single writing slot, no nested inner boxes) */}
-        <form onSubmit={handleSubmit} className="surface-optic-soft p-4 sm:p-5 rounded-lg space-y-3">
-          <div>
+        {/* Quick Capture Input Tray: one continuous optical surface with a shallow writing plane */}
+        <form onSubmit={handleSubmit} className="surface-optic-soft inbox-capture-surface rounded-lg">
+          <div className="inbox-capture-slot">
             <textarea
               placeholder="随时捕捉闪念（如：看看 MCP transport 实现细节、interval DP 专题...）"
+              aria-label="记录一条闪念"
               value={content}
               onChange={e => setContent(e.target.value)}
               onKeyDown={e => {
@@ -185,24 +187,25 @@ export const InboxView: React.FC<InboxViewProps> = ({
                 }
               }}
               rows={2}
-              className="w-full bg-transparent border-0 p-0 journal-input text-[var(--text-primary)] placeholder:text-[var(--text-ghost)] focus:outline-none focus:ring-0 resize-none"
+              className="inbox-capture-input w-full bg-transparent border-0 p-0 journal-input text-[var(--text-primary)] focus:outline-none focus:ring-0 resize-none"
               autoFocus
             />
           </div>
 
-          <div className="border-t border-[#b8894f]/15 pt-3 flex flex-wrap items-center justify-between gap-3">
-            <div className="flex items-center gap-2 type-l5 font-medium">
-              <span className="text-[var(--text-secondary)] font-mono">可选主线:</span>
+          <div className="inbox-capture-actions">
+            <div className="inbox-track-picker flex min-w-0 flex-1 items-center gap-2 type-l5 font-medium sm:flex-none">
+              <span className="shrink-0 whitespace-nowrap text-[var(--text-secondary)] font-mono">可选主线:</span>
               <CustomTrackSelect
                 tracks={tracks}
                 value={selectedTrackId}
                 onChange={setSelectedTrackId}
                 allowEmpty
                 emptyLabel="不关联 (自由闪念)"
+                className="min-w-0 flex-1 sm:flex-none"
               />
             </div>
 
-            <div className="flex items-center gap-2.5">
+            <div className="inbox-submit-controls flex items-center gap-2.5">
               <span className="type-l6 font-mono text-[var(--text-ghost)] hidden sm:inline select-none">⌘ + Enter</span>
               <button
                 type="submit"
@@ -218,10 +221,8 @@ export const InboxView: React.FC<InboxViewProps> = ({
         {/* Capture Stream */}
         <div className="space-y-3">
           {activeItems.length === 0 ? (
-            <div className="py-8 text-center space-y-2 select-none border border-dashed border-[#b8894f]/15 rounded-lg bg-[#151412]/30">
-              <div className="type-l6 font-mono text-[var(--text-ghost)] tracking-widest uppercase">···· CAPTURE TRAY EMPTY ····</div>
-              <p className="type-l4 text-[var(--text-primary)] font-medium">暂无未归整的灵感碎片</p>
-              <p className="type-l5 text-[var(--text-secondary)]">闪念可随时在此停泊，无需立即处理</p>
+            <div className="inbox-empty-state select-none">
+              <InlineEmptyState label="暂无碎片" description="闪念可以先停在这里，无需立即处理。" />
             </div>
           ) : (
             activeItems.map(item => {

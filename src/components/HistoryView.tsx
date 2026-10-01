@@ -119,7 +119,7 @@ export const HistoryView: React.FC<HistoryViewProps> = ({
         </header>
 
         {/* Weekly Touch Matrix (The core optical reference - Dedicated warm ambient micro-glow) */}
-        <div className="matrix-panel p-6 rounded-lg space-y-6">
+        <div className="surface-optic-strong matrix-panel p-6 rounded-lg space-y-6">
           <div className="flex items-center justify-between">
             <div>
               <h2 className="section-title flex items-center gap-2">
@@ -202,17 +202,29 @@ export const HistoryView: React.FC<HistoryViewProps> = ({
         </div>
 
         {/* Daily Archive Logs */}
-        <div className="space-y-6 pt-4">
-          <div className="flex items-center justify-between border-b border-[#b8894f]/15 pb-2">
+        <section className="archive-ledger-section pt-4">
+          <header className="ledger-section-header border-b border-[#b8894f]/15 pb-2">
             <h2 className="section-title">
               本周日常记录存根
             </h2>
             <span className="type-l6 font-mono text-[var(--text-muted)] uppercase tracking-wider font-medium">
               DAILY ARCHIVE · 工程日志
             </span>
-          </div>
+          </header>
 
-          <div className="space-y-8">
+          <div className="archive-ledger-body">
+            {weekLogs.length === 0 && dayCloses.length === 0 && (
+              <div className="ledger-section-body">
+                <ChronographLedger
+                  mode="archive"
+                  entries={[]}
+                  tracks={tracks}
+                  emptyMessage="暂无记录"
+                  emptySubtext="本周还没有留下日常记录。"
+                />
+              </div>
+            )}
+
             {weekDays
               .slice()
               .reverse()
@@ -223,10 +235,10 @@ export const HistoryView: React.FC<HistoryViewProps> = ({
                 if (dayEntries.length === 0 && !dayClose) return null;
 
                 return (
-                  <div key={d.dateStr} className="space-y-2">
+                  <div key={d.dateStr} className="archive-day-group">
                     {/* Date Section Header */}
-                    <div className="flex items-center justify-between border-b border-[#b8894f]/12 pb-1.5">
-                      <div className="flex items-center gap-2">
+                    <div className="archive-day-header">
+                      <div className="archive-day-date">
                         <span className="w-1.5 h-1.5 rounded-full bg-[#b8894f]" />
                         <span className="date-group-heading">
                           {d.dateStr} · {d.dayName}
@@ -238,7 +250,7 @@ export const HistoryView: React.FC<HistoryViewProps> = ({
                     </div>
 
                     {/* Timeline Archive Entries (Chronograph Ledger Archive Slip) */}
-                    <div className="py-1">
+                    <div className="archive-day-ledger">
                       <ChronographLedger
                         mode="archive"
                         entries={dayEntries}
@@ -261,7 +273,7 @@ export const HistoryView: React.FC<HistoryViewProps> = ({
                 );
               })}
           </div>
-        </div>
+        </section>
       </div>
     </div>
   );

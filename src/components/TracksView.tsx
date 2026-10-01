@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import {
   Plus,
   Play,
@@ -10,6 +10,7 @@ import {
 } from 'lucide-react';
 import { Card, LogEntry, NextAction, Phase, Track, TrackRole } from '../types';
 import { calculateStalenessDays } from '../lib/recommendation';
+import { InlineEmptyState } from './InlineEmptyState';
 
 interface TracksViewProps {
   tracks: Track[];
@@ -27,6 +28,10 @@ interface TracksViewProps {
   onOpenCard: (card: Card) => void;
   onAddNewTrack: (name: string, description: string, role: TrackRole, stages: string[]) => void;
   onOpenPhaseSettings: () => void;
+  shouldOpenNewTrackComposer?: boolean;
+  onNewTrackComposerOpened?: () => void;
+  onCreatedFromToday?: () => void;
+  onNewTrackComposerDismissed?: () => void;
 }
 
 export const TracksView: React.FC<TracksViewProps> = ({
@@ -45,7 +50,13 @@ export const TracksView: React.FC<TracksViewProps> = ({
   onOpenCard,
   onAddNewTrack,
   onOpenPhaseSettings,
+  shouldOpenNewTrackComposer = false,
+  onNewTrackComposerOpened,
+  onCreatedFromToday,
+  onNewTrackComposerDismissed,
 }) => {
+  // Keep the existing initial selection for populated datasets. An empty dataset
+  // begins without a selection, and must not fall back once a track is added.
   const [selectedTrackId, setSelectedTrackId] = useState<string>(tracks[0]?.id || '');
   const [showAddTrackModal, setShowAddTrackModal] = useState(false);
   const [newTrackName, setNewTrackName] = useState('');
@@ -53,13 +64,22 @@ export const TracksView: React.FC<TracksViewProps> = ({
   const [newTrackRole, setNewTrackRole] = useState<TrackRole>('main');
   const [newTrackStages, setNewTrackStages] = useState('基础理解, 小 Demo, 完整项目, 求职包装');
 
+  useEffect(() => {
+    if (shouldOpenNewTrackComposer) {
+      setShowAddTrackModal(true);
+      onNewTrackComposerOpened?.();
+    }
+  }, [shouldOpenNewTrackComposer, onNewTrackComposerOpened]);
+
   // Quick add Next action state
   const [isAddingAction, setIsAddingAction] = useState(false);
   const [actionTitle, setActionTitle] = useState('');
   const [actionNote, setActionNote] = useState('');
   const [actionEffort, setActionEffort] = useState<'light' | 'normal' | 'deep'>('normal');
 
-  const selectedTrack = tracks.find(t => t.id === selectedTrackId) || tracks[0];
+  // Do not fall back to tracks[0]: an empty selection is its own page state.
+  const selectedTrack = tracks.find(t => t.id === selectedTrackId);
+  const hasTracks = tracks.length > 0;
 
   const handleCreateTrack = (e: React.FormEvent) => {
     e.preventDefault();
@@ -77,6 +97,7 @@ export const TracksView: React.FC<TracksViewProps> = ({
     setNewTrackName('');
     setNewTrackDesc('');
     setShowAddTrackModal(false);
+    onCreatedFromToday?.();
   };
 
   const handleCreateAction = (e: React.FormEvent) => {
@@ -173,14 +194,25 @@ export const TracksView: React.FC<TracksViewProps> = ({
         {/* Two-Column Structure with Subtle Vertical Dossier Divider */}
         <div className="flex flex-col md:flex-row gap-7 md:gap-8 items-start">
           {/* Left Column: Track Index / 主线目录 */}
-          <nav className="w-full md:w-[190px] shrink-0 space-y-2 md:border-r md:border-[#b8894f]/12 md:pr-7">
+          <nav
+            className={`w-full md:w-[190px] shrink-0 space-y-2 md:pr-7 ${
+              hasTracks ? 'md:border-r md:border-[#b8894f]/12' : ''
+            }`}
+          >
             <div className="type-l6 font-mono uppercase tracking-widest text-[var(--text-muted)] px-2 pb-2 border-b border-[#b8894f]/12 flex items-center justify-between font-medium">
               <span>ALL COURSES</span>
               <span className="text-[var(--text-muted)] font-mono text-[11.5px] font-semibold">{tracks.length}</span>
             </div>
 
             <div className="flex md:flex-col overflow-x-auto md:overflow-x-visible pb-2 md:pb-0 gap-1 md:gap-0.5 pt-1">
-              {tracks.map(t => {
+              {!hasTracks ? (
+                <InlineEmptyState
+                  className="tracks-empty-state px-2.5 py-3"
+                  label="暂无主线"
+                  description="从一条近期想持续推进的方向开始。"
+                />
+              ) : (
+                tracks.map(t => {
                 const isSelected = t.id === selectedTrack?.id;
                 const staleness = calculateStalenessDays(t.last_touched_at, currentDateStr);
                 const isMain = t.role === 'main';
@@ -221,7 +253,8 @@ export const TracksView: React.FC<TracksViewProps> = ({
                     </div>
                   </button>
                 );
-              })}
+                })
+              )}
             </div>
           </nav>
 
@@ -229,7 +262,7 @@ export const TracksView: React.FC<TracksViewProps> = ({
           {selectedTrack ? (
             <div className="flex-1 min-w-0 space-y-8">
               {/* Dossier Header with soft optical depth (surface-optic-soft) */}
-              <div className="surface-optic-soft p-4 sm:p-5 rounded-lg space-y-3">
+              <div className="surface-optic-soft track-profile-surface track-detail-content-inset py-4 sm:py-5 rounded-lg space-y-3">
                 <div className="flex flex-col sm:flex-row sm:items-baseline justify-between gap-2.5">
                   <div className="type-l6 font-mono text-[var(--text-muted)] uppercase tracking-wider font-medium">
                     {getRoleHeaderKicker(selectedTrack.role)}
@@ -473,12 +506,11 @@ export const TracksView: React.FC<TracksViewProps> = ({
                     </div>
                   </form>
                 ) : activeTrackActions.length === 0 ? (
-                  <div className="py-4 space-y-1 text-left">
-                    <div className="type-l4 text-[var(--text-primary)] font-medium">暂无清晰 Next</div>
-                    <p className="type-l5 text-[var(--text-secondary)]">
-                      先留下当前最确定、最容易启动的一步。
-                    </p>
-                  </div>
+                  <InlineEmptyState
+                    className="py-4"
+                    label="暂无 Next"
+                    description="先留下当前最确定、最容易启动的一步。"
+                  />
                 ) : (
                   <div className="divide-y divide-[#b8894f]/10">
                     {activeTrackActions.map((action, idx) => (
@@ -601,9 +633,7 @@ export const TracksView: React.FC<TracksViewProps> = ({
                   </div>
 
                   {trackLogs.length === 0 ? (
-                    <div className="type-l5 text-[var(--text-secondary)] py-1.5 font-sans">
-                      暂无记录
-                    </div>
+                    <InlineEmptyState className="py-1.5" label="暂无记录" />
                   ) : (
                     <div className="space-y-1">
                       {trackLogs.map((l, lIdx) => (
@@ -647,9 +677,7 @@ export const TracksView: React.FC<TracksViewProps> = ({
                   </div>
 
                   {relatedCards.length === 0 ? (
-                    <div className="type-l5 text-[var(--text-secondary)] py-1.5 font-sans">
-                      暂无资源
-                    </div>
+                    <InlineEmptyState className="py-1.5" label="暂无关联资源" />
                   ) : (
                     <div className="space-y-0.5">
                       {relatedCards.map(c => (
@@ -669,22 +697,24 @@ export const TracksView: React.FC<TracksViewProps> = ({
                 </div>
               </div>
             </div>
-          ) : (
-            <div className="flex-1 py-12 text-center text-[var(--text-muted)] type-l4">
-              请选择或新建一条主线
+          ) : hasTracks ? (
+            <div className="flex-1 min-w-0 track-detail-content-inset pt-1">
+              <InlineEmptyState
+                className="py-3"
+                label="选择一条主线查看档案"
+                description="目标、阶段与 Next 会显示在这里。"
+              />
             </div>
-          )}
+          ) : null}
         </div>
       </div>
 
       {/* Add Track Modal */}
       {showAddTrackModal && (
         <div className="fixed inset-0 z-50 bg-black/75 backdrop-blur-xs flex items-center justify-center p-4">
-          <div className="brass-panel-elevated p-6 rounded-lg max-w-md w-full space-y-4 border border-[#b8894f]/35 shadow-2xl">
-            <h3 className="font-display text-lg font-semibold text-[var(--text-hero)]">
-              新建探索主线
-            </h3>
-            <form onSubmit={handleCreateTrack} className="space-y-3 type-l5">
+          <div className="surface-optic-soft p-5 sm:p-6 rounded-lg max-w-[36rem] w-full space-y-4 border border-[#b8894f]/20 shadow-lg">
+            <div><h3 className="font-display text-lg font-semibold text-[var(--text-hero)]">新建主线</h3><p className="type-l5 text-[var(--text-secondary)] mt-1">留下一条接下来一段时间想持续推进的方向。</p></div>
+            <form onSubmit={handleCreateTrack} className="space-y-4 type-l5">
               <div>
                 <label className="block text-[var(--text-muted)] mb-1 font-medium">主线名称</label>
                 <input
@@ -692,19 +722,19 @@ export const TracksView: React.FC<TracksViewProps> = ({
                   placeholder="如: Agent / AI, 算法, Linux/C"
                   value={newTrackName}
                   onChange={e => setNewTrackName(e.target.value)}
-                  className="w-full bg-[#141311] border border-[#b8894f]/20 rounded px-3 py-2 text-[var(--text-primary)] focus:outline-hidden focus:border-[#b8894f]"
+                  className="form-slot px-3 py-2"
                   required
                   autoFocus
                 />
               </div>
 
               <div>
-                <label className="block text-[var(--text-muted)] mb-1 font-medium">做它是为了什么 (核心目的)</label>
+                <label className="block text-[var(--text-muted)] mb-1.5 font-medium">为什么做这条主线</label>
                 <textarea
                   placeholder="如: 掌握现代 Agent 开发，并形成一个可以用于求职展示的项目。"
                   value={newTrackDesc}
                   onChange={e => setNewTrackDesc(e.target.value)}
-                  className="w-full bg-[#141311] border border-[#b8894f]/20 rounded px-3 py-2 text-[var(--text-primary)] focus:outline-hidden focus:border-[#b8894f] h-20"
+                  className="form-slot px-3 py-2 h-20"
                 />
               </div>
 
@@ -718,8 +748,8 @@ export const TracksView: React.FC<TracksViewProps> = ({
                       onClick={() => setNewTrackRole(role)}
                       className={`flex-1 py-1.5 rounded type-l5 cursor-pointer font-medium ${
                         newTrackRole === role
-                          ? 'bg-[#282119] text-[#b8894f] border border-[#b8894f]/40 shadow-2xs font-semibold'
-                          : 'bg-[#161513] text-[var(--text-muted)] hover:text-[var(--text-primary)]'
+                          ? `role-control ${role === 'main' ? 'is-main' : role === 'maintenance' ? 'is-maintenance' : 'is-paused'} font-semibold`
+                          : 'role-control text-[var(--text-muted)] hover:text-[var(--text-primary)]'
                       }`}
                     >
                       {role === 'main' ? '主线' : role === 'maintenance' ? '保温' : '暂缓'}
@@ -729,19 +759,20 @@ export const TracksView: React.FC<TracksViewProps> = ({
               </div>
 
               <div>
-                <label className="block text-[var(--text-muted)] mb-1 font-medium">粗粒度阶段 (以逗号分隔)</label>
+                <label className="block text-[var(--text-muted)] mb-1 font-medium">路线阶段</label>
+                <p className="type-l6 text-[var(--text-ghost)] mb-1.5">用逗号分隔，建议 3–5 个阶段。</p>
                 <input
                   type="text"
                   value={newTrackStages}
                   onChange={e => setNewTrackStages(e.target.value)}
-                  className="w-full bg-[#141311] border border-[#b8894f]/20 rounded px-3 py-2 text-[var(--text-primary)] focus:outline-hidden focus:border-[#b8894f]"
+                  className="form-slot px-3 py-2"
                 />
               </div>
 
               <div className="flex items-center justify-end gap-2 pt-3">
                 <button
                   type="button"
-                  onClick={() => setShowAddTrackModal(false)}
+                  onClick={() => { setShowAddTrackModal(false); onNewTrackComposerDismissed?.(); }}
                   className="px-3 py-1.5 text-[var(--text-muted)] hover:text-[var(--text-primary)] cursor-pointer font-medium"
                 >
                   取消

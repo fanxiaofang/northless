@@ -74,6 +74,8 @@ export default function App() {
   // Recommendations effort filter & cycle offset
   const [effortFilter, setEffortFilter] = useState<EffortFilter>('all');
   const [rotationOffset, setRotationOffset] = useState<number>(0);
+  const [shouldOpenNewTrackComposer, setShouldOpenNewTrackComposer] = useState(false);
+  const [returnToTodayAfterNewTrack, setReturnToTodayAfterNewTrack] = useState(false);
 
   // Modals state
   const [showLogModal, setShowLogModal] = useState<boolean>(false);
@@ -595,6 +597,11 @@ export default function App() {
             onOpenCard={card => setSelectedCardForView(card)}
             onDeleteLog={handleDeleteLog}
             onSelectTrackView={() => setCurrentView('tracks')}
+            onCreateFirstTrack={() => {
+              setShouldOpenNewTrackComposer(true);
+              setReturnToTodayAfterNewTrack(true);
+              setCurrentView('tracks');
+            }}
             onAddNextAction={handleAddNextAction}
           />
         )}
@@ -616,6 +623,13 @@ export default function App() {
             onOpenCard={card => setSelectedCardForView(card)}
             onAddNewTrack={handleAddNewTrack}
             onOpenPhaseSettings={() => setShowSettingsModal(true)}
+            shouldOpenNewTrackComposer={shouldOpenNewTrackComposer}
+            onNewTrackComposerOpened={() => setShouldOpenNewTrackComposer(false)}
+            onCreatedFromToday={returnToTodayAfterNewTrack ? () => {
+              setReturnToTodayAfterNewTrack(false);
+              setCurrentView('today');
+            } : undefined}
+            onNewTrackComposerDismissed={() => setReturnToTodayAfterNewTrack(false)}
           />
         )}
 

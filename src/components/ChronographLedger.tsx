@@ -1,6 +1,7 @@
 import React from 'react';
 import { Trash2 } from 'lucide-react';
 import { ActiveSession, LogEntry, Track } from '../types';
+import { InlineEmptyState } from './InlineEmptyState';
 
 export type LedgerMode = 'live' | 'archive';
 
@@ -12,7 +13,6 @@ interface ChronographLedgerProps {
   onDeleteLog?: (logId: string) => void;
   emptyMessage?: string;
   emptySubtext?: string;
-  onOpenCreate?: () => void;
 }
 
 export const ChronographLedger: React.FC<ChronographLedgerProps> = ({
@@ -23,7 +23,6 @@ export const ChronographLedger: React.FC<ChronographLedgerProps> = ({
   onDeleteLog,
   emptyMessage = '暂无记录存根',
   emptySubtext = '发生的现实由人亲手留下。',
-  onOpenCreate,
 }) => {
   // Format duration into quiet instrument string without box/badge
   const formatDuration = (minutes?: number) => {
@@ -44,34 +43,26 @@ export const ChronographLedger: React.FC<ChronographLedgerProps> = ({
     return 'long';
   };
 
-  if (entries.length === 0 && !activeSession) {
-    return (
-      <div className="py-6 px-1 space-y-2 max-w-[640px]">
-        <div className="type-l6 font-mono text-[var(--text-ghost)] tracking-widest uppercase select-none">
-          ···· NO RECORDS ····
-        </div>
-        <p className="type-l4 font-sans text-[var(--text-primary)] font-medium">{emptyMessage}</p>
-        <p className="type-l5 font-sans text-[var(--text-secondary)]">{emptySubtext}</p>
-        {onOpenCreate && (
-          <button
-            onClick={onOpenCreate}
-            className="brass-button px-3.5 py-1.5 rounded type-l5 text-[var(--text-primary)] hover:text-[var(--text-hero)] inline-flex items-center gap-1.5 cursor-pointer mt-2 font-medium"
-          >
-            <span>留下第一笔记录</span>
-          </button>
-        )}
-      </div>
-    );
-  }
-
   const isArchive = mode === 'archive';
+  const isEmpty = entries.length === 0 && !activeSession;
   const activeTrack = activeSession ? tracks.find(t => t.id === activeSession.track_id) : null;
 
   return (
     <div className="relative max-w-[640px] w-full space-y-1" data-mode={mode}>
+      {isEmpty && (
+        <div className="ledger-grid ledger-empty-row" role="status">
+          <span className="ledger-empty-rail" aria-hidden="true">····</span>
+          <InlineEmptyState
+            className="ledger-empty-block"
+            label={emptyMessage}
+            description={emptySubtext}
+          />
+        </div>
+      )}
+
       {/* Active Session Live Marker (Grid Layout tightened) */}
       {mode === 'live' && activeSession && (
-        <div className="grid grid-cols-[64px_68px_minmax(0,1fr)_42px_22px] sm:grid-cols-[68px_72px_minmax(0,1fr)_44px_22px] items-start gap-2.5 sm:gap-3 py-1.5 px-2 -mx-2 rounded bg-white/[0.012]">
+        <div className="ledger-grid rounded bg-white/[0.012]">
           {/* Timestamp Column */}
           <div className="w-full text-right ledger-time text-[#78998d] select-none pt-0.5">
             <span className="inline-block animate-pulse">● LIVE</span>
@@ -135,7 +126,7 @@ export const ChronographLedger: React.FC<ChronographLedgerProps> = ({
         return (
           <div
             key={log.id}
-            className="group relative grid grid-cols-[64px_68px_minmax(0,1fr)_42px_22px] sm:grid-cols-[68px_72px_minmax(0,1fr)_44px_22px] items-start gap-2.5 sm:gap-3 py-1.5 px-2 -mx-2 rounded transition-colors hover:bg-white/[0.015]"
+            className="ledger-grid group relative transition-colors hover:bg-white/[0.015]"
           >
             {/* 1. Time Column: Fixed width, start time default, full span on hover without layout jump */}
             <div className="w-full text-right ledger-time select-none pt-0.5 transition-colors group-hover:text-[var(--text-primary)]">
