@@ -14,8 +14,8 @@ export const ScoreExplanationModal: React.FC<ScoreExplanationModalProps> = ({
   const { action, track, score, explanation } = candidate;
 
   return (
-    <div className="fixed inset-0 z-50 bg-black/75 backdrop-blur-xs flex items-center justify-center p-4">
-      <div className="brass-panel-elevated p-6 rounded-lg max-w-md w-full space-y-5 border border-[#b8894f]/40 shadow-2xl relative">
+    <div className="cockpit-modal-overlay">
+      <div className="cockpit-modal-panel p-6 max-w-md w-full space-y-5 relative">
         <button
           onClick={onClose}
           className="absolute top-4 right-4 text-[var(--text-muted)] hover:text-[var(--text-hero)]"

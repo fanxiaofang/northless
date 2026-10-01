@@ -13,8 +13,8 @@ import {
   StopCircle,
   Pause,
   Trash2
-  ,ChevronDown, Check
 } from 'lucide-react';
+import { CockpitSelect } from './ui/CockpitSelect';
 import {
   ActiveSession,
   Card,
@@ -223,35 +223,11 @@ export const TodayView: React.FC<TodayViewProps> = ({
     tracks.find(t => t.role === 'main')?.id || tracks[0]?.id || ''
   );
   const [quickAddEffort, setQuickAddEffort] = useState<'light' | 'normal' | 'deep'>('normal');
-  const [isQuickAddTrackListOpen, setIsQuickAddTrackListOpen] = useState(false);
-  const [quickAddOptionIndex, setQuickAddOptionIndex] = useState(0);
 
   const hasTracks = tracks.length > 0;
   const currentMainTrack = tracks.find(track => track.role === 'main');
   const selectedQuickAddTrack = tracks.find(track => track.id === quickAddTrackId);
   const canSaveQuickAdd = Boolean(quickAddTitle.trim() && selectedQuickAddTrack);
-  const quickAddTrackLabel = selectedQuickAddTrack
-    ? `${selectedQuickAddTrack.name} · ${selectedQuickAddTrack.role === 'main' ? '主线' : selectedQuickAddTrack.role === 'maintenance' ? '保温' : '暂缓'}`
-    : '选择主线';
-
-  const selectQuickAddTrack = (track: Track) => {
-    setQuickAddTrackId(track.id);
-    setQuickAddOptionIndex(tracks.findIndex(candidate => candidate.id === track.id));
-    setIsQuickAddTrackListOpen(false);
-  };
-
-  const handleQuickAddTrackKeyDown = (event: React.KeyboardEvent<HTMLButtonElement>) => {
-    if (event.key === 'Escape') { setIsQuickAddTrackListOpen(false); return; }
-    if (event.key === 'Enter' || event.key === ' ') { event.preventDefault(); setIsQuickAddTrackListOpen(open => !open); return; }
-    if (event.key === 'ArrowDown' || event.key === 'ArrowUp') {
-      event.preventDefault();
-      const direction = event.key === 'ArrowDown' ? 1 : -1;
-      const nextIndex = (quickAddOptionIndex + direction + tracks.length) % tracks.length;
-      setQuickAddOptionIndex(nextIndex);
-      setQuickAddTrackId(tracks[nextIndex].id);
-      setIsQuickAddTrackListOpen(true);
-    }
-  };
 
   useEffect(() => {
     if (!hasTracks) {
@@ -531,16 +507,7 @@ export const TodayView: React.FC<TodayViewProps> = ({
                   <div className="quick-add-controls">
                     <div className="quick-add-track-control">
                       <span>主线</span>
-                      <div className="track-listbox">
-                        <button type="button" className="track-listbox-trigger" aria-haspopup="listbox" aria-expanded={isQuickAddTrackListOpen} onClick={() => setIsQuickAddTrackListOpen(open => !open)} onKeyDown={handleQuickAddTrackKeyDown}>
-                          <span>{quickAddTrackLabel}</span><ChevronDown className="w-3 h-3" />
-                        </button>
-                        {isQuickAddTrackListOpen && <div className="track-listbox-options" role="listbox" aria-label="选择主线">
-                          {tracks.map((track, index) => <button key={track.id} type="button" role="option" aria-selected={track.id === quickAddTrackId} className={track.id === quickAddTrackId ? 'is-selected' : ''} onMouseEnter={() => setQuickAddOptionIndex(index)} onClick={() => selectQuickAddTrack(track)}>
-                            <span>{track.name} · {track.role === 'main' ? '主线' : track.role === 'maintenance' ? '保温' : '暂缓'}</span>{track.id === quickAddTrackId && <Check className="w-3 h-3" />}
-                          </button>)}
-                        </div>}
-                      </div>
+                      <CockpitSelect value={quickAddTrackId} onChange={setQuickAddTrackId} ariaLabel="选择主线" options={tracks.map(track => ({ value: track.id, label: `${track.name} · ${track.role === 'main' ? '主线' : track.role === 'maintenance' ? '保温' : '暂缓'}` }))} />
                     </div>
                     <div className="segmented-control compact quick-add-effort" aria-label="投入程度">
                       {(['light', 'normal', 'deep'] as const).map(effort => (

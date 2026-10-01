@@ -46,8 +46,8 @@ export const EndTodayModal: React.FC<EndTodayModalProps> = ({
   };
 
   return (
-    <div className="fixed inset-0 z-50 bg-black/75 backdrop-blur-xs flex items-center justify-center p-4">
-      <div className="brass-panel-elevated p-6 sm:p-7 rounded-lg max-w-lg w-full space-y-6 border border-[#b8894f]/40 shadow-2xl relative">
+    <div className="cockpit-modal-overlay">
+      <div className="cockpit-modal-panel p-6 sm:p-7 max-w-lg w-full space-y-6 relative">
         <button
           onClick={onClose}
           className="absolute top-4 right-4 text-[var(--text-muted)] hover:text-[var(--text-hero)]"

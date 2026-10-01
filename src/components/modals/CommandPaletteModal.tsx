@@ -178,8 +178,8 @@ export const CommandPaletteModal: React.FC<CommandPaletteModalProps> = ({
   );
 
   return (
-    <div className="fixed inset-0 z-50 bg-black/80 backdrop-blur-xs flex items-start justify-center pt-24 p-4">
-      <div className="brass-panel-elevated rounded-lg max-w-xl w-full border border-[#b8894f]/40 shadow-2xl overflow-hidden animate-fadeIn">
+    <div className="cockpit-modal-overlay items-start pt-24 p-4">
+      <div className="cockpit-modal-panel max-w-xl w-full overflow-hidden animate-fadeIn">
         {/* Search Input */}
         <div className="p-3.5 border-b border-[#b8894f]/20 flex items-center gap-3 bg-[#181512]">
           <Search className="w-4 h-4 text-[#b8894f]" />
