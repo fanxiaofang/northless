@@ -12,9 +12,11 @@ import {
   ArrowRight,
   StopCircle,
   Pause,
-  Trash2
+  CircleX
 } from 'lucide-react';
 import { CockpitSelect } from './ui/CockpitSelect';
+import { CockpitTooltip } from './ui/CockpitTooltip';
+import { InlineConfirmPopover } from './ui/InlineConfirmPopover';
 import {
   ActiveSession,
   Card,
@@ -219,6 +221,8 @@ export const TodayView: React.FC<TodayViewProps> = ({
   // Quick Add Next Action state for lightweight prompt
   const [showQuickAddNext, setShowQuickAddNext] = useState<boolean>(false);
   const [quickAddTitle, setQuickAddTitle] = useState<string>('');
+  const [isAbandonConfirmOpen, setIsAbandonConfirmOpen] = useState(false);
+  const abandonButtonRef = useRef<HTMLButtonElement>(null);
   const [quickAddTrackId, setQuickAddTrackId] = useState<string>(
     tracks.find(t => t.role === 'main')?.id || tracks[0]?.id || ''
   );
@@ -241,6 +245,10 @@ export const TodayView: React.FC<TodayViewProps> = ({
       setQuickAddTrackId(currentMainTrack?.id || tracks[0].id);
     }
   }, [hasTracks, tracks, quickAddTrackId, currentMainTrack]);
+
+  useEffect(() => {
+    if (!activeSession) setIsAbandonConfirmOpen(false);
+  }, [activeSession]);
 
   useEffect(() => {
     const updateTime = () => {
@@ -353,14 +361,14 @@ export const TodayView: React.FC<TodayViewProps> = ({
                 </div>
               </div>
 
-              <div className="flex items-center gap-2 self-end md:self-auto">
+              <div className="session-action-row self-end md:self-auto">
                 <button
                   onClick={onPauseResumeSession}
-                  className="px-3 py-1.5 type-l5 font-medium rounded bg-[#251f18] hover:bg-[#30271e] border border-[#b8894f]/25 text-[var(--text-primary)] hover:text-[var(--text-hero)] transition-colors flex items-center gap-1.5 cursor-pointer"
+                  className="session-control-button"
                 >
                   {activeSession.is_running ? (
                     <>
-                      <Pause className="w-3.5 h-3.5 text-[#c89a5a]" />
+                      <Pause className="w-3.5 h-3.5" />
                       <span>暂停</span>
                     </>
                   ) : (
@@ -379,13 +387,14 @@ export const TodayView: React.FC<TodayViewProps> = ({
                   <span>停止并记入今日</span>
                 </button>
 
-                <button
-                  onClick={onCancelSession}
-                  className="p-1.5 text-[var(--text-muted)] hover:text-[#e06c75] transition-colors rounded cursor-pointer"
-                  title="放弃本次专注"
-                >
-                  <Trash2 className="w-4 h-4" />
-                </button>
+                <span className="session-abandon-edge">
+                  <CockpitTooltip content="放弃本次专注">
+                    <button ref={abandonButtonRef} type="button" onClick={() => setIsAbandonConfirmOpen(current => !current)} className="session-abandon-button" aria-label="放弃本次专注" aria-expanded={isAbandonConfirmOpen}>
+                      <CircleX aria-hidden="true" />
+                    </button>
+                  </CockpitTooltip>
+                  <InlineConfirmPopover anchorRef={abandonButtonRef} open={isAbandonConfirmOpen} onClose={() => setIsAbandonConfirmOpen(false)} onConfirm={() => { setIsAbandonConfirmOpen(false); onCancelSession(); }} title="放弃本次专注？" description="这段计时不会记入今天。" cancelLabel="继续专注" confirmLabel="放弃" />
+                </span>
               </div>
             </div>
           </section>
@@ -704,11 +713,11 @@ export const TodayView: React.FC<TodayViewProps> = ({
               </button>
 
               <button
-                onClick={() => onStartSession('', undefined, '自由专注 Session')}
-                className="brass-button px-3.5 py-1.5 rounded type-l5 font-medium text-[var(--text-primary)] hover:text-[var(--text-hero)] flex items-center gap-1.5 cursor-pointer"
+                onClick={() => onStartSession('', undefined, '自由专注')}
+                className="brass-button session-start-button cursor-pointer"
               >
-                <Play className="w-3 h-3 text-[#c89a5a]" />
-                <span>Start Session</span>
+                <Play className="w-3.5 h-3.5" />
+                <span>开始专注</span>
               </button>
             </div>
           </header>

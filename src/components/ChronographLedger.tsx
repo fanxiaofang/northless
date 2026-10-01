@@ -77,7 +77,7 @@ export const ChronographLedger: React.FC<ChronographLedgerProps> = ({
           {/* Content & Contextual Metadata */}
           <div className="min-w-0">
             <div className="ledger-event-title">
-              {activeSession.task_title || '自由专注 Session'}
+              {activeSession.task_title || '自由专注'}
             </div>
             {activeTrack && (
               <div className="ledger-event-meta flex items-center gap-1.5 mt-0.5">

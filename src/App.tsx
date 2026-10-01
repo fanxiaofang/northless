@@ -260,7 +260,7 @@ export default function App() {
         title ||
         (trackId
           ? `${tracks.find(t => t.id === trackId)?.name || ''} 专注探索`
-          : '自由深度专注');
+          : '自由专注');
 
       setActiveSession({
         track_id: trackId,
@@ -329,16 +329,14 @@ export default function App() {
   );
 
   const handleCancelSession = useCallback(() => {
-    if (confirm('确定要放弃当前正在计时的 Session 吗？')) {
-      setActiveSession(null);
-    }
+    setActiveSession(null);
   }, []);
 
   const handleToggleSession = useCallback(() => {
     if (activeSession) {
       handlePauseResumeSession();
     } else {
-      handleStartSession(tracks[0]?.id || '', undefined, '自由专注 Session');
+      handleStartSession('', undefined, '自由专注');
     }
   }, [activeSession, handlePauseResumeSession, handleStartSession, tracks]);
 

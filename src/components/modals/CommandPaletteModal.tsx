@@ -103,7 +103,7 @@ export const CommandPaletteModal: React.FC<CommandPaletteModalProps> = ({
     {
       id: 'action_session',
       category: '核心操作',
-      title: isSessionRunning ? '暂停 / 恢复当前专注 Session' : '开启专注计时 (Start Session)',
+      title: isSessionRunning ? '暂停 / 恢复当前专注' : '开始专注',
       shortcut: 'S',
       icon: Play,
       action: () => {
