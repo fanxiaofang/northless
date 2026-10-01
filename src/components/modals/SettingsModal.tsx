@@ -97,7 +97,7 @@ export const SettingsModal: React.FC<SettingsModalProps> = ({
 
   return (
     <div className="fixed inset-0 z-50 bg-black/80 backdrop-blur-xs flex items-center justify-center p-4">
-      <div className="brass-panel-elevated p-6 rounded-lg max-w-2xl w-full h-[80vh] flex flex-col border border-[#c69956]/40 shadow-2xl relative">
+      <div className="brass-panel-elevated p-6 rounded-lg max-w-2xl w-full h-[80vh] flex flex-col border border-[#b8894f]/40 shadow-2xl relative">
         <button
           onClick={onClose}
           className="absolute top-4 right-4 text-[var(--text-muted)] hover:text-[var(--text-hero)]"

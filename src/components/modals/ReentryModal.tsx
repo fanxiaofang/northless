@@ -35,7 +35,7 @@ export const ReentryModal: React.FC<ReentryModalProps> = ({
 
   return (
     <div className="fixed inset-0 z-50 bg-black/80 backdrop-blur-xs flex items-center justify-center p-4">
-      <div className="brass-panel-elevated p-6 sm:p-7 rounded-lg max-w-xl w-full space-y-6 border border-[#c69956]/40 shadow-2xl relative">
+      <div className="brass-panel-elevated p-6 sm:p-7 rounded-lg max-w-xl w-full space-y-6 border border-[#b8894f]/40 shadow-2xl relative">
         <button
           onClick={onClose}
           className="absolute top-4 right-4 text-[var(--text-muted)] hover:text-[var(--text-hero)]"

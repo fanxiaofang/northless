@@ -12,7 +12,7 @@ export const CardViewerModal: React.FC<CardViewerModalProps> = ({ card, onClose 
 
   return (
     <div className="fixed inset-0 z-50 bg-black/80 backdrop-blur-xs flex items-center justify-center p-3 sm:p-6">
-      <div className="brass-panel-elevated rounded-lg max-w-4xl w-full h-[85vh] flex flex-col border border-[#c69956]/40 shadow-2xl overflow-hidden relative">
+      <div className="brass-panel-elevated rounded-lg max-w-4xl w-full h-[85vh] flex flex-col border border-[#b8894f]/40 shadow-2xl overflow-hidden relative">
         {/* Modal Header */}
         <div className="p-4 border-b border-[#b8894f]/20 flex items-center justify-between bg-[#161411]">
           <div className="space-y-0.5">

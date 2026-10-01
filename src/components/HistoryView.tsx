@@ -81,7 +81,7 @@ export const HistoryView: React.FC<HistoryViewProps> = ({
         {/* Header */}
         <header className="flex flex-col sm:flex-row sm:items-center justify-between pb-6 border-b border-[#b8894f]/15 gap-4">
           <div>
-            <div className="flex items-center gap-2 type-l6 font-mono text-[var(--text-muted)] tracking-wider uppercase mb-1 font-medium">
+            <div className="flex items-center gap-2 type-l6 font-mono text-[var(--text-ghost)] tracking-wider uppercase mb-1 font-medium">
               <span>TRAJECTORY / 轨迹，不是成绩单</span>
             </div>
             <h1 className="type-l1 font-display font-semibold text-[var(--text-hero)] flex items-baseline gap-2.5">
@@ -144,16 +144,16 @@ export const HistoryView: React.FC<HistoryViewProps> = ({
             <table className="w-full text-left">
               <thead>
                 <tr className="border-b border-[#b8894f]/18">
-                  <th className="py-2.5 type-l5 font-display text-[var(--text-secondary)] font-medium w-40">主线</th>
+                  <th className="py-2.5 type-l5 font-display text-[var(--text-muted)] font-medium w-40">主线</th>
                   {weekDays.map(d => (
                     <th key={d.dateStr} className="py-2.5 text-center type-l6 text-[var(--text-muted)] font-medium">
                       <div>{d.dayName}</div>
                       <div className="text-[11px] text-[var(--text-muted)] tracking-normal">{d.shortDate}</div>
                     </th>
                   ))}
-                  <th className="py-2.5 text-right type-l6 text-[var(--text-secondary)] font-medium pl-4">本周 Touch</th>
+                  <th className="py-2.5 text-right type-l6 text-[var(--text-muted)] font-medium pl-4">本周 Touch</th>
                   {showDurationStats && (
-                    <th className="py-2.5 text-right type-l6 text-[#b8894f] font-medium pl-4">总时长</th>
+                    <th className="py-2.5 text-right type-l6 text-[var(--text-muted)] font-medium pl-4">总时长</th>
                   )}
                 </tr>
               </thead>
@@ -186,7 +186,7 @@ export const HistoryView: React.FC<HistoryViewProps> = ({
                     </td>
 
                     {showDurationStats && (
-                      <td className="py-3 text-right type-l5 font-mono text-[#b8894f] pl-4 font-medium">
+                      <td className="py-3 text-right type-l5 font-mono text-[var(--text-muted)] pl-4 font-medium">
                         {totalMinutes > 0
                           ? totalMinutes >= 60
                             ? `${Math.floor(totalMinutes / 60)}h ${totalMinutes % 60}m`

@@ -50,7 +50,7 @@ const CustomTrackSelect: React.FC<CustomTrackSelectProps> = ({
       <button
         type="button"
         onClick={() => setIsOpen(prev => !prev)}
-        className="flex items-center justify-between gap-2 bg-[#151412] hover:bg-[#1c1a17] border border-[#c69956]/20 hover:border-[#c69956]/40 rounded px-2.5 py-1.5 type-l5 text-[var(--text-primary)] transition-colors focus:outline-none focus:border-[#c69956] w-full text-left cursor-pointer"
+        className="flex items-center justify-between gap-2 bg-[#151412] hover:bg-[#1c1a17] border border-[#b8894f]/20 hover:border-[#b8894f]/40 rounded px-2.5 py-1.5 type-l5 text-[var(--text-primary)] transition-colors focus:outline-none focus:border-[#b8894f] w-full text-left cursor-pointer"
       >
         <span className="truncate">
           {selectedTrack ? `#${selectedTrack.name}` : emptyLabel}
@@ -59,7 +59,7 @@ const CustomTrackSelect: React.FC<CustomTrackSelectProps> = ({
       </button>
 
       {isOpen && (
-        <div className="absolute left-0 mt-1 min-w-[220px] w-full max-h-56 overflow-y-auto bg-[#171513] border border-[#c69956]/30 rounded-md shadow-2xl py-1 z-50">
+        <div className="absolute left-0 mt-1 min-w-[220px] w-full max-h-56 overflow-y-auto bg-[#171513] border border-[#b8894f]/30 rounded-md shadow-2xl py-1 z-50">
           {allowEmpty && (
             <button
               type="button"
@@ -68,11 +68,11 @@ const CustomTrackSelect: React.FC<CustomTrackSelectProps> = ({
                 setIsOpen(false);
               }}
               className={`w-full text-left px-3 py-1.5 type-l5 transition-colors flex items-center justify-between cursor-pointer ${
-                !value ? 'bg-[#251f18] text-[#dfbf85] font-medium' : 'text-[var(--text-muted)] hover:bg-[#1e1a16] hover:text-[var(--text-primary)]'
+                !value ? 'bg-[#251f18] text-[#c89a5a] font-medium' : 'text-[var(--text-muted)] hover:bg-[#1e1a16] hover:text-[var(--text-primary)]'
               }`}
             >
               <span>{emptyLabel}</span>
-              {!value && <Check className="w-3.5 h-3.5 text-[#dfbf85]" />}
+              {!value && <Check className="w-3.5 h-3.5 text-[#c89a5a]" />}
             </button>
           )}
 
@@ -87,14 +87,14 @@ const CustomTrackSelect: React.FC<CustomTrackSelectProps> = ({
                   setIsOpen(false);
                 }}
                 className={`w-full text-left px-3 py-1.5 type-l5 transition-colors flex items-center justify-between cursor-pointer ${
-                  isSelected ? 'bg-[#251f18] text-[#dfbf85] font-medium' : 'text-[var(--text-primary)] hover:bg-[#1e1a16]'
+                  isSelected ? 'bg-[#251f18] text-[#c89a5a] font-medium' : 'text-[var(--text-primary)] hover:bg-[#1e1a16]'
                 }`}
               >
                 <div className="flex items-center gap-2 truncate">
-                  <span className={`w-1.5 h-1.5 rounded-full shrink-0 ${t.role === 'main' ? 'bg-[#c69956]' : 'bg-[#615749]'}`} />
+                  <span className={`w-1.5 h-1.5 rounded-full shrink-0 ${t.role === 'main' ? 'bg-[#b8894f]' : 'bg-[#615749]'}`} />
                   <span className="truncate">#{t.name}</span>
                 </div>
-                {isSelected && <Check className="w-3.5 h-3.5 text-[#dfbf85] shrink-0" />}
+                {isSelected && <Check className="w-3.5 h-3.5 text-[#c89a5a] shrink-0" />}
               </button>
             );
           })}
@@ -192,7 +192,7 @@ export const InboxView: React.FC<InboxViewProps> = ({
 
           <div className="border-t border-[#b8894f]/15 pt-3 flex flex-wrap items-center justify-between gap-3">
             <div className="flex items-center gap-2 type-l5 font-medium">
-              <span className="text-[var(--text-muted)] font-mono">可选主线:</span>
+              <span className="text-[var(--text-secondary)] font-mono">可选主线:</span>
               <CustomTrackSelect
                 tracks={tracks}
                 value={selectedTrackId}
@@ -206,7 +206,7 @@ export const InboxView: React.FC<InboxViewProps> = ({
               <span className="type-l6 font-mono text-[var(--text-ghost)] hidden sm:inline select-none">⌘ + Enter</span>
               <button
                 type="submit"
-                className="brass-button px-4 py-1.5 rounded type-l5 font-semibold text-[var(--text-hero)] flex items-center gap-1.5 cursor-pointer"
+                className="brass-button px-4 py-1.5 rounded type-l5 font-medium text-[var(--text-hero)] flex items-center gap-1.5 cursor-pointer"
               >
                 <Plus className="w-3.5 h-3.5 text-[#b8894f]" />
                 <span>投掷记录</span>
@@ -282,13 +282,13 @@ export const InboxView: React.FC<InboxViewProps> = ({
       {/* Promote to Track Action Modal */}
       {promotingItemId && (
         <div className="fixed inset-0 z-50 bg-black/70 backdrop-blur-xs flex items-center justify-center p-4">
-          <div className="brass-panel-elevated p-6 rounded-lg max-w-md w-full space-y-4 shadow-2xl border border-[#c69956]/35">
+          <div className="brass-panel-elevated p-6 rounded-lg max-w-md w-full space-y-4 shadow-2xl border border-[#b8894f]/35">
             <h3 className="type-l3 font-semibold text-[var(--text-hero)]">
               将想法转化为清晰的 Next 行动
             </h3>
             <form onSubmit={handleConfirmPromote} className="space-y-3 type-l5">
               <div>
-                <label className="block text-[var(--text-muted)] mb-1">目标主线</label>
+                <label className="block text-[var(--text-muted)] mb-1 font-medium font-sans">目标主线</label>
                 <CustomTrackSelect
                   tracks={tracks}
                   value={targetTrackId}
@@ -299,32 +299,32 @@ export const InboxView: React.FC<InboxViewProps> = ({
               </div>
 
               <div>
-                <label className="block text-[var(--text-muted)] mb-1">Action 标题 (可执行的小动作)</label>
+                <label className="block text-[var(--text-muted)] mb-1 font-medium font-sans">Action 标题 (可执行的小动作)</label>
                 <input
                   type="text"
                   value={actionTitle}
                   onChange={e => setActionTitle(e.target.value)}
-                  className="w-full bg-[#141311] border border-[#c69956]/20 rounded px-3 py-2 text-[var(--text-primary)] focus:outline-none focus:border-[#c69956]"
+                  className="w-full bg-[#141311] border border-[#b8894f]/20 rounded px-3 py-2 text-[var(--text-primary)] focus:outline-none focus:border-[#b8894f] font-medium font-sans"
                   required
                 />
               </div>
 
               <div>
-                <label className="block text-[var(--text-muted)] type-l6 mb-1">复杂度负荷</label>
+                <label className="block text-[var(--text-muted)] type-l6 mb-1 font-medium font-sans">复杂度负荷</label>
                 <div className="flex gap-2">
                   {(['light', 'normal', 'deep'] as const).map(eff => (
                     <button
                       key={eff}
                       type="button"
                       onClick={() => setActionEffort(eff)}
-                      className={`flex-1 py-1.5 rounded type-l5 transition-colors cursor-pointer ${
+                      className={`flex-1 py-1.5 rounded type-l5 transition-colors cursor-pointer font-medium ${
                         actionEffort === eff
                           ? eff === 'light'
                             ? 'tag-effort-light font-medium'
                             : eff === 'deep'
                             ? 'tag-effort-deep font-medium'
                             : 'tag-effort-normal font-medium'
-                          : 'bg-[#151412] text-[var(--text-muted)] border border-[#c69956]/15'
+                          : 'bg-[#151412] text-[var(--text-muted)] border border-[#b8894f]/15'
                       }`}
                     >
                       {eff === 'light' ? '轻量' : eff === 'normal' ? '正常' : '深入'}
@@ -337,15 +337,15 @@ export const InboxView: React.FC<InboxViewProps> = ({
                 <button
                   type="button"
                   onClick={() => setPromotingItemId(null)}
-                  className="px-3 py-1.5 text-[var(--text-muted)] hover:text-[var(--text-primary)] cursor-pointer"
+                  className="px-3 py-1.5 text-[var(--text-muted)] hover:text-[var(--text-primary)] cursor-pointer font-medium"
                 >
                   取消
                 </button>
                 <button
                   type="submit"
-                  className="brass-button px-4 py-1.5 font-semibold text-[var(--text-hero)] rounded flex items-center gap-1.5 cursor-pointer"
+                  className="brass-button px-4 py-1.5 font-medium text-[var(--text-hero)] rounded flex items-center gap-1.5 cursor-pointer"
                 >
-                  <Check className="w-3.5 h-3.5 text-[#dfbf85]" />
+                  <Check className="w-3.5 h-3.5 text-[#c89a5a]" />
                   <span>转化并收纳</span>
                 </button>
               </div>
