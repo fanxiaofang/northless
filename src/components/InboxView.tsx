@@ -159,15 +159,15 @@ export const InboxView: React.FC<InboxViewProps> = ({
     <div className="flex-1 overflow-y-auto min-h-screen bg-transparent text-[var(--text-primary)] p-6 lg:p-10">
       <div className="max-w-[880px] mx-auto space-y-8">
         {/* Header - Deliberately no unread count */}
-        <header className="pb-6 border-b border-[#c69956]/12">
-          <div className="flex items-center gap-2 type-l6 font-mono text-[var(--text-muted)] tracking-wider uppercase mb-1">
+        <header className="pb-6 border-b border-[#b8894f]/15">
+          <div className="flex items-center gap-2 type-l6 font-mono text-[var(--text-ghost)] tracking-wider uppercase mb-1 select-none">
             <span>FREE CAPTURE / 允许自由腐烂，无需清零压力</span>
           </div>
           <h1 className="type-l1 font-display font-semibold text-[var(--text-hero)] flex items-baseline gap-2.5">
             <span>收集箱</span>
             <span className="type-l6 font-mono font-normal text-[var(--text-ghost)] tracking-widest">/ INBOX</span>
           </h1>
-          <p className="type-l6 text-[var(--text-secondary)] font-sans mt-0.5">
+          <p className="type-l5 text-[var(--text-secondary)] font-sans mt-1">
             想到什么，扔进去，结束。无需优先级、截止日或整理负担。
           </p>
         </header>
@@ -185,14 +185,14 @@ export const InboxView: React.FC<InboxViewProps> = ({
                 }
               }}
               rows={2}
-              className="w-full bg-transparent border-0 p-0 type-l4 text-[var(--text-primary)] placeholder:text-[var(--text-ghost)] focus:outline-none focus:ring-0 resize-none leading-relaxed"
+              className="w-full bg-transparent border-0 p-0 type-l4 text-[var(--text-primary)] placeholder:text-[var(--text-ghost)] focus:outline-none focus:ring-0 resize-none leading-relaxed font-sans font-medium"
               autoFocus
             />
           </div>
 
-          <div className="border-t border-[#c69956]/10 pt-3 flex flex-wrap items-center justify-between gap-3">
-            <div className="flex items-center gap-2 type-l5">
-              <span className="text-[var(--text-muted)]">可选主线:</span>
+          <div className="border-t border-[#b8894f]/15 pt-3 flex flex-wrap items-center justify-between gap-3">
+            <div className="flex items-center gap-2 type-l5 font-medium">
+              <span className="text-[var(--text-muted)] font-mono">可选主线:</span>
               <CustomTrackSelect
                 tracks={tracks}
                 value={selectedTrackId}
@@ -203,12 +203,12 @@ export const InboxView: React.FC<InboxViewProps> = ({
             </div>
 
             <div className="flex items-center gap-2.5">
-              <span className="type-l6 font-mono text-[var(--text-ghost)] hidden sm:inline">⌘ + Enter</span>
+              <span className="type-l6 font-mono text-[var(--text-ghost)] hidden sm:inline select-none">⌘ + Enter</span>
               <button
                 type="submit"
                 className="brass-button px-4 py-1.5 rounded type-l5 font-semibold text-[var(--text-hero)] flex items-center gap-1.5 cursor-pointer"
               >
-                <Plus className="w-3.5 h-3.5 text-[#dfbf85]" />
+                <Plus className="w-3.5 h-3.5 text-[#b8894f]" />
                 <span>投掷记录</span>
               </button>
             </div>
@@ -218,9 +218,10 @@ export const InboxView: React.FC<InboxViewProps> = ({
         {/* Capture Stream */}
         <div className="space-y-3">
           {activeItems.length === 0 ? (
-            <div className="py-6 text-center text-[var(--text-ghost)] space-y-1 select-none border border-dashed border-[#c69956]/10 rounded-lg bg-[#151412]/15">
-              <div className="type-l6 font-mono text-[var(--text-ghost)] tracking-widest uppercase">[ CAPTURE TRAY EMPTY ]</div>
-              <p className="type-l5 text-[var(--text-muted)]">暂无未归整的灵感碎片 · 闪念可随时在此停泊</p>
+            <div className="py-8 text-center space-y-2 select-none border border-dashed border-[#b8894f]/15 rounded-lg bg-[#151412]/30">
+              <div className="type-l6 font-mono text-[var(--text-ghost)] tracking-widest uppercase">···· CAPTURE TRAY EMPTY ····</div>
+              <p className="type-l4 text-[var(--text-primary)] font-medium">暂无未归整的灵感碎片</p>
+              <p className="type-l5 text-[var(--text-secondary)]">闪念可随时在此停泊，无需立即处理</p>
             </div>
           ) : (
             activeItems.map(item => {
@@ -229,18 +230,18 @@ export const InboxView: React.FC<InboxViewProps> = ({
               return (
                 <div
                   key={item.id}
-                  className="surface-flat p-3.5 rounded-lg flex flex-col sm:flex-row sm:items-center justify-between gap-3 group transition-colors"
+                  className="surface-card p-3.5 rounded-lg flex flex-col sm:flex-row sm:items-center justify-between gap-3 group transition-colors"
                 >
                   <div className="space-y-1">
-                    <p className="type-l4 text-[var(--text-primary)] leading-relaxed">
+                    <p className="type-l4 text-[var(--text-primary)] leading-relaxed font-sans font-medium">
                       {item.content}
                     </p>
-                    <div className="flex items-center gap-2 type-l6 text-[var(--text-muted)]">
+                    <div className="flex items-center gap-2 type-l6 text-[var(--text-muted)] font-mono font-medium">
                       <span>{item.created_at}</span>
                       {track && (
                         <>
                           <span aria-hidden="true" className="text-[var(--text-ghost)]">·</span>
-                          <span className="text-[#b38a48] font-medium">#{track.name}</span>
+                          <span className="text-[#b8894f] font-medium font-sans">#{track.name}</span>
                         </>
                       )}
                     </div>
@@ -249,9 +250,9 @@ export const InboxView: React.FC<InboxViewProps> = ({
                   <div className="flex items-center gap-2 shrink-0 self-end sm:self-auto">
                     <button
                       onClick={() => handleStartPromote(item)}
-                      className="btn-secondary px-2.5 py-1 rounded type-l5 text-[#dfbf85] hover:text-[var(--text-hero)] transition-colors flex items-center gap-1 cursor-pointer"
+                      className="btn-secondary px-2.5 py-1 rounded type-l5 text-[var(--text-primary)] hover:text-[var(--text-hero)] transition-colors flex items-center gap-1 cursor-pointer font-medium"
                     >
-                      <ArrowRight className="w-3 h-3" />
+                      <ArrowRight className="w-3 h-3 text-[#b8894f]" />
                       <span>转为 Next</span>
                     </button>
 

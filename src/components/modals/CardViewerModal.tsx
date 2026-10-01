@@ -14,14 +14,14 @@ export const CardViewerModal: React.FC<CardViewerModalProps> = ({ card, onClose 
     <div className="fixed inset-0 z-50 bg-black/80 backdrop-blur-xs flex items-center justify-center p-3 sm:p-6">
       <div className="brass-panel-elevated rounded-lg max-w-4xl w-full h-[85vh] flex flex-col border border-[#c69956]/40 shadow-2xl overflow-hidden relative">
         {/* Modal Header */}
-        <div className="p-4 border-b border-[#c69956]/20 flex items-center justify-between bg-[#161411]">
+        <div className="p-4 border-b border-[#b8894f]/20 flex items-center justify-between bg-[#161411]">
           <div className="space-y-0.5">
-            <h3 className="font-display font-semibold text-base text-[var(--text-hero)] flex items-center gap-2">
+            <h3 className="type-l3 font-semibold text-[var(--text-hero)] flex items-center gap-2">
               <span>{card.title}</span>
-              <span className="text-xs font-mono font-normal text-[#c69956]">Handy Portal</span>
+              <span className="type-l6 font-mono font-medium text-[#b8894f]">HANDY PORTAL</span>
             </h3>
             {card.description && (
-              <p className="text-xs text-[var(--text-secondary)] line-clamp-1">{card.description}</p>
+              <p className="type-l5 text-[var(--text-secondary)] line-clamp-1 font-sans">{card.description}</p>
             )}
           </div>
 
@@ -30,15 +30,15 @@ export const CardViewerModal: React.FC<CardViewerModalProps> = ({ card, onClose 
               href={card.url}
               target="_blank"
               rel="noopener noreferrer"
-              className="brass-button px-3 py-1.5 rounded text-xs text-[var(--text-hero)] flex items-center gap-1.5"
+              className="brass-button px-3 py-1.5 rounded type-l5 text-[var(--text-hero)] flex items-center gap-1.5 cursor-pointer font-medium"
             >
               <span>新标签页打开</span>
-              <ExternalLink className="w-3.5 h-3.5 text-[#dfbf85]" />
+              <ExternalLink className="w-3.5 h-3.5 text-[#b8894f]" />
             </a>
 
             <button
               onClick={onClose}
-              className="p-1.5 text-[var(--text-muted)] hover:text-[var(--text-hero)] rounded"
+              className="p-1.5 text-[var(--text-muted)] hover:text-[var(--text-hero)] rounded cursor-pointer"
             >
               <X className="w-4 h-4" />
             </button>
@@ -57,9 +57,9 @@ export const CardViewerModal: React.FC<CardViewerModalProps> = ({ card, onClose 
             />
           ) : (
             <div className="text-center space-y-3 max-w-md p-6 brass-panel rounded-lg">
-              <AlertCircle className="w-8 h-8 text-[#c69956] mx-auto" />
-              <div className="text-sm font-semibold text-[var(--text-hero)]">该页面不支持内嵌浏览 (Iframe Restricted)</div>
-              <p className="text-xs text-[var(--text-secondary)]">
+              <AlertCircle className="w-8 h-8 text-[#b8894f] mx-auto" />
+              <div className="type-l3 font-semibold text-[var(--text-hero)]">该页面不支持内嵌浏览 (Iframe Restricted)</div>
+              <p className="type-l5 text-[var(--text-secondary)] leading-relaxed font-sans">
                 部分网站出于同源策略禁止在框架中展示，这非常正常。Cockpit
                 负责把上下文收拢手边，网页自己管理内容。
               </p>
@@ -67,10 +67,10 @@ export const CardViewerModal: React.FC<CardViewerModalProps> = ({ card, onClose 
                 href={card.url}
                 target="_blank"
                 rel="noopener noreferrer"
-                className="brass-button px-4 py-2 rounded text-xs font-semibold text-[var(--text-hero)] inline-flex items-center gap-2"
+                className="brass-button px-4 py-2 rounded type-l5 font-semibold text-[var(--text-hero)] inline-flex items-center gap-2 cursor-pointer"
               >
                 <span>直接前往 {card.title}</span>
-                <ExternalLink className="w-3.5 h-3.5 text-[#dfbf85]" />
+                <ExternalLink className="w-3.5 h-3.5 text-[#b8894f]" />
               </a>
             </div>
           )}

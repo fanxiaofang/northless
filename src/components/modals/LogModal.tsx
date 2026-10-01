@@ -76,52 +76,52 @@ export const LogModal: React.FC<LogModalProps> = ({ tracks, onClose, onSubmit })
         <div className="space-y-1">
           <div className="flex items-center gap-2">
             <span className="rivet" />
-            <h3 className="font-display text-lg font-semibold text-[var(--text-hero)]">
+            <h3 className="type-l3 font-semibold text-[var(--text-hero)]">
               记一下刚刚发生了什么
             </h3>
           </div>
-          <p className="text-xs text-[var(--text-secondary)]">
+          <p className="type-l5 text-[var(--text-secondary)] font-sans">
             记录真实发生的事。不仅是学习专注，生活娱乐也能留下痕迹。
           </p>
         </div>
 
         {/* Type Switcher */}
-        <div className="flex gap-2 p-1 bg-[#181512] rounded border border-[#c69956]/20">
+        <div className="flex gap-2 p-1 bg-[#181512] rounded border border-[#b8894f]/20">
           <button
             type="button"
             onClick={() => setType('session')}
-            className={`flex-1 py-1.5 rounded text-xs flex items-center justify-center gap-1.5 transition-colors ${
+            className={`flex-1 py-1.5 rounded type-l5 flex items-center justify-center gap-1.5 transition-colors font-medium cursor-pointer ${
               type === 'session'
-                ? 'bg-[#2b231a] text-[var(--text-hero)] border border-[#c69956]/40 shadow-sm'
+                ? 'bg-[#2b231a] text-[var(--text-hero)] border border-[#b8894f]/40 shadow-sm'
                 : 'text-[var(--text-muted)] hover:text-[var(--text-primary)]'
             }`}
           >
-            <Clock className="w-3.5 h-3.5 text-[#dfbf85]" />
+            <Clock className="w-3.5 h-3.5 text-[#b8894f]" />
             <span>专注 Session (推进主线)</span>
           </button>
           <button
             type="button"
             onClick={() => setType('note')}
-            className={`flex-1 py-1.5 rounded text-xs flex items-center justify-center gap-1.5 transition-colors ${
+            className={`flex-1 py-1.5 rounded type-l5 flex items-center justify-center gap-1.5 transition-colors font-medium cursor-pointer ${
               type === 'note'
-                ? 'bg-[#2b231a] text-[var(--text-hero)] border border-[#c69956]/40 shadow-sm'
+                ? 'bg-[#2b231a] text-[var(--text-hero)] border border-[#b8894f]/40 shadow-sm'
                 : 'text-[var(--text-muted)] hover:text-[var(--text-primary)]'
             }`}
           >
-            <BookOpen className="w-3.5 h-3.5 text-[#dfbf85]" />
+            <BookOpen className="w-3.5 h-3.5 text-[#b8894f]" />
             <span>日常随笔 Note (生活记录)</span>
           </button>
         </div>
 
-        <form onSubmit={handleSubmit} className="space-y-3.5 text-xs">
+        <form onSubmit={handleSubmit} className="space-y-3.5 type-l5">
           <div>
-            <label className="block text-[var(--text-muted)] mb-1 font-medium">
+            <label className="block text-[var(--text-muted)] mb-1 font-medium font-sans">
               关联主线 (可选)
             </label>
             <select
               value={trackId}
               onChange={e => setTrackId(e.target.value)}
-              className="w-full bg-[#11100f] border border-[#c69956]/25 rounded px-3 py-2 text-[var(--text-primary)] focus:outline-none focus:border-[#dfbf85]"
+              className="w-full bg-[#11100f] border border-[#b8894f]/25 rounded px-3 py-2 text-[var(--text-primary)] focus:outline-none focus:border-[#b8894f] font-medium"
             >
               <option value="">{type === 'session' ? '不关联主线 (自由专注)' : '不关联主线 (日常生活随笔)'}</option>
               {tracks.map(t => (
@@ -135,23 +135,23 @@ export const LogModal: React.FC<LogModalProps> = ({ tracks, onClose, onSubmit })
           {type === 'session' ? (
             <div className="grid grid-cols-2 gap-3">
               <div>
-                <label className="block text-[var(--text-muted)] mb-1 font-medium">时长 (分钟)</label>
+                <label className="block text-[var(--text-muted)] mb-1 font-medium font-sans">时长 (分钟)</label>
                 <input
                   type="number"
                   min="1"
                   step="5"
                   value={durationMinutes}
                   onChange={e => setDurationMinutes(Number(e.target.value))}
-                  className="w-full bg-[#11100f] border border-[#c69956]/25 rounded px-3 py-2 text-[var(--text-primary)] font-mono focus:outline-none focus:border-[#dfbf85]"
+                  className="w-full bg-[#11100f] border border-[#b8894f]/25 rounded px-3 py-2 text-[var(--text-primary)] font-mono font-medium focus:outline-none focus:border-[#b8894f]"
                 />
               </div>
               <div>
                 <div className="flex items-center justify-between mb-1">
-                  <label className="text-[var(--text-muted)] font-medium">起止时间 (可选)</label>
+                  <label className="text-[var(--text-muted)] font-medium font-sans">起止时间 (可选)</label>
                   <button
                     type="button"
                     onClick={handleUseRecentTime}
-                    className="text-[10px] text-[#c69956] hover:underline cursor-pointer"
+                    className="type-l6 font-mono text-[#b8894f] hover:underline cursor-pointer font-medium"
                   >
                     填入刚刚
                   </button>
@@ -161,14 +161,14 @@ export const LogModal: React.FC<LogModalProps> = ({ tracks, onClose, onSubmit })
                   placeholder="如: 14:10 - 15:05"
                   value={timeRange}
                   onChange={e => setTimeRange(e.target.value)}
-                  className="w-full bg-[#11100f] border border-[#c69956]/25 rounded px-3 py-2 text-[var(--text-primary)] font-mono focus:outline-none focus:border-[#dfbf85]"
+                  className="w-full bg-[#11100f] border border-[#b8894f]/25 rounded px-3 py-2 text-[var(--text-primary)] font-mono font-medium focus:outline-none focus:border-[#b8894f]"
                 />
               </div>
             </div>
           ) : (
             <div>
               <div className="flex items-center justify-between mb-1">
-                <label className="text-[var(--text-muted)] font-medium">记录时间点 (可选)</label>
+                <label className="text-[var(--text-muted)] font-medium font-sans">记录时间点 (可选)</label>
                 <button
                   type="button"
                   onClick={() => {
@@ -177,7 +177,7 @@ export const LogModal: React.FC<LogModalProps> = ({ tracks, onClose, onSubmit })
                     const m = String(now.getMinutes()).padStart(2, '0');
                     setTimeRange(`${h}:${m}`);
                   }}
-                  className="text-[10px] text-[#c69956] hover:underline cursor-pointer"
+                  className="type-l6 font-mono text-[#b8894f] hover:underline cursor-pointer font-medium"
                 >
                   填入此刻
                 </button>
@@ -187,13 +187,13 @@ export const LogModal: React.FC<LogModalProps> = ({ tracks, onClose, onSubmit })
                 placeholder="如: 16:30"
                 value={timeRange}
                 onChange={e => setTimeRange(e.target.value)}
-                className="w-full bg-[#11100f] border border-[#c69956]/25 rounded px-3 py-2 text-[var(--text-primary)] font-mono focus:outline-none focus:border-[#dfbf85]"
+                className="w-full bg-[#11100f] border border-[#b8894f]/25 rounded px-3 py-2 text-[var(--text-primary)] font-mono font-medium focus:outline-none focus:border-[#b8894f]"
               />
             </div>
           )}
 
           <div>
-            <label className="block text-[var(--text-muted)] mb-1 font-medium">
+            <label className="block text-[var(--text-muted)] mb-1 font-medium font-sans">
               {type === 'session' ? '具体做了什么？' : '记录此刻的想法或生活'}
             </label>
             <textarea
@@ -204,7 +204,7 @@ export const LogModal: React.FC<LogModalProps> = ({ tracks, onClose, onSubmit })
               }
               value={content}
               onChange={e => setContent(e.target.value)}
-              className="w-full bg-[#11100f] border border-[#c69956]/25 rounded px-3 py-2 text-[var(--text-primary)] focus:outline-none focus:border-[#dfbf85] h-20 resize-none"
+              className="w-full bg-[#11100f] border border-[#b8894f]/25 rounded px-3 py-2 text-[var(--text-primary)] focus:outline-none focus:border-[#b8894f] h-20 resize-none font-medium font-sans"
               required
               autoFocus
             />
@@ -214,15 +214,15 @@ export const LogModal: React.FC<LogModalProps> = ({ tracks, onClose, onSubmit })
             <button
               type="button"
               onClick={onClose}
-              className="px-3 py-1.5 text-[var(--text-muted)] hover:text-[var(--text-primary)]"
+              className="px-3 py-1.5 text-[var(--text-muted)] hover:text-[var(--text-primary)] cursor-pointer font-medium"
             >
               取消
             </button>
             <button
               type="submit"
-              className="brass-button px-4 py-1.5 font-semibold text-[var(--text-hero)] rounded flex items-center gap-1.5"
+              className="brass-button px-4 py-1.5 font-semibold text-[var(--text-hero)] rounded flex items-center gap-1.5 cursor-pointer"
             >
-              <Check className="w-3.5 h-3.5 text-[#dfbf85]" />
+              <Check className="w-3.5 h-3.5 text-[#b8894f]" />
               <span>记入今日时间线</span>
             </button>
           </div>

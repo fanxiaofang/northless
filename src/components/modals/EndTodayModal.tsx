@@ -57,33 +57,33 @@ export const EndTodayModal: React.FC<EndTodayModalProps> = ({
 
         <div className="space-y-1">
           <div className="flex items-center gap-2">
-            <Moon className="w-4 h-4 text-[#dfbf85]" />
-            <h3 className="font-display text-xl font-semibold text-[var(--text-hero)]">
+            <Moon className="w-4 h-4 text-[#b8894f]" />
+            <h3 className="type-l2 font-semibold text-[var(--text-hero)]">
               End Today · 给今天一个安静的边界
             </h3>
           </div>
-          <p className="text-xs text-[var(--text-secondary)]">
+          <p className="type-l5 text-[var(--text-secondary)] font-sans">
             {currentDateStr} · 审视今天留下的印记，卸下心智负担。
           </p>
         </div>
 
         {/* Summary of what moved */}
         <div className="brass-panel p-4 rounded-lg space-y-3">
-          <div className="text-xs font-display uppercase tracking-wider text-[#c69956]">
+          <div className="type-l6 font-mono font-medium uppercase tracking-wider text-[#b8894f]">
             今天留下了
           </div>
 
           {touchedTracks.length === 0 ? (
-            <div className="text-xs text-[var(--text-secondary)]">今天没有记录主线投入，静静休整也是探索的一部分。</div>
+            <div className="type-l5 text-[var(--text-secondary)] font-sans">今天没有记录主线投入，静静休整也是探索的一部分。</div>
           ) : (
             <div className="space-y-2">
               {touchedTracks.map(t => (
-                <div key={t.id} className="flex items-center justify-between text-xs">
+                <div key={t.id} className="flex items-center justify-between type-l5">
                   <div className="flex items-center gap-2 text-[var(--text-primary)]">
-                    <span className="w-1.5 h-1.5 rounded-full bg-[#dfbf85]" />
-                    <span className="font-medium">{t.name}</span>
+                    <span className="w-1.5 h-1.5 rounded-full bg-[#b8894f]" />
+                    <span className="font-medium font-sans">{t.name}</span>
                   </div>
-                  <span className="font-mono text-[#c69956]">
+                  <span className="font-mono text-[#b8894f] font-medium">
                     {trackMinutesMap[t.id] ? formatMinutes(trackMinutesMap[t.id]) : '触达'}
                   </span>
                 </div>
@@ -92,53 +92,53 @@ export const EndTodayModal: React.FC<EndTodayModalProps> = ({
           )}
         </div>
 
-        <form onSubmit={handleFinish} className="space-y-4 text-xs">
+        <form onSubmit={handleFinish} className="space-y-4 type-l5">
           <div>
             <div className="flex items-center justify-between mb-1">
-              <label className="text-[var(--text-muted)]">今天一句话？ (Optional)</label>
-              <span className="text-[10px] text-[var(--text-ghost)]">可不填</span>
+              <label className="text-[var(--text-muted)] font-medium font-sans">今天一句话？ (Optional)</label>
+              <span className="type-l6 font-mono text-[var(--text-ghost)]">可不填</span>
             </div>
             <input
               type="text"
               placeholder="如: 状态平稳，把核心接口逻辑理清楚了。"
               value={reflection}
               onChange={e => setReflection(e.target.value)}
-              className="w-full bg-[#11100f] border border-[#c69956]/25 rounded px-3 py-2 text-[var(--text-primary)] focus:outline-none focus:border-[#dfbf85]"
+              className="w-full bg-[#11100f] border border-[#b8894f]/25 rounded px-3 py-2 text-[var(--text-primary)] focus:outline-none focus:border-[#b8894f] font-medium font-sans"
             />
           </div>
 
           <div>
             <div className="flex items-center justify-between mb-1">
-              <label className="text-[var(--text-muted)]">明天有什么想接着做？ (Optional)</label>
-              <span className="text-[10px] text-[var(--text-ghost)]">可不填</span>
+              <label className="text-[var(--text-muted)] font-medium font-sans">明天有什么想接着做？ (Optional)</label>
+              <span className="type-l6 font-mono text-[var(--text-ghost)]">可不填</span>
             </div>
             <input
               type="text"
               placeholder="如: 继续跑 MCP Server 示例。"
               value={carryForward}
               onChange={e => setCarryForward(e.target.value)}
-              className="w-full bg-[#11100f] border border-[#c69956]/25 rounded px-3 py-2 text-[var(--text-primary)] focus:outline-none focus:border-[#dfbf85]"
+              className="w-full bg-[#11100f] border border-[#b8894f]/25 rounded px-3 py-2 text-[var(--text-primary)] focus:outline-none focus:border-[#b8894f] font-medium font-sans"
             />
           </div>
 
           {/* Guilt-free design reminder */}
-          <div className="p-3 rounded bg-[#171411] border border-[#c69956]/15 text-[11px] text-[var(--text-muted)] leading-relaxed">
-            🌿 <strong>设计原则</strong>: End Today 不产生 streak 打卡火焰。今天未 Close 也没有欠账，明天随时平稳接续。
+          <div className="p-3 rounded bg-[#171411] border border-[#b8894f]/15 type-l5 text-[var(--text-secondary)] leading-relaxed font-sans">
+            🌿 <strong className="text-[var(--text-primary)]">设计原则</strong>: End Today 不产生 streak 打卡火焰。今天未 Close 也没有欠账，明天随时平稳接续。
           </div>
 
           <div className="flex items-center justify-end gap-2 pt-2">
             <button
               type="button"
               onClick={onClose}
-              className="px-3 py-1.5 text-[var(--text-muted)] hover:text-[var(--text-primary)]"
+              className="px-3 py-1.5 text-[var(--text-muted)] hover:text-[var(--text-primary)] cursor-pointer font-medium"
             >
               继续看今日
             </button>
             <button
               type="submit"
-              className="brass-button px-5 py-2 font-semibold text-[var(--text-hero)] rounded flex items-center gap-1.5"
+              className="brass-button px-5 py-2 font-semibold text-[var(--text-hero)] rounded flex items-center gap-1.5 cursor-pointer"
             >
-              <Check className="w-4 h-4 text-[#dfbf85]" />
+              <Check className="w-4 h-4 text-[#b8894f]" />
               <span>结束今天</span>
             </button>
           </div>

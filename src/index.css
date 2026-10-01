@@ -9,28 +9,32 @@
     --font-sans: 'IBM Plex Sans', 'Noto Sans SC', 'PingFang SC', system-ui, -apple-system, sans-serif;
     --font-mono: 'IBM Plex Mono', 'JetBrains Mono', monospace;
 
-    /* Rebuilt Neutral & Optical Contrast Hierarchy Tokens (Strict 6-Level Gradient) */
-    --text-hero:      #ede4d4;  /* Only primary page anchors (Today date, main page title) */
-    --text-title:     #c9bead;  /* Partition titles, key object names ("现在做什么", "今天发生的现实") */
-    --text-primary:   #b4a896;  /* Main reading text, event content, normal body */
-    --text-secondary: #8e8271;  /* Explanations, subtitles, secondary prose */
-    --text-muted:     #6b6154;  /* Timestamps, counts, metadata, secondary tags */
-    --text-ghost:     #4e463c;  /* Empty state descriptions, subtle brackets, backgrounded notes */
+    /* Text Hue Architecture Tokens (5-Rail Hierarchy: Warm, Neutral, Cool Neutral, Brass, Verdigris) */
+    --text-hero:      #e6ddcf;  /* Warm Hero (Page titles, primary anchors - Warm Ivory/Parchment) */
+    --text-title:     #d5caba;  /* Warm Title (Section titles, partition headings, key object names) */
+    --text-primary:   #c2bdb4;  /* Neutral Primary (Body reading text, event content, track description, items) */
+    --text-secondary: #9d9991;  /* Cool Secondary (Explanations, helper text, subtitles, descriptions) */
+    --text-muted:     #7f807c;  /* Cool Muted (Timestamps, counts, metadata, numbers, secondary tags) */
+    --text-ghost:     #5d5d58;  /* Cool Ghost (Technical eyebrows, separators, punch markings) */
 
-    /* Primary Accent: Aged Brass (方向 / 权重 / 主线 / 重要动作 - Visual Weight 100%) */
-    --brass-bright: #d4ab6a;
-    --brass:        #b98a4a;
-    --brass-dim:    #7f6645;
+    /* Primary Accent: Aged Brass (方向 / 当前 / 权重 / 主线 / 主操作 - Visual Weight 100%) */
+    --accent-brass:       #b8894f;
+    --accent-brass-hover: #c89a5a;
+    --brass-bright:       #c89a5a;
+    --brass:              #b8894f;
+    --brass-dim:          #826744;
 
-    /* Secondary Cool Accent: Weathered Verdigris 氧化铜绿 (状态 / 运行中 / 轻量 / 恢复 - Visual Weight 70%) */
-    --verdigris-strong: #86a69a;
-    --verdigris:        #6b877c;
-    --verdigris-dim:    #475e55;
-    --verdigris-ghost:  #2d3d37;
+    /* Secondary Accent: Weathered Verdigris 氧化铜绿 (活跃 / 正在运行 / 恢复 / 完成 / 临时健康态 - Visual Weight 70%) */
+    --accent-verdigris:       #78998d;
+    --accent-verdigris-hover: #88a99d;
+    --verdigris-strong:       #88a99d;
+    --verdigris:              #78998d;
+    --verdigris-dim:          #516c62;
+    --verdigris-ghost:        #344640;
 
     /* Tertiary Accent: Muted Copper 紫铜 (保温 / 深度 - Visual Weight 50%) */
-    --copper:           #93654c;
-    --copper-dim:       #6a4430;
+    --copper:           #a86d4e;
+    --copper-dim:       #7a4932;
 
     /* 6-Level Typography Scale Tokens */
     --text-scale-l1: 1.875rem; /* 30px, range 28-32px */
@@ -48,33 +52,40 @@
     --text-scale-l5: 0.8125rem; /* 13px */
     --line-height-l5: 1.25rem;  /* 20px */
 
-    --text-scale-l6: 0.71875rem; /* 11.5px, range 11-12px */
-    --line-height-l6: 1.05rem;   /* 17px */
+    --text-scale-l6: 0.75rem;   /* 12px safe minimum for metadata */
+    --line-height-l6: 1.125rem; /* 18px */
 
     /* Layout & Viewport Foundation Tokens */
     --sidebar-width: 220px;
     --main-max-width: 880px;
 
     /* Semantic Effort Palette (Chemical Patina & Metals) */
-    --effort-light: #86a69a;        /* Weathered Verdigris 氧化铜绿 */
-    --effort-light-bg: rgba(107, 135, 124, 0.10);
-    --effort-light-border: rgba(107, 135, 124, 0.22);
+    --effort-light: #78998d;        /* Weathered Verdigris 氧化铜绿 */
+    --effort-light-bg: rgba(120, 153, 141, 0.12);
+    --effort-light-border: rgba(120, 153, 141, 0.28);
 
-    --effort-normal: #c69956;       /* Aged Brass 原色黄铜 */
-    --effort-normal-bg: rgba(198, 153, 86, 0.08);
-    --effort-normal-border: rgba(198, 153, 86, 0.20);
+    --effort-normal: #b8894f;       /* Aged Brass 原色黄铜 */
+    --effort-normal-bg: rgba(184, 137, 79, 0.10);
+    --effort-normal-border: rgba(184, 137, 79, 0.25);
 
     --effort-deep: #c87a3e;         /* Darker Copper 紫铜色 */
-    --effort-deep-bg: rgba(200, 122, 62, 0.08);
-    --effort-deep-border: rgba(200, 122, 62, 0.20);
+    --effort-deep-bg: rgba(200, 122, 62, 0.10);
+    --effort-deep-border: rgba(200, 122, 62, 0.25);
   }
 
   body {
     font-family: var(--font-sans);
     font-size: var(--text-scale-l4);
     line-height: var(--line-height-l4);
+    font-weight: 450;
     background-color: #151413;
     color: var(--text-primary);
+  }
+
+  /* Keyboard-first focus visible ring */
+  :focus-visible {
+    outline: 1px solid rgba(184, 137, 79, 0.55);
+    outline-offset: 2px;
   }
 }
 
@@ -128,11 +139,12 @@
     );
 }
 
-/* 6-level typography scale utility classes */
+/* 6-level typography scale utility classes with minimum safe weights for dark UI */
 .type-l1 {
   font-family: var(--font-display);
   font-size: var(--text-scale-l1);
   line-height: var(--line-height-l1);
+  font-weight: 600;
   letter-spacing: -0.01em;
 }
 
@@ -140,10 +152,11 @@
   font-family: var(--font-display);
   font-size: var(--text-scale-l2);
   line-height: var(--line-height-l2);
+  font-weight: 600;
   letter-spacing: 0.005em;
 }
 
-/* L3 Section Titles: Precise instrument chrome in Sans 500-600 */
+/* L3 Section Titles: Precise instrument chrome in Sans 600 */
 .type-l3 {
   font-family: var(--font-sans);
   font-size: var(--text-scale-l3);
@@ -156,21 +169,24 @@
   font-family: var(--font-sans);
   font-size: var(--text-scale-l4);
   line-height: var(--line-height-l4);
+  font-weight: 450;
 }
 
 .type-l5 {
   font-family: var(--font-sans);
   font-size: var(--text-scale-l5);
   line-height: var(--line-height-l5);
+  font-weight: 500;
 }
 
 .type-l6 {
-  font-family: var(--font-mono);
+  font-family: var(--font-sans);
   font-size: var(--text-scale-l6);
   line-height: var(--line-height-l6);
+  font-weight: 500;
 }
 
-/* Timeline Event Content: Human Journal Handwriting */
+/* Timeline Event Content: Human Journal Handwriting (Life Note) */
 .type-journal {
   font-family: var(--font-journal);
   font-size: 0.9375rem; /* 15px */
@@ -191,22 +207,22 @@
 
 .rail-session {
   height: 1.5px;
-  background: linear-gradient(90deg, rgba(85, 78, 70, 0.2) 0%, rgba(128, 118, 106, 0.45) 50%, rgba(162, 142, 120, 0.6) 100%);
+  background: linear-gradient(90deg, rgba(85, 78, 70, 0.25) 0%, rgba(140, 128, 114, 0.55) 50%, rgba(184, 137, 79, 0.7) 100%);
 }
 
 .rail-track {
   height: 1.5px;
-  background: linear-gradient(90deg, rgba(72, 86, 81, 0.2) 0%, rgba(108, 128, 120, 0.45) 50%, rgba(130, 152, 142, 0.55) 100%);
+  background: linear-gradient(90deg, rgba(72, 86, 81, 0.25) 0%, rgba(110, 135, 126, 0.5) 50%, rgba(120, 153, 141, 0.65) 100%);
 }
 
 .rail-active {
   height: 1.5px;
-  background: linear-gradient(90deg, rgba(90, 118, 108, 0.25) 0%, rgba(134, 166, 154, 0.75) 100%);
+  background: linear-gradient(90deg, rgba(90, 118, 108, 0.3) 0%, rgba(136, 169, 157, 0.85) 100%);
 }
 
 .rail-archive {
-  height: 1px;
-  background: linear-gradient(90deg, rgba(70, 64, 58, 0.15) 0%, rgba(98, 90, 80, 0.3) 60%, rgba(120, 110, 98, 0.38) 100%);
+  height: 1.2px;
+  background: linear-gradient(90deg, rgba(70, 70, 68, 0.2) 0%, rgba(105, 105, 100, 0.45) 60%, rgba(127, 128, 124, 0.6) 100%);
 }
 
 /* Mechanical Punch Mark Nodes */
@@ -214,7 +230,7 @@
   width: 6px;
   height: 6px;
   border-radius: 50%;
-  border: 1.5px solid #b98a4a;
+  border: 1.5px solid #b8894f;
   background: #161514;
   flex-shrink: 0;
 }
@@ -223,7 +239,7 @@
   width: 5.5px;
   height: 5.5px;
   transform: rotate(45deg);
-  border: 1.2px solid #86a69a;
+  border: 1.2px solid #78998d;
   background: #161514;
   flex-shrink: 0;
 }
@@ -232,27 +248,27 @@
   width: 6.5px;
   height: 6.5px;
   border-radius: 50%;
-  border: 1.5px solid #86a69a;
+  border: 1.5px solid #88a99d;
   background: #1b2924;
-  box-shadow: 0 0 3px rgba(134, 166, 154, 0.35);
+  box-shadow: 0 0 4px rgba(136, 169, 157, 0.45);
   flex-shrink: 0;
 }
 
-/* Archive Mode Desaturated Punch Nodes */
+/* Archive Mode Punch Nodes */
 .punch-node-session-archive {
-  width: 5px;
-  height: 5px;
+  width: 5.5px;
+  height: 5.5px;
   border-radius: 50%;
-  border: 1px solid #7a6649;
+  border: 1.2px solid #7f807c;
   background: #161514;
   flex-shrink: 0;
 }
 
 .punch-node-track-archive {
-  width: 4.5px;
-  height: 4.5px;
+  width: 5px;
+  height: 5px;
   transform: rotate(45deg);
-  border: 1px solid #5a736a;
+  border: 1.2px solid #62776f;
   background: #161514;
   flex-shrink: 0;
 }
@@ -261,88 +277,88 @@
 /* Physical Optics Surface Hierarchy (Editorial Cockpit Calibration)        */
 /* ========================================================================= */
 
-/* Level 1: Standard Cockpit Surface (Matte, lightweight, zero heavy card feel) */
+/* Level 1: Standard Cockpit Surface (Matte, lightweight) */
 .surface-flat,
 .brass-panel {
-  background: rgba(28, 26, 23, 0.48);
-  border: 1px solid rgba(198, 153, 86, 0.08);
+  background: rgba(28, 26, 23, 0.55);
+  border: 1px solid rgba(184, 137, 79, 0.12);
   box-shadow: none;
   transition: border-color 0.15s ease;
 }
 
 .surface-flat:hover,
 .brass-panel:hover {
-  border-color: rgba(198, 153, 86, 0.18);
+  border-color: rgba(184, 137, 79, 0.22);
 }
 
-/* Soft Optical Surface (Restrained 30%-40% depth for primary inputs/containers) */
+/* Soft Optical Surface (Restrained container - not interactive by default) */
 .surface-optic-soft {
   background:
     radial-gradient(
       ellipse at 50% 0%,
-      rgba(198, 153, 86, 0.018) 0%,
+      rgba(184, 137, 79, 0.02) 0%,
       transparent 65%
     ),
-    rgba(26, 24, 22, 0.60);
-  border: 1px solid rgba(198, 153, 86, 0.09);
+    rgba(26, 24, 22, 0.65);
+  border: 1px solid rgba(184, 137, 79, 0.12);
   box-shadow: none;
-  transition: border-color 0.15s ease;
 }
 
-/* Weekly Touch Matrix (Strongest optical reference: Radial ambient top light, inset bevel highlight & brass rim) */
+/* Weekly Touch Matrix (Strongest optical reference) */
 .matrix-panel {
-  background: radial-gradient(circle at 50% 0%, rgba(198, 153, 86, 0.05) 0%, transparent 68%),
+  background: radial-gradient(circle at 50% 0%, rgba(184, 137, 79, 0.05) 0%, transparent 68%),
               linear-gradient(180deg, #1d1a17 0%, #171513 100%);
-  border: 1px solid rgba(198, 153, 86, 0.16);
+  border: 1px solid rgba(184, 137, 79, 0.18);
   box-shadow: 0 4px 16px -2px rgba(0, 0, 0, 0.38),
               inset 0 1px 0 rgba(255, 230, 180, 0.06);
   transition: border-color 0.2s ease, box-shadow 0.2s ease;
 }
 
 .matrix-panel:hover {
-  border-color: rgba(198, 153, 86, 0.26);
+  border-color: rgba(184, 137, 79, 0.26);
   box-shadow: 0 5px 18px -2px rgba(0, 0, 0, 0.45),
               inset 0 1px 0 rgba(255, 230, 180, 0.09);
 }
 
-/* Level 2: Featured Surface (Primary recommendation anchor - restrained top bevel) */
+/* Level 2: Featured Surface (Primary recommendation anchor) */
 .surface-featured,
 .brass-panel-elevated {
-  background: radial-gradient(ellipse at 50% 0%, rgba(198, 153, 86, 0.035) 0%, transparent 65%),
+  background: radial-gradient(ellipse at 50% 0%, rgba(184, 137, 79, 0.04) 0%, transparent 65%),
               linear-gradient(180deg, #1c1a17 0%, #161513 100%);
-  border: 1px solid rgba(198, 153, 86, 0.16);
-  box-shadow: 0 3px 12px -2px rgba(0, 0, 0, 0.35), inset 0 1px 0 rgba(255, 230, 180, 0.04);
+  border: 1px solid rgba(184, 137, 79, 0.20);
+  box-shadow: 0 3px 12px -2px rgba(0, 0, 0, 0.35), inset 0 1px 0 rgba(255, 230, 180, 0.05);
   transition: border-color 0.15s ease;
 }
 
 .surface-featured:hover,
 .brass-panel-elevated:hover {
-  border-color: rgba(198, 153, 86, 0.28);
+  border-color: rgba(184, 137, 79, 0.30);
 }
 
 /* Level 3: Instrument Surface (Active live chronometer - clean matte chassis) */
 .surface-instrument {
-  background: radial-gradient(ellipse at 50% 0%, rgba(107, 135, 124, 0.035) 0%, transparent 60%),
+  background: radial-gradient(ellipse at 50% 0%, rgba(120, 153, 141, 0.04) 0%, transparent 60%),
               linear-gradient(180deg, #181f1c 0%, #141816 100%);
-  border: 1px solid rgba(107, 135, 124, 0.26);
-  box-shadow: 0 3px 14px -3px rgba(0, 0, 0, 0.4), inset 0 1px 1px rgba(215, 245, 235, 0.05);
+  border: 1px solid rgba(120, 153, 141, 0.28);
+  box-shadow: 0 3px 14px -3px rgba(0, 0, 0, 0.4), inset 0 1px 1px rgba(215, 245, 235, 0.06);
 }
 
 /* Phosphor Optical Glow for Indicators & Chronometer Beacons */
 .phosphor-glow,
 .brass-glow {
-  box-shadow: 0 0 4px rgba(198, 153, 86, 0.25);
+  box-shadow: 0 0 4px rgba(184, 137, 79, 0.28);
 }
 
 .verdigris-glow {
-  box-shadow: 0 0 4px rgba(134, 166, 154, 0.25);
+  box-shadow: 0 0 4px rgba(120, 153, 141, 0.30);
 }
 
-/* Tactile Instrument Switch (7-8px engineered chamfer, physical toggle instead of SaaS pill) */
+/* Tactile Instrument Switch (7-8px engineered chamfer, physical toggle) */
 .chip-semi-capsule {
   height: 28px;
   border-radius: 6px;
   padding: 0 10px;
+  font-weight: 500;
   display: inline-flex;
   align-items: center;
   justify-content: center;
@@ -354,31 +370,37 @@
   color: var(--effort-light);
   background-color: var(--effort-light-bg);
   border: 1px solid var(--effort-light-border);
+  font-weight: 500;
 }
 
 .tag-effort-normal {
   color: var(--effort-normal);
   background-color: var(--effort-normal-bg);
   border: 1px solid var(--effort-normal-border);
+  font-weight: 500;
 }
 
 .tag-effort-deep {
   color: var(--effort-deep);
   background-color: var(--effort-deep-bg);
   border: 1px solid var(--effort-deep-border);
+  font-weight: 500;
 }
 
 /* Primary Button: Brass Button (Precise, crisp, tactile) */
 .brass-button {
   background: linear-gradient(180deg, #2a241c 0%, #1d1914 100%);
-  border: 1px solid rgba(198, 153, 86, 0.28);
+  border: 1px solid rgba(184, 137, 79, 0.32);
   box-shadow: inset 0 1px 0 rgba(255, 235, 195, 0.10), 0 1px 3px rgba(0, 0, 0, 0.3);
+  color: var(--text-primary);
+  font-weight: 500;
   transition: all 0.15s cubic-bezier(0.16, 1, 0.3, 1);
 }
 
 .brass-button:hover {
   background: linear-gradient(180deg, #332b20 0%, #221c15 100%);
-  border-color: rgba(212, 171, 106, 0.44);
+  border-color: rgba(200, 154, 90, 0.50);
+  color: var(--text-hero);
   box-shadow: inset 0 1px 0 rgba(255, 235, 195, 0.15), 0 2px 5px rgba(0, 0, 0, 0.35);
 }
 
@@ -387,24 +409,26 @@
   box-shadow: inset 0 2px 4px rgba(0, 0, 0, 0.45);
 }
 
-/* Secondary Button: Lightweight flat/transparent with light border */
+/* Secondary Button: Lightweight flat with clean hover feedback */
 .btn-secondary {
-  background: rgba(28, 25, 22, 0.45);
-  border: 1px solid rgba(198, 153, 86, 0.16);
+  background: rgba(28, 25, 22, 0.50);
+  border: 1px solid rgba(184, 137, 79, 0.18);
   color: var(--text-primary);
+  font-weight: 500;
   transition: all 0.15s ease;
 }
 
 .btn-secondary:hover {
-  background: rgba(36, 32, 27, 0.65);
-  border-color: rgba(198, 153, 86, 0.30);
+  background: rgba(36, 32, 27, 0.70);
+  border-color: rgba(184, 137, 79, 0.36);
   color: var(--text-hero);
 }
 
 .brass-tag {
-  background: rgba(198, 153, 86, 0.08);
-  border: 1px solid rgba(198, 153, 86, 0.18);
-  color: #cfab72;
+  background: rgba(184, 137, 79, 0.10);
+  border: 1px solid rgba(184, 137, 79, 0.22);
+  color: #c89a5a;
+  font-weight: 500;
 }
 
 /* Brass Rivet Detail (Matte mechanical rivet) */
