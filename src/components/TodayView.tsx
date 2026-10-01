@@ -295,10 +295,10 @@ export const TodayView: React.FC<TodayViewProps> = ({
             </div>
 
             {/* Effort & Filter switchers (Tactile instrument switches) */}
-            {hasTracks && <div className="flex items-center gap-1 p-0.5 bg-[#151412] rounded-[7px] border border-[#b8894f]/15 self-start sm:self-auto overflow-x-auto max-w-full">
+            {hasTracks && <div className="segmented-control self-start sm:self-auto overflow-x-auto max-w-full" aria-label="推荐投入偏好">
               <button
                 onClick={() => onSetEffortFilter('all')}
-                className={`chip-semi-capsule type-l5 whitespace-nowrap cursor-pointer ${
+                className={`segmented-item type-l5 whitespace-nowrap cursor-pointer ${
                   effortFilter === 'all'
                     ? 'mode-auto-selected border font-medium'
                     : 'text-[var(--text-muted)] hover:text-[var(--text-primary)]'
@@ -308,7 +308,7 @@ export const TodayView: React.FC<TodayViewProps> = ({
               </button>
               <button
                 onClick={() => onSetEffortFilter('light')}
-                className={`chip-semi-capsule type-l5 whitespace-nowrap cursor-pointer ${
+                className={`segmented-item type-l5 whitespace-nowrap cursor-pointer ${
                   effortFilter === 'light'
                     ? 'mode-light-selected border font-medium'
                     : 'text-[var(--text-muted)] hover:text-[#78998d]'
@@ -318,7 +318,7 @@ export const TodayView: React.FC<TodayViewProps> = ({
               </button>
               <button
                 onClick={() => onSetEffortFilter('normal')}
-                className={`chip-semi-capsule type-l5 whitespace-nowrap cursor-pointer ${
+                className={`segmented-item type-l5 whitespace-nowrap cursor-pointer ${
                   effortFilter === 'normal'
                     ? 'mode-normal-selected border font-medium'
                     : 'text-[var(--text-muted)] hover:text-[var(--text-primary)]'
@@ -328,7 +328,7 @@ export const TodayView: React.FC<TodayViewProps> = ({
               </button>
               <button
                 onClick={() => onSetEffortFilter('deep')}
-                className={`chip-semi-capsule type-l5 whitespace-nowrap cursor-pointer ${
+                className={`segmented-item type-l5 whitespace-nowrap cursor-pointer ${
                   effortFilter === 'deep'
                     ? 'mode-deep-selected border font-medium'
                     : 'text-[var(--text-muted)] hover:text-[#c87a3e]'
@@ -338,7 +338,7 @@ export const TodayView: React.FC<TodayViewProps> = ({
               </button>
               <button
                 onClick={onShuffleRecommendations}
-                className="chip-semi-capsule type-l5 text-[var(--text-muted)] hover:text-[var(--text-primary)] transition-colors flex items-center gap-1 border-l border-[#b8894f]/15 ml-0.5 pl-2 cursor-pointer font-medium"
+                className="segmented-item type-l5 text-[var(--text-muted)] hover:text-[var(--text-primary)] transition-colors flex items-center gap-1 border-l border-[#b8894f]/15 ml-0.5 pl-2 cursor-pointer font-medium"
                 title="换一批候选"
               >
                 <RotateCw className="w-3 h-3" />
@@ -358,18 +358,21 @@ export const TodayView: React.FC<TodayViewProps> = ({
           ) : recommendations.length === 0 ? (
             <div className="surface-flat recommendation-empty-surface rounded-lg">
               <div className="p-4 sm:p-5 flex flex-col sm:flex-row sm:items-end sm:justify-between gap-4 min-h-[108px]">
-                <InlineEmptyState label="暂无推荐" description="当前主线还没有清晰的下一步。" />
-                <div className="recommendation-action-cluster shrink-0">
-                  {onAddNextAction && (
-                    <button onClick={() => setShowQuickAddNext(true)} className="btn-secondary recommendation-quick-add px-3 py-1.5 rounded type-l5 font-medium flex items-center gap-1.5 cursor-pointer">
-                      <Plus className="w-3.5 h-3.5" />
-                      <span>快速新增 Next</span>
+                <div className="inline-empty-state">
+                  <div className="inline-empty-label">暂无推荐</div>
+                  <p className="inline-empty-description">
+                    当前主线还没有清晰的下一步。{' '}
+                    <button onClick={onSelectTrackView} className="recommendation-link-action type-l5 font-medium cursor-pointer">
+                      去主线页 <ArrowRight className="w-3 h-3" />
                     </button>
-                  )}
-                  <button onClick={onSelectTrackView} className="recommendation-link-action inline-flex items-center gap-0.5 type-l6 font-medium cursor-pointer">
-                    去主线页完整编辑 <ArrowRight className="w-3 h-3" />
-                  </button>
+                  </p>
                 </div>
+                {onAddNextAction && (
+                  <button onClick={() => setShowQuickAddNext(true)} aria-label="快速新增下一步" className="secondary-create-action shrink-0 cursor-pointer">
+                    <Plus className="w-3.5 h-3.5" />
+                    <span>快速新增</span>
+                  </button>
+                )}
               </div>
               {showQuickAddNext && onAddNextAction && (
                 <form
@@ -383,7 +386,7 @@ export const TodayView: React.FC<TodayViewProps> = ({
                   className="quick-add-composer"
                 >
                   <div className="quick-add-composer-header">
-                    <span>快速新增 Next</span>
+                    <span>快速新增</span>
                     <button type="button" onClick={() => setShowQuickAddNext(false)} className="quick-add-cancel cursor-pointer">取消</button>
                   </div>
                   <input type="text" placeholder="可执行的小动作（如：读完第 2 章、写完 API 接口...）" value={quickAddTitle} onChange={(e) => setQuickAddTitle(e.target.value)} className="quick-add-slot" autoFocus />
@@ -401,9 +404,9 @@ export const TodayView: React.FC<TodayViewProps> = ({
                         </div>}
                       </div>
                     </div>
-                    <div className="quick-add-effort" aria-label="投入程度">
+                    <div className="segmented-control quick-add-effort" aria-label="投入程度">
                       {(['light', 'normal', 'deep'] as const).map(effort => (
-                        <button key={effort} type="button" onClick={() => setQuickAddEffort(effort)} aria-pressed={quickAddEffort === effort} className={quickAddEffort === effort ? 'is-selected' : ''}>
+                        <button key={effort} type="button" onClick={() => setQuickAddEffort(effort)} aria-pressed={quickAddEffort === effort} data-effort={effort} className={`segmented-item ${quickAddEffort === effort ? 'is-selected' : ''}`}>
                           {effort === 'light' ? '轻量' : effort === 'normal' ? '正常' : '深入'}
                         </button>
                       ))}
@@ -588,9 +591,9 @@ export const TodayView: React.FC<TodayViewProps> = ({
             <div className="flex items-center gap-2 self-start sm:self-auto">
               <button
                 onClick={onOpenLogModal}
-                className="btn-secondary px-3 py-1.5 rounded type-l5 text-[var(--text-primary)] hover:text-[var(--text-hero)] flex items-center gap-1.5 cursor-pointer font-medium"
+                className="secondary-create-action cursor-pointer"
               >
-                <Plus className="w-3.5 h-3.5 text-[#b8894f]" />
+                <Plus className="w-3.5 h-3.5" />
                 <span>记一下刚刚做了什么</span>
               </button>
 
