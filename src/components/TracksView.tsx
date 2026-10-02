@@ -1,7 +1,6 @@
 import React, { useEffect, useState } from 'react';
 import {
   Plus,
-  Play,
   CheckCircle2,
   Trash2,
   ArrowRight,
@@ -176,16 +175,16 @@ export const TracksView: React.FC<TracksViewProps> = ({
             </h1>
           </div>
 
-          <div className="flex items-center gap-3 self-start sm:self-auto">
+          <div className="flex flex-wrap items-center gap-3 self-start sm:self-auto">
             <button
               onClick={onOpenPhaseSettings}
-              className="btn-secondary px-3 py-1.5 rounded type-l5 text-[var(--text-primary)] hover:text-[var(--text-hero)] transition-colors cursor-pointer font-medium"
+              className="cockpit-button cockpit-button--secondary cursor-pointer"
             >
               当前阶段: <strong className="text-[#b8894f] font-normal">{currentPhase?.name || '探索期'}</strong>
             </button>
             <button
               onClick={() => setShowAddTrackModal(true)}
-              className="brass-button px-3.5 py-1.5 rounded type-l5 font-medium text-[var(--text-primary)] hover:text-[var(--text-hero)] flex items-center gap-1.5 cursor-pointer"
+              className={`cockpit-button cursor-pointer ${hasTracks ? 'cockpit-button--secondary cockpit-button--brass-action' : 'cockpit-button--primary'}`}
             >
               <Plus className="w-3.5 h-3.5 text-[#c89a5a]" />
               <span>新建主线</span>
@@ -271,16 +270,14 @@ export const TracksView: React.FC<TracksViewProps> = ({
                   </div>
 
                   {/* Segmented Role Control */}
-                  <div className="flex items-center gap-0.5 bg-[#151412] p-0.5 rounded border border-[#b8894f]/15 self-start sm:self-auto">
+                  <div className="segmented-control compact track-role-selector self-start sm:self-auto" role="group" aria-label="主线角色">
                     {(['main', 'maintenance', 'paused'] as TrackRole[]).map(role => (
                       <button
                         key={role}
                         onClick={() => onUpdateTrackRole(selectedTrack.id, role)}
-                        className={`px-2.5 py-0.5 type-l6 font-mono rounded transition-colors cursor-pointer ${
-                          selectedTrack.role === role
-                            ? 'bg-[#251f18] text-[#b8894f] border border-[#b8894f]/35 shadow-2xs font-semibold'
-                            : 'text-[var(--text-muted)] hover:text-[var(--text-primary)] font-medium'
-                        }`}
+                        aria-pressed={selectedTrack.role === role}
+                        data-role={role}
+                        className={`segmented-item cursor-pointer ${selectedTrack.role === role ? 'is-selected' : ''}`}
                       >
                         {role === 'main' ? '主线' : role === 'maintenance' ? '保温' : '暂缓'}
                       </button>
@@ -426,7 +423,7 @@ export const TracksView: React.FC<TracksViewProps> = ({
                   {!isAddingAction && (
                     <button
                       onClick={() => setIsAddingAction(true)}
-                      className="btn-secondary flex items-center gap-1.5 type-l5 text-[#b8894f] hover:text-[var(--text-hero)] transition-colors py-1 px-2.5 rounded cursor-pointer font-medium"
+                      className="cockpit-button cockpit-button--secondary cockpit-button--brass-action cockpit-button--compact cursor-pointer"
                     >
                       <Plus className="w-3.5 h-3.5" />
                       <span>新增</span>
@@ -438,69 +435,68 @@ export const TracksView: React.FC<TracksViewProps> = ({
                 {isAddingAction ? (
                   <form
                     onSubmit={handleCreateAction}
-                    className="p-4 rounded-lg border border-[#b8894f]/25 bg-[#161412] space-y-3.5 shadow-2xs"
+                    className="inline-action-composer"
                   >
-                    <div className="space-y-1">
-                      <label className="type-l6 font-mono uppercase text-[var(--text-muted)] block font-medium">
+                    <div className="inline-action-field">
+                      <label htmlFor="track-next-title" className="inline-action-label">
                         下一步行动
                       </label>
                       <input
+                        id="track-next-title"
                         type="text"
                         placeholder="如：跑一个最小 MCP Server"
                         value={actionTitle}
                         onChange={e => setActionTitle(e.target.value)}
-                        className="w-full bg-[#121110] border border-[#b8894f]/20 rounded px-3 py-1.5 type-l5 text-[var(--text-primary)] focus:outline-hidden focus:border-[#b8894f]"
+                        className="inline-action-slot"
                         autoFocus
                       />
                     </div>
 
-                    <div className="space-y-1">
-                      <label className="type-l6 font-mono uppercase text-[var(--text-muted)] block font-medium">
-                        备注 / 上下文 (可选)
+                    <div className="inline-action-field">
+                      <label htmlFor="track-next-note" className="inline-action-label">
+                        备注 / 上下文（可选）
                       </label>
                       <input
+                        id="track-next-note"
                         type="text"
                         placeholder="如：昨天刚完成 tool calling，继续这里上下文最完整"
                         value={actionNote}
                         onChange={e => setActionNote(e.target.value)}
-                        className="w-full bg-[#121110] border border-[#b8894f]/20 rounded px-3 py-1.5 type-l5 text-[var(--text-primary)] focus:outline-hidden focus:border-[#b8894f]"
+                        className="inline-action-slot"
                       />
                     </div>
 
-                    <div className="flex items-center justify-between pt-1">
-                      <div className="flex items-center gap-2 type-l5">
-                        <span className="text-[var(--text-muted)] type-l6 font-mono uppercase font-medium">EFFORT:</span>
-                        {(['light', 'normal', 'deep'] as const).map(eff => (
-                          <button
-                            key={eff}
-                            type="button"
-                            onClick={() => setActionEffort(eff)}
-                            className={`px-2.5 py-1 rounded type-l6 font-mono transition-colors cursor-pointer ${
-                              actionEffort === eff
-                                ? eff === 'light'
-                                ? 'bg-[#17231f] text-[#78998d] border border-[#4a635a] font-semibold'
-                                : eff === 'normal'
-                                ? 'bg-[#282015] text-[#b8894f] border border-[#8a6a3b] font-semibold'
-                                : 'bg-[#291b14] text-[#c87a3e] border border-[#8a4e29] font-semibold'
-                                : 'text-[var(--text-muted)] hover:text-[var(--text-primary)] font-medium'
-                            }`}
-                          >
-                            {eff === 'light' ? '轻量' : eff === 'normal' ? '正常' : '深入'}
-                          </button>
-                        ))}
+                    <div className="inline-action-controls">
+                      <div className="inline-action-effort">
+                        <span className="inline-action-control-label">投入程度</span>
+                        <div className="segmented-control compact quick-add-effort" role="group" aria-label="投入程度">
+                          {(['light', 'normal', 'deep'] as const).map(eff => (
+                            <button
+                              key={eff}
+                              type="button"
+                              onClick={() => setActionEffort(eff)}
+                              aria-pressed={actionEffort === eff}
+                              data-effort={eff}
+                              className={`segmented-item cursor-pointer ${actionEffort === eff ? 'is-selected' : ''}`}
+                            >
+                              {eff === 'light' ? '轻量' : eff === 'normal' ? '正常' : '深入'}
+                            </button>
+                          ))}
+                        </div>
                       </div>
 
-                      <div className="flex items-center gap-2">
+                      <div className="inline-action-commit">
                         <button
                           type="button"
                           onClick={() => setIsAddingAction(false)}
-                          className="px-3 py-1 type-l5 text-[var(--text-muted)] hover:text-[var(--text-primary)] cursor-pointer font-medium"
+                          className="cockpit-action-text cursor-pointer"
                         >
                           取消
                         </button>
                         <button
                           type="submit"
-                          className="brass-button px-4 py-1 type-l5 font-medium text-[var(--text-hero)] rounded cursor-pointer"
+                          disabled={!actionTitle.trim()}
+                          className="cockpit-button cockpit-button--primary cockpit-button--compact cursor-pointer"
                         >
                           保存
                         </button>
@@ -518,9 +514,9 @@ export const TracksView: React.FC<TracksViewProps> = ({
                     {activeTrackActions.map((action, idx) => (
                       <div
                         key={action.id}
-                        className="py-2.5 flex flex-col sm:flex-row sm:items-center justify-between gap-3 group transition-colors hover:bg-[#181614]/40 px-2 -mx-2 rounded"
+                        className="track-action-row group"
                       >
-                        <div className="flex items-start gap-3.5 min-w-0">
+                        <div className="track-action-copy">
                           <span className="type-l6 font-mono text-[var(--text-muted)] pt-0.5 shrink-0 select-none font-medium">
                             {String(idx + 1).padStart(2, '0')}
                           </span>
@@ -563,7 +559,7 @@ export const TracksView: React.FC<TracksViewProps> = ({
                           </div>
                         </div>
 
-                        <div className="flex items-center gap-2 shrink-0 self-end sm:self-center">
+                        <div className="track-action-controls">
                           <CockpitTooltip content="开始此行动"><button
                             onClick={() =>
                               onStartSession(
@@ -572,7 +568,7 @@ export const TracksView: React.FC<TracksViewProps> = ({
                                 `${selectedTrack.name} · ${action.title}`
                               )
                             }
-                            className="btn-secondary flex items-center gap-1.5 px-3 py-1 rounded type-l5 text-[#b8894f] hover:text-[var(--text-hero)] transition-all cursor-pointer font-medium"
+                            className="cockpit-button cockpit-button--secondary cockpit-button--brass-action cockpit-button--compact cursor-pointer"
                             aria-label="开始此行动"
                           >
                             <span>开始</span>
@@ -580,7 +576,7 @@ export const TracksView: React.FC<TracksViewProps> = ({
                           </button></CockpitTooltip>
                           <CockpitTooltip content="标记完成"><button
                             onClick={() => onCompleteAction(action.id)}
-                            className="p-1.5 text-[var(--text-muted)] hover:text-[#78998d] transition-colors rounded hover:bg-[#1c1916] cursor-pointer"
+                            className="cockpit-icon-button cockpit-icon-button--complete cursor-pointer"
                             aria-label="标记完成"
                           >
                             <CheckCircle2 className="w-4 h-4" />
@@ -588,7 +584,7 @@ export const TracksView: React.FC<TracksViewProps> = ({
                           <CockpitConfirmAction tooltip="删除行动" title="删除这个行动？" description="行动会从当前主线中永久移除。" onConfirm={() => onDeleteAction(action.id)}>{({ ref, onClick, expanded }) => <button
                             ref={ref}
                             onClick={onClick}
-                            className="p-1.5 text-[var(--text-muted)] hover:text-[#c87a3e] transition-colors rounded hover:bg-[#1c1916] opacity-0 group-hover:opacity-100 cursor-pointer"
+                            className="cockpit-icon-button cockpit-icon-button--danger track-action-delete cursor-pointer"
                             aria-label="删除行动"
                             aria-expanded={expanded}
                           >
@@ -744,17 +740,15 @@ export const TracksView: React.FC<TracksViewProps> = ({
 
               <div>
                 <label className="block text-[var(--text-muted)] mb-1 font-medium">当前角色</label>
-                <div className="flex gap-2">
+                <div className="segmented-control compact track-role-selector track-role-selector--wide" role="group" aria-label="当前角色">
                   {(['main', 'maintenance', 'paused'] as TrackRole[]).map(role => (
                     <button
                       key={role}
                       type="button"
                       onClick={() => setNewTrackRole(role)}
-                      className={`flex-1 py-1.5 rounded type-l5 cursor-pointer font-medium ${
-                        newTrackRole === role
-                          ? `role-control ${role === 'main' ? 'is-main' : role === 'maintenance' ? 'is-maintenance' : 'is-paused'} font-semibold`
-                          : 'role-control text-[var(--text-muted)] hover:text-[var(--text-primary)]'
-                      }`}
+                      aria-pressed={newTrackRole === role}
+                      data-role={role}
+                      className={`segmented-item cursor-pointer ${newTrackRole === role ? 'is-selected' : ''}`}
                     >
                       {role === 'main' ? '主线' : role === 'maintenance' ? '保温' : '暂缓'}
                     </button>
@@ -777,13 +771,14 @@ export const TracksView: React.FC<TracksViewProps> = ({
                 <button
                   type="button"
                   onClick={() => { setShowAddTrackModal(false); onNewTrackComposerDismissed?.(); }}
-                  className="px-3 py-1.5 text-[var(--text-muted)] hover:text-[var(--text-primary)] cursor-pointer font-medium"
+                  className="cockpit-action-text cursor-pointer"
                 >
                   取消
                 </button>
                 <button
                   type="submit"
-                  className="brass-button px-4 py-1.5 font-medium text-[var(--text-hero)] rounded cursor-pointer"
+                  disabled={!newTrackName.trim()}
+                  className="cockpit-button cockpit-button--primary cursor-pointer"
                 >
                   创建主线
                 </button>
