@@ -579,7 +579,7 @@ export const TracksView: React.FC<TracksViewProps> = ({
                   </form>
                 ) : activeTrackActions.length === 0 ? (
                   <InlineEmptyState
-                    className="py-4"
+                    className="tracks-next-empty py-4"
                     label="暂无 Next"
                     description="先留下当前最确定、最容易启动的一步。"
                   />
@@ -694,9 +694,9 @@ export const TracksView: React.FC<TracksViewProps> = ({
               </div>
 
               {/* Recent Touches & Resources Sections (Refined Editorial Journal without excessive lines) */}
-              <div className="space-y-7 pt-3">
+              <div className={`pt-3 ${trackLogs.length === 0 && relatedCards.length === 0 ? 'space-y-5' : 'space-y-7'}`}>
                 {/* RECENT TOUCHES Chapter */}
-                <div className="space-y-2">
+                <div className={trackLogs.length === 0 ? 'space-y-1.5' : 'space-y-2'}>
                   <div className="flex items-center justify-between">
                     <span className="track-section-label">
                       RECENT TOUCHES / 最近发生
@@ -707,7 +707,7 @@ export const TracksView: React.FC<TracksViewProps> = ({
                   </div>
 
                   {trackLogs.length === 0 ? (
-                    <InlineEmptyState className="py-1.5" label="暂无记录" />
+                    <InlineEmptyState className="py-1" label="暂无记录" />
                   ) : (
                     <div className="recent-touch-list">
                       {trackLogs.map(l => (
@@ -725,7 +725,7 @@ export const TracksView: React.FC<TracksViewProps> = ({
                 </div>
 
                 {/* RESOURCES Chapter */}
-                <div className="space-y-2">
+                <div className={relatedCards.length === 0 ? 'space-y-1.5' : 'space-y-2'}>
                   <div className="flex items-center justify-between">
                     <span className="track-section-label">
                       RESOURCES / 关联资源
@@ -736,7 +736,7 @@ export const TracksView: React.FC<TracksViewProps> = ({
                   </div>
 
                   {relatedCards.length === 0 ? (
-                    <InlineEmptyState className="py-1.5" label="暂无关联资源" />
+                    <InlineEmptyState className="py-1" label="暂无关联资源" />
                   ) : (
                     <div className="space-y-0.5">
                       {relatedCards.map(c => (
