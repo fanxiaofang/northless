@@ -20,7 +20,8 @@ export const AiExportModal: React.FC<AiExportModalProps> = ({ content, onClose }
       <div className="cockpit-modal-panel p-6 max-w-2xl w-full h-[80vh] flex flex-col relative">
         <button
           onClick={onClose}
-          className="absolute top-4 right-4 text-[var(--text-muted)] hover:text-[var(--text-hero)]"
+          className="cockpit-icon-button cockpit-icon-button--neutral absolute top-4 right-4"
+          aria-label="关闭上下文导出"
         >
           <X className="w-4 h-4" />
         </button>
@@ -28,13 +29,13 @@ export const AiExportModal: React.FC<AiExportModalProps> = ({ content, onClose }
         <div className="space-y-1 pb-3 border-b border-[#b8894f]/20">
           <div className="flex items-center gap-2 type-l6 font-mono font-medium text-[#b8894f]">
             <Sparkles className="w-3.5 h-3.5 text-[#b8894f]" />
-            <span>AI CONTEXT PROMPT GENERATOR</span>
+            <span>CONTEXT EXPORT / 驾驶舱上下文</span>
           </div>
           <h3 className="type-l3 font-semibold text-[var(--text-hero)]">
-            复制驾驶舱当前上下文
+            复制当前驾驶舱上下文
           </h3>
           <p className="type-l5 text-[var(--text-secondary)] font-sans">
-            直接粘贴给 ChatGPT / Claude / Gemini，让外部大模型协助复盘并建议下一步，无需在应用中配置 API Key。
+            将当前阶段、主线状态、活跃 Next 与最近 7 天记录整理为 Markdown。可直接粘贴到 ChatGPT、Claude、Gemini，也可以保存到其他笔记或工具中。
           </p>
         </div>
 
@@ -52,10 +53,10 @@ export const AiExportModal: React.FC<AiExportModalProps> = ({ content, onClose }
           <div className="type-l5 text-[var(--text-muted)] font-mono">
             {copied ? (
               <span className="text-[#b8894f] flex items-center gap-1.5 font-medium font-sans">
-                <Check className="w-4 h-4" /> 已成功复制到剪贴板！可以直接粘贴。
+                <Check className="w-4 h-4" /> 已复制到剪贴板
               </span>
             ) : (
-              <span>包含当前阶段、主线状态、活跃 Next 与最近 7 天日志</span>
+              <span>包含当前阶段、主线状态、活跃 Next 与最近 7 天记录</span>
             )}
           </div>
 
@@ -68,10 +69,10 @@ export const AiExportModal: React.FC<AiExportModalProps> = ({ content, onClose }
             </button>
             <button
               onClick={handleCopy}
-              className="brass-button px-5 py-2 type-l5 font-semibold text-[var(--text-hero)] rounded flex items-center gap-2 cursor-pointer"
+              className="cockpit-button cockpit-button--primary"
             >
               {copied ? <Check className="w-4 h-4 text-[#b8894f]" /> : <Copy className="w-4 h-4 text-[#b8894f]" />}
-              <span>{copied ? '已复制' : '复制 AI Prompt (Copy Markdown)'}</span>
+              <span>{copied ? '已复制到剪贴板' : '复制 Markdown 上下文'}</span>
             </button>
           </div>
         </div>

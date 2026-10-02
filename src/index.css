@@ -1235,6 +1235,12 @@
   color: var(--text-secondary);
 }
 
+.segmented-control .segmented-item.is-selected {
+  border-color: var(--control-brass-edge-muted);
+  background: var(--control-surface-primary);
+  color: var(--text-heading);
+}
+
 .segmented-control .segmented-item:active { transform: translateY(1px); }
 .segmented-control .segmented-item:focus-visible {
   outline: 1px solid rgba(200, 154, 90, 0.62);
@@ -1426,6 +1432,18 @@
   border-color: var(--control-verdigris-edge);
   color: color-mix(in srgb, var(--accent-verdigris) 78%, var(--text-primary));
 }
+
+.cockpit-button--danger {
+  --control-icon: #c98282;
+  border-color: rgba(176, 92, 92, 0.2);
+  background: var(--control-surface-secondary);
+  color: #c98282;
+}
+.cockpit-button--danger:hover:not(:disabled) {
+  border-color: rgba(176, 92, 92, 0.38);
+  background: var(--control-surface-secondary-hover);
+  color: #e09a9a;
+}
 .cockpit-button--recovery:hover:not(:disabled) {
   border-color: var(--control-verdigris-edge-hover);
   background:
@@ -1477,6 +1495,8 @@
     opacity 160ms ease;
 }
 .cockpit-icon-button svg { width: 0.9375rem; height: 0.9375rem; }
+.cockpit-confirm-action { display: inline-flex; align-items: center; }
+.cockpit-inline-error { margin-top: 0.25rem; color: #c98282; font-size: var(--text-scale-l6); line-height: 1.35; }
 .cockpit-icon-button:active { transform: translateY(1px); }
 .cockpit-icon-button:focus-visible {
   outline: 1px solid rgba(200, 154, 90, 0.62);

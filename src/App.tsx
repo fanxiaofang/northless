@@ -40,15 +40,12 @@ import { ReentryModal } from './components/modals/ReentryModal';
 import { ScoreExplanationModal } from './components/modals/ScoreExplanationModal';
 import { CardViewerModal } from './components/modals/CardViewerModal';
 import { CommandPaletteModal } from './components/modals/CommandPaletteModal';
-import { SettingsModal } from './components/modals/SettingsModal';
+import { SettingsModal, type SettingsTab } from './components/modals/SettingsModal';
 import { AiExportModal } from './components/modals/AiExportModal';
 
-export default function App() {
-  // Initialize storage once
-  useEffect(() => {
-    initializeStorageIfNeeded();
-  }, []);
+initializeStorageIfNeeded();
 
+export default function App() {
   const todayStr = useMemo(() => getTodayDateStr(), []);
 
   // Primary State
@@ -85,6 +82,7 @@ export default function App() {
   const [selectedCardForView, setSelectedCardForView] = useState<Card | null>(null);
   const [showCommandPalette, setShowCommandPalette] = useState<boolean>(false);
   const [showSettingsModal, setShowSettingsModal] = useState<boolean>(false);
+  const [settingsEntry, setSettingsEntry] = useState<{ tab: SettingsTab; focusNewCard: boolean }>({ tab: 'phase', focusNewCard: false });
   const [showAiExportModal, setShowAiExportModal] = useState<boolean>(false);
   const [aiExportContent, setAiExportContent] = useState<string>('');
 
@@ -529,7 +527,7 @@ export default function App() {
     setCards(prev => prev.filter(c => c.id !== cardId));
   }, []);
 
-  // AI Prompt Export
+  // Cockpit context export
   const handleOpenAiExport = useCallback(() => {
     const text = generateAiPromptContext(tracks, actions, logs, currentPhase, todayStr);
     setAiExportContent(text);
@@ -549,7 +547,49 @@ export default function App() {
   }, [todayStr]);
 
   const handleImportData = useCallback((jsonStr: string) => {
-    return importAllData(jsonStr);
+    if (!importAllData(jsonStr)) return false;
+    setPhases(loadData(STORAGE_KEYS.PHASES, []));
+    setCurrentPhaseId(loadData(STORAGE_KEYS.CURRENT_PHASE_ID, 'phase_agent'));
+    setTracks(loadData(STORAGE_KEYS.TRACKS, []));
+    setActions(loadData(STORAGE_KEYS.ACTIONS, []));
+    setLogs(loadData(STORAGE_KEYS.LOGS, []));
+    setInbox(loadData(STORAGE_KEYS.INBOX, []));
+    setCards(loadData(STORAGE_KEYS.CARDS, []));
+    setDayCloses(loadData(STORAGE_KEYS.DAY_CLOSES, []));
+    setActiveSession(null);
+    setShowSettingsModal(false);
+    return true;
+  }, []);
+
+  const handleResetData = useCallback(() => {
+    const seed = resetToSeedData();
+    setPhases(seed.phases);
+    setCurrentPhaseId(seed.currentPhaseId);
+    setTracks(seed.tracks);
+    setActions(seed.actions);
+    setLogs(seed.logs);
+    setInbox(seed.inbox);
+    setCards(seed.cards);
+    setDayCloses(seed.dayCloses);
+    setActiveSession(null);
+    setEffortFilter('all');
+    setRotationOffset(0);
+    setSelectedScoreCandidate(null);
+    setSelectedCardForView(null);
+    setShowCommandPalette(false);
+    setShowLogModal(false);
+    setShowEndTodayModal(false);
+    setShowReentryModal(false);
+    setShowAiExportModal(false);
+    setShowSettingsModal(false);
+    setShouldOpenNewTrackComposer(false);
+    setReturnToTodayAfterNewTrack(false);
+    setCurrentView('today');
+  }, []);
+
+  const openSettings = useCallback((tab: SettingsTab = 'phase', focusNewCard = false) => {
+    setSettingsEntry({ tab, focusNewCard });
+    setShowSettingsModal(true);
   }, []);
 
   return (
@@ -561,10 +601,9 @@ export default function App() {
         currentPhase={currentPhase}
         pinnedCards={pinnedCards}
         onOpenCard={card => setSelectedCardForView(card)}
-        onOpenAddCard={() => setShowSettingsModal(true)}
-        onOpenSettings={() => setShowSettingsModal(true)}
+        onOpenAddCard={() => openSettings('cards', true)}
+        onOpenSettings={() => openSettings()}
         onOpenAiExport={handleOpenAiExport}
-        onOpenCommandPalette={() => setShowCommandPalette(true)}
         isSessionRunning={!!activeSession?.is_running}
       />
 
@@ -620,7 +659,7 @@ export default function App() {
             onStartSession={handleStartSession}
             onOpenCard={card => setSelectedCardForView(card)}
             onAddNewTrack={handleAddNewTrack}
-            onOpenPhaseSettings={() => setShowSettingsModal(true)}
+            onOpenPhaseSettings={() => openSettings()}
             shouldOpenNewTrackComposer={shouldOpenNewTrackComposer}
             onNewTrackComposerOpened={() => setShouldOpenNewTrackComposer(false)}
             onCreatedFromToday={returnToTodayAfterNewTrack ? () => {
@@ -710,7 +749,7 @@ export default function App() {
           onOpenEndTodayModal={() => setShowEndTodayModal(true)}
           onOpenReentryModal={() => setShowReentryModal(true)}
           onOpenAiExport={handleOpenAiExport}
-          onOpenSettings={() => setShowSettingsModal(true)}
+          onOpenSettings={() => openSettings()}
           onOpenCard={card => setSelectedCardForView(card)}
           cards={cards}
           isSessionRunning={!!activeSession?.is_running}
@@ -721,6 +760,9 @@ export default function App() {
       {showSettingsModal && (
         <SettingsModal
           onClose={() => setShowSettingsModal(false)}
+          initialTab={settingsEntry.tab}
+          focusNewCard={settingsEntry.focusNewCard}
+          todayStr={todayStr}
           phases={phases}
           currentPhaseId={currentPhaseId}
           onSelectPhase={setCurrentPhaseId}
@@ -740,7 +782,7 @@ export default function App() {
           onDeleteCard={handleDeleteCard}
           onExportData={handleExportData}
           onImportData={handleImportData}
-          onResetData={resetToSeedData}
+          onResetData={handleResetData}
           onOpenAiExport={handleOpenAiExport}
         />
       )}

@@ -546,6 +546,7 @@ export function resetToSeedData() {
   saveData(STORAGE_KEYS.ACTIVE_SESSION, null);
   saveData(STORAGE_KEYS.LAST_VISIT, getTodayDateStr());
   localStorage.setItem(STORAGE_KEYS.SEED_SCHEMA_VERSION, String(CURRENT_SEED_SCHEMA_VERSION));
+  return seed;
 }
 
 export function exportAllData() {

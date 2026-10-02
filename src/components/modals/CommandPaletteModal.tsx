@@ -10,7 +10,7 @@ import {
   Sparkles,
   Settings,
   RotateCw,
-  ExternalLink,
+  BookOpen,
   X
 } from 'lucide-react';
 import { Card } from '../../types';
@@ -104,7 +104,7 @@ export const CommandPaletteModal: React.FC<CommandPaletteModalProps> = ({
       id: 'action_session',
       category: '核心操作',
       title: isSessionRunning ? '暂停 / 恢复当前专注' : '开始专注',
-      shortcut: 'S',
+      shortcut: '',
       icon: Play,
       action: () => {
         onClose();
@@ -115,7 +115,7 @@ export const CommandPaletteModal: React.FC<CommandPaletteModalProps> = ({
       id: 'action_end_today',
       category: '核心操作',
       title: '结束今天 (End Today)',
-      shortcut: 'E',
+      shortcut: '',
       icon: Calendar,
       action: () => {
         onClose();
@@ -126,7 +126,7 @@ export const CommandPaletteModal: React.FC<CommandPaletteModalProps> = ({
       id: 'action_reentry',
       category: '核心操作',
       title: '断线平稳接回模式 (Re-entry Flow)',
-      shortcut: 'R',
+      shortcut: '',
       icon: RotateCw,
       action: () => {
         onClose();
@@ -136,8 +136,8 @@ export const CommandPaletteModal: React.FC<CommandPaletteModalProps> = ({
     {
       id: 'action_ai_export',
       category: '工具',
-      title: '复制 AI 上下文 Prompt (Copy AI Context)',
-      shortcut: 'C',
+      title: '复制驾驶舱上下文',
+      shortcut: '',
       icon: Sparkles,
       action: () => {
         onClose();
@@ -148,7 +148,7 @@ export const CommandPaletteModal: React.FC<CommandPaletteModalProps> = ({
       id: 'action_settings',
       category: '工具',
       title: '打开驾驶舱偏好与数据管理 (Settings)',
-      shortcut: ',',
+      shortcut: '',
       icon: Settings,
       action: () => {
         onClose();
@@ -161,10 +161,10 @@ export const CommandPaletteModal: React.FC<CommandPaletteModalProps> = ({
   cards.forEach(card => {
     commands.push({
       id: `card_${card.id}`,
-      category: '手边入口 Cards',
+      category: '手边入口',
       title: `打开 ${card.title}`,
-      shortcut: '↗',
-      icon: ExternalLink,
+      shortcut: '',
+      icon: BookOpen,
       action: () => {
         onClose();
         onOpenCard(card);
@@ -218,9 +218,9 @@ export const CommandPaletteModal: React.FC<CommandPaletteModalProps> = ({
                       <div className="type-l6 font-mono font-medium text-[var(--text-muted)]">{cmd.category}</div>
                     </div>
                   </div>
-                  <kbd className="px-2 py-0.5 type-l6 font-mono bg-[#161411] border border-[#30271c] rounded text-[var(--text-muted)] group-hover:text-[var(--text-primary)] group-hover:border-[#b8894f]/30 transition-colors font-medium">
+                  {cmd.shortcut && <kbd className="px-2 py-0.5 type-l6 font-mono bg-[#161411] border border-[#30271c] rounded text-[var(--text-muted)] group-hover:text-[var(--text-primary)] group-hover:border-[#b8894f]/30 transition-colors font-medium">
                     {cmd.shortcut}
-                  </kbd>
+                  </kbd>}
                 </button>
               );
             })

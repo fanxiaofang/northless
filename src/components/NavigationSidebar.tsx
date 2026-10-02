@@ -5,10 +5,8 @@ import {
   Layers,
   Clock,
   Inbox,
-  ExternalLink,
   Settings,
   Sparkles,
-  Command,
   Plus
 } from 'lucide-react';
 import { Card, Phase } from '../types';
@@ -23,7 +21,6 @@ interface NavigationSidebarProps {
   onOpenAddCard: () => void;
   onOpenSettings: () => void;
   onOpenAiExport: () => void;
-  onOpenCommandPalette: () => void;
   isSessionRunning: boolean;
 }
 
@@ -36,7 +33,6 @@ export const NavigationSidebar: React.FC<NavigationSidebarProps> = ({
   onOpenAddCard,
   onOpenSettings,
   onOpenAiExport,
-  onOpenCommandPalette,
   isSessionRunning,
 }) => {
   return (
@@ -144,11 +140,11 @@ export const NavigationSidebar: React.FC<NavigationSidebarProps> = ({
         {/* Pinned Cards Section */}
         <div className="px-2.5 py-1.5">
           <div className="flex items-center justify-between px-2.5 mb-1.5 type-l6 font-mono uppercase tracking-widest text-[var(--text-muted)] font-medium">
-            <span>CARDS · 手边入口</span>
-            <CockpitTooltip content="添加快捷入口"><button
+            <span>手边入口</span>
+            <CockpitTooltip content="收拢新入口"><button
               onClick={onOpenAddCard}
-              className="text-[var(--text-muted)] hover:text-[#c89a5a] transition-colors p-0.5 rounded cursor-pointer"
-              aria-label="添加快捷入口"
+              className="cockpit-icon-button cockpit-icon-button--neutral"
+              aria-label="收拢新入口"
             >
               <Plus className="w-3.5 h-3.5" />
             </button></CockpitTooltip>
@@ -158,10 +154,12 @@ export const NavigationSidebar: React.FC<NavigationSidebarProps> = ({
               <button
                 key={card.id}
                 onClick={() => onOpenCard(card)}
-                className="w-full flex items-center justify-between px-2.5 py-1 rounded type-l5 text-[var(--text-secondary)] hover:text-[var(--text-hero)] hover:bg-[#181613] transition-colors group text-left cursor-pointer font-medium"
+                className="w-full flex items-center px-2.5 py-1.5 rounded type-l5 text-[var(--text-secondary)] hover:text-[var(--text-hero)] hover:bg-[#181613] transition-colors group text-left cursor-pointer font-medium"
               >
-                <span className="truncate">{card.title}</span>
-                <ExternalLink className="w-3 h-3 text-[var(--text-muted)] group-hover:text-[#c89a5a] transition-colors shrink-0" />
+                <span className="min-w-0 flex flex-col gap-0.5">
+                  <span className="truncate">{card.title}</span>
+                  {card.description && <span className="type-l6 font-normal text-[var(--text-muted)] truncate">{card.description}</span>}
+                </span>
               </button>
             ))}
           </div>
@@ -170,27 +168,14 @@ export const NavigationSidebar: React.FC<NavigationSidebarProps> = ({
 
       {/* Footer Controls */}
       <div className="p-2.5 border-t border-[#b8894f]/15 space-y-0.5">
-        <CockpitTooltip content={'复制 AI Context\n生成阶段与主线的 Markdown 上下文'}><button
+        <CockpitTooltip content="复制当前阶段、主线、Next 与最近记录的 Markdown 上下文"><button
           onClick={onOpenAiExport}
-          className="w-full flex items-center gap-2 px-2.5 py-1.5 rounded type-l5 text-[#b8894f] hover:bg-[#1a1713] hover:text-[#c89a5a] transition-colors cursor-pointer font-medium"
-          aria-label="复制 AI Context"
+          className="w-full flex items-center gap-2 px-2.5 py-1.5 rounded type-l5 text-[var(--text-secondary)] hover:bg-[#181613] hover:text-[var(--text-hero)] transition-colors cursor-pointer font-medium"
+          aria-label="复制驾驶舱上下文"
         >
-          <Sparkles className="w-3.5 h-3.5 text-[#b8894f]" />
-          <span>Copy AI Context</span>
+          <Sparkles className="w-3.5 h-3.5 text-[var(--text-muted)]" />
+          <span>复制驾驶舱上下文</span>
         </button></CockpitTooltip>
-
-        <button
-          onClick={onOpenCommandPalette}
-          className="w-full flex items-center justify-between px-2.5 py-1.5 rounded type-l5 text-[var(--text-secondary)] hover:text-[var(--text-hero)] hover:bg-[#181613] transition-colors cursor-pointer font-medium"
-        >
-          <div className="flex items-center gap-2">
-            <Command className="w-3.5 h-3.5 text-[var(--text-muted)]" />
-            <span>快捷指令</span>
-          </div>
-          <kbd className="px-1.5 py-0.5 type-l6 bg-[#181613] border border-[#362e24] rounded text-[var(--text-muted)] font-mono font-medium">
-            ⌘K
-          </kbd>
-        </button>
 
         <button
           onClick={onOpenSettings}

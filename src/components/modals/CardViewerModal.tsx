@@ -18,7 +18,7 @@ export const CardViewerModal: React.FC<CardViewerModalProps> = ({ card, onClose 
           <div className="space-y-0.5">
             <h3 className="type-l3 font-semibold text-[var(--text-hero)] flex items-center gap-2">
               <span>{card.title}</span>
-              <span className="type-l6 font-mono font-medium text-[#b8894f]">HANDY PORTAL</span>
+              <span className="type-l6 font-mono font-medium text-[var(--text-muted)]">手边入口</span>
             </h3>
             {card.description && (
               <p className="type-l5 text-[var(--text-secondary)] line-clamp-1 font-sans">{card.description}</p>
@@ -30,7 +30,7 @@ export const CardViewerModal: React.FC<CardViewerModalProps> = ({ card, onClose 
               href={card.url}
               target="_blank"
               rel="noopener noreferrer"
-              className="brass-button px-3 py-1.5 rounded type-l5 text-[var(--text-hero)] flex items-center gap-1.5 cursor-pointer font-medium"
+              className="cockpit-button cockpit-button--brass-action"
             >
               <span>新标签页打开</span>
               <ExternalLink className="w-3.5 h-3.5 text-[#b8894f]" />
@@ -38,7 +38,8 @@ export const CardViewerModal: React.FC<CardViewerModalProps> = ({ card, onClose 
 
             <button
               onClick={onClose}
-              className="p-1.5 text-[var(--text-muted)] hover:text-[var(--text-hero)] rounded cursor-pointer"
+              className="cockpit-icon-button cockpit-icon-button--neutral"
+              aria-label="关闭手边入口"
             >
               <X className="w-4 h-4" />
             </button>
@@ -67,7 +68,7 @@ export const CardViewerModal: React.FC<CardViewerModalProps> = ({ card, onClose 
                 href={card.url}
                 target="_blank"
                 rel="noopener noreferrer"
-                className="brass-button px-4 py-2 rounded type-l5 font-semibold text-[var(--text-hero)] inline-flex items-center gap-2 cursor-pointer"
+                className="cockpit-button cockpit-button--brass-action"
               >
                 <span>直接前往 {card.title}</span>
                 <ExternalLink className="w-3.5 h-3.5 text-[#b8894f]" />
