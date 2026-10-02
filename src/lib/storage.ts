@@ -22,6 +22,43 @@ const STORAGE_KEYS = {
   ACTIVE_SESSION: 'gap_cockpit_active_session_v0',
   LAST_VISIT: 'gap_cockpit_last_visit_v0',
   REENTRY_DISMISSED_DATE: 'gap_cockpit_reentry_dismissed_v0',
+  SEED_SCHEMA_VERSION: 'gap_cockpit_seed_schema_version',
+};
+
+const CURRENT_SEED_SCHEMA_VERSION = 2;
+
+const LEGACY_PHASE_NOTES: Record<string, { legacy: string; replacement: string }> = {
+  phase_agent: {
+    legacy: '聚焦现代 Agent 与协议生态，打造具备展示度的求职硬核项目。',
+    replacement: '以 Agent 项目为主轴，同时保温算法、Linux/C 与求职准备，形成可持续推进的技术探索节奏。',
+  },
+  phase_job: {
+    legacy: '重点转向简历包装、项目实战复盘与算法高频题巩固。',
+    replacement: '求职成为当前主方向，围绕项目包装、技术复盘、算法巩固与沟通准备集中推进。',
+  },
+};
+
+const LEGACY_TRACK_DESCRIPTIONS: Record<string, { legacy: string; replacement: string }> = {
+  track_agent: {
+    legacy: '掌握现代 Agent 开发，并形成一个可以用于求职展示的项目。',
+    replacement: '掌握现代 Agent 开发，并形成一个可展示、可持续迭代的完整项目。',
+  },
+  track_algo: {
+    legacy: '维持高频算法手感，巩固二叉树、图论与经典动态规划。',
+    replacement: '保持算法题手感，持续巩固高频数据结构、经典算法与常见解题模型。',
+  },
+  track_linux: {
+    legacy: '重温网络底层模型与高并发编程架构。',
+    replacement: '持续巩固 Linux 系统编程、网络 I/O 与高并发基础能力。',
+  },
+  track_interview: {
+    legacy: '计算机网络、操作系统、数据库系统底层核心要点速查。',
+    replacement: '建立计算机网络、操作系统、数据库等核心基础知识的稳定复习体系。',
+  },
+  track_resume: {
+    legacy: '简历叙事线重构与个人作品集网站部署。',
+    replacement: '持续整理项目叙事、简历表达与作品展示，使技术能力能够被清晰呈现。',
+  },
 };
 
 function getDaysAgo(days: number): string {
@@ -44,13 +81,13 @@ export function getInitialSeedData() {
       id: 'phase_agent',
       name: 'AI / Agent Exploration',
       started_at: '2026-09-01',
-      note: '聚焦现代 Agent 与协议生态，打造具备展示度的求职硬核项目。',
+      note: '以 Agent 项目为主轴，同时保温算法、Linux/C 与求职准备，形成可持续推进的技术探索节奏。',
     },
     {
       id: 'phase_job',
       name: 'Job Hunting 冲刺期',
       started_at: '2026-11-01',
-      note: '重点转向简历包装、项目实战复盘与算法高频题巩固。',
+      note: '求职成为当前主方向，围绕项目包装、技术复盘、算法巩固与沟通准备集中推进。',
     },
   ];
 
@@ -58,7 +95,7 @@ export function getInitialSeedData() {
     {
       id: 'track_agent',
       name: 'Agent / AI',
-      description: '掌握现代 Agent 开发，并形成一个可以用于求职展示的项目。',
+      description: '掌握现代 Agent 开发，并形成一个可展示、可持续迭代的完整项目。',
       role: 'main',
       roadmap: ['基础理解', '小 Demo', '完整项目', '求职包装'],
       current_stage_index: 2,
@@ -69,7 +106,7 @@ export function getInitialSeedData() {
     {
       id: 'track_algo',
       name: '算法',
-      description: '维持高频算法手感，巩固二叉树、图论与经典动态规划。',
+      description: '保持算法题手感，持续巩固高频数据结构、经典算法与常见解题模型。',
       role: 'maintenance',
       roadmap: ['二叉树/图论', '动态规划专题', '高频75题速通'],
       current_stage_index: 0,
@@ -80,7 +117,7 @@ export function getInitialSeedData() {
     {
       id: 'track_linux',
       name: 'Linux / C',
-      description: '重温网络底层模型与高并发编程架构。',
+      description: '持续巩固 Linux 系统编程、网络 I/O 与高并发基础能力。',
       role: 'maintenance',
       roadmap: ['epoll并发模型', '内存与系统调用', '简易网关原型'],
       current_stage_index: 0,
@@ -91,7 +128,7 @@ export function getInitialSeedData() {
     {
       id: 'track_interview',
       name: '八股体系',
-      description: '计算机网络、操作系统、数据库系统底层核心要点速查。',
+      description: '建立计算机网络、操作系统、数据库等核心基础知识的稳定复习体系。',
       role: 'paused',
       roadmap: ['计算机网络', '操作系统', 'MySQL/Redis'],
       current_stage_index: 0,
@@ -102,7 +139,7 @@ export function getInitialSeedData() {
     {
       id: 'track_resume',
       name: '求职包装',
-      description: '简历叙事线重构与个人作品集网站部署。',
+      description: '持续整理项目叙事、简历表达与作品展示，使技术能力能够被清晰呈现。',
       role: 'paused',
       roadmap: ['简历骨架梳理', '作品集打磨', '模拟技术沟通'],
       current_stage_index: 0,
@@ -417,6 +454,37 @@ export function saveData<T>(key: string, value: T): void {
   }
 }
 
+function migrateSeedDataIfNeeded(): void {
+  if (localStorage.getItem(STORAGE_KEYS.SEED_SCHEMA_VERSION) === String(CURRENT_SEED_SCHEMA_VERSION)) {
+    return;
+  }
+
+  const phases = loadData<Phase[]>(STORAGE_KEYS.PHASES, []);
+  const tracks = loadData<Track[]>(STORAGE_KEYS.TRACKS, []);
+  let phasesChanged = false;
+  let tracksChanged = false;
+
+  const migratedPhases = phases.map(phase => {
+    const migration = LEGACY_PHASE_NOTES[phase.id];
+    if (!migration || phase.note !== migration.legacy) return phase;
+
+    phasesChanged = true;
+    return { ...phase, note: migration.replacement };
+  });
+
+  const migratedTracks = tracks.map(track => {
+    const migration = LEGACY_TRACK_DESCRIPTIONS[track.id];
+    if (!migration || track.description !== migration.legacy) return track;
+
+    tracksChanged = true;
+    return { ...track, description: migration.replacement };
+  });
+
+  if (phasesChanged) saveData(STORAGE_KEYS.PHASES, migratedPhases);
+  if (tracksChanged) saveData(STORAGE_KEYS.TRACKS, migratedTracks);
+  localStorage.setItem(STORAGE_KEYS.SEED_SCHEMA_VERSION, String(CURRENT_SEED_SCHEMA_VERSION));
+}
+
 export function initializeStorageIfNeeded() {
   if (!localStorage.getItem(STORAGE_KEYS.TRACKS)) {
     const seed = getInitialSeedData();
@@ -430,6 +498,8 @@ export function initializeStorageIfNeeded() {
     saveData(STORAGE_KEYS.DAY_CLOSES, seed.dayCloses);
     saveData(STORAGE_KEYS.LAST_VISIT, getTodayDateStr());
   }
+
+  migrateSeedDataIfNeeded();
 }
 
 export function resetToSeedData() {
@@ -444,6 +514,7 @@ export function resetToSeedData() {
   saveData(STORAGE_KEYS.DAY_CLOSES, seed.dayCloses);
   saveData(STORAGE_KEYS.ACTIVE_SESSION, null);
   saveData(STORAGE_KEYS.LAST_VISIT, getTodayDateStr());
+  localStorage.setItem(STORAGE_KEYS.SEED_SCHEMA_VERSION, String(CURRENT_SEED_SCHEMA_VERSION));
 }
 
 export function exportAllData() {
