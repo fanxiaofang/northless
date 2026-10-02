@@ -197,69 +197,72 @@ export const InboxView: React.FC<InboxViewProps> = ({
 
       {/* Promote to Track Action Modal */}
       {promotingItemId && (
-        <div className="fixed inset-0 z-50 bg-black/70 backdrop-blur-xs flex items-center justify-center p-4">
-          <div className="brass-panel-elevated p-6 rounded-lg max-w-md w-full space-y-4 shadow-2xl border border-[#b8894f]/35">
-            <h3 className="type-l3 font-semibold text-[var(--text-hero)]">
-              将想法转化为清晰的 Next 行动
-            </h3>
-            <form onSubmit={handleConfirmPromote} className="space-y-3 type-l5">
-              <div>
-                <label className="block text-[var(--text-muted)] mb-1 font-medium font-sans">目标主线</label>
-                <CockpitSelect
-                  value={targetTrackId}
-                  onChange={setTargetTrackId}
-                  ariaLabel="目标主线"
-                  placeholder="选择目标主线..."
-                  options={promotionTrackOptions}
-                  className="w-full"
-                />
+        <div className="cockpit-modal-overlay">
+          <div className="cockpit-modal-panel max-w-md">
+            <div className="cockpit-modal-header">
+              <div className="cockpit-modal-heading">
+                <div>
+                  <h3>将想法转化为清晰的 Next 行动</h3>
+                  <p>把这条闪念放进一条主线，变成靠近执行的下一步。</p>
+                </div>
               </div>
+            </div>
+            <form onSubmit={handleConfirmPromote} className="type-l5">
+              <div className="cockpit-modal-body space-y-4">
+                <div className="log-field">
+                  <span className="log-field-label">目标主线</span>
+                  <CockpitSelect
+                    value={targetTrackId}
+                    onChange={setTargetTrackId}
+                    ariaLabel="目标主线"
+                    placeholder="选择目标主线..."
+                    options={promotionTrackOptions}
+                    className="w-full"
+                  />
+                </div>
 
-              <div>
-                <label className="block text-[var(--text-muted)] mb-1 font-medium font-sans">Action 标题 (可执行的小动作)</label>
-                <input
-                  type="text"
-                  value={actionTitle}
-                  onChange={e => setActionTitle(e.target.value)}
-                  className="form-control form-control--single font-medium"
-                  required
-                />
-              </div>
+                <div className="log-field">
+                  <label htmlFor="promotion-action-title" className="log-field-label">Action 标题 (可执行的小动作)</label>
+                  <input
+                    id="promotion-action-title"
+                    type="text"
+                    value={actionTitle}
+                    onChange={e => setActionTitle(e.target.value)}
+                    className="form-control form-control--single font-medium"
+                    required
+                  />
+                </div>
 
-              <div>
-                <label className="block text-[var(--text-muted)] type-l6 mb-1 font-medium font-sans">复杂度负荷</label>
-                <div className="segmented-control compact flex gap-2" role="group" aria-label="复杂度负荷">
-                  {(['light', 'normal', 'deep'] as const).map(eff => (
-                    <button
-                      key={eff}
-                      type="button"
-                      onClick={() => setActionEffort(eff)}
-                      className={`segmented-item flex-1 cursor-pointer ${
-                        actionEffort === eff
-                          ? eff === 'light'
-                            ? 'tag-effort-light font-medium'
-                            : eff === 'deep'
-                            ? 'tag-effort-deep font-medium'
-                            : 'tag-effort-normal font-medium'
-                          : 'bg-[#151412] text-[var(--text-muted)] border border-[#b8894f]/15'
-                      }`}
-                    >
-                      {eff === 'light' ? '轻量' : eff === 'normal' ? '正常' : '深入'}
-                    </button>
-                  ))}
+                <div className="log-field">
+                  <span className="log-field-label">复杂度负荷</span>
+                  <div className="segmented-control compact quick-add-effort self-start" role="group" aria-label="复杂度负荷">
+                    {(['light', 'normal', 'deep'] as const).map(eff => (
+                      <button
+                        key={eff}
+                        type="button"
+                        onClick={() => setActionEffort(eff)}
+                        aria-pressed={actionEffort === eff}
+                        data-effort={eff}
+                        className={`segmented-item cursor-pointer ${actionEffort === eff ? 'is-selected' : ''}`}
+                      >
+                        {eff === 'light' ? '轻量' : eff === 'normal' ? '正常' : '深入'}
+                      </button>
+                    ))}
+                  </div>
                 </div>
               </div>
 
-              <div className="flex items-center justify-end gap-2 pt-3">
+              <div className="cockpit-modal-footer">
                 <button
                   type="button"
                   onClick={() => setPromotingItemId(null)}
-                  className="cockpit-action-text cursor-pointer"
+                  className="cockpit-button cockpit-button--secondary cockpit-button--compact cursor-pointer"
                 >
                   取消
                 </button>
                 <button
                   type="submit"
+                  disabled={!targetTrackId || !actionTitle.trim()}
                   className="cockpit-button cockpit-button--primary cursor-pointer"
                 >
                   <Check aria-hidden="true" />
