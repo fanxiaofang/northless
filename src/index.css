@@ -35,14 +35,32 @@
     --brass:              #b8894f;
     --brass-dim:          #826744;
 
-    /* Cockpit control materials: one shared surface language for Today actions. */
-    --control-radius: 10px;
-    --control-gunmetal-top: #25221d;
-    --control-gunmetal-bottom: #191714;
-    --control-bronze-top: #33291d;
-    --control-bronze-bottom: #211b14;
+    /* Global Cockpit Control System: shared material, size, and semantic edges. */
+    --control-radius-md: 10px;
+    --control-radius-sm: 9px;
+    --control-height-lg: 40px;
+    --control-height-md: 36px;
+    --control-height-sm: 32px;
+    --control-surface:
+      linear-gradient(180deg, rgba(255, 244, 218, 0.025), transparent 42%),
+      linear-gradient(180deg, #25221d, #191714);
+    --control-surface-hover:
+      linear-gradient(180deg, rgba(255, 244, 218, 0.045), transparent 46%),
+      linear-gradient(180deg, #2b2721, #1d1a16);
+    --control-surface-pressed: linear-gradient(180deg, #1a1713, #211c16);
+    --control-surface-disabled: linear-gradient(180deg, #1d1b18, #181715);
+    --control-surface-primary:
+      linear-gradient(180deg, rgba(255, 226, 169, 0.075), transparent 46%),
+      linear-gradient(180deg, #33291d, #211b14);
+    --control-surface-primary-hover:
+      linear-gradient(180deg, rgba(255, 230, 178, 0.11), transparent 48%),
+      linear-gradient(180deg, #3a2f21, #271f17);
     --control-brass-edge: rgba(200, 154, 90, 0.46);
     --control-brass-edge-muted: rgba(184, 137, 79, 0.24);
+    --control-brass-edge-hover: rgba(200, 154, 90, 0.44);
+    --control-brass-edge-strong: rgba(211, 166, 99, 0.68);
+    --control-verdigris-edge: rgba(120, 153, 141, 0.28);
+    --control-verdigris-edge-hover: rgba(136, 169, 157, 0.48);
     --control-top-light: rgba(255, 235, 195, 0.095);
     --control-bottom-shade: rgba(0, 0, 0, 0.34);
 
@@ -960,25 +978,23 @@
   color: var(--text-hero);
 }
 
-/* Today cockpit control system ------------------------------------------------
+/* Global cockpit control system -----------------------------------------------
    Precision hardware, not ornament: a common frame, three densities, and
-   material/state variants that preserve the existing brass/verdigris grammar. */
+   material/state variants shared by every product surface as it migrates. */
 .cockpit-button {
   --control-icon: var(--accent-brass);
   position: relative;
   isolation: isolate;
   display: inline-flex;
   min-width: 0;
-  height: 36px;
+  height: var(--control-height-md);
   align-items: center;
   justify-content: center;
   gap: 0.4375rem;
   padding: 0 0.875rem;
   border: 1px solid var(--control-brass-edge-muted);
-  border-radius: var(--control-radius);
-  background:
-    linear-gradient(180deg, rgba(255, 244, 218, 0.025), transparent 42%),
-    linear-gradient(180deg, var(--control-gunmetal-top), var(--control-gunmetal-bottom));
+  border-radius: var(--control-radius-md);
+  background: var(--control-surface);
   box-shadow:
     inset 0 1px 0 var(--control-top-light),
     inset 0 -1px 0 var(--control-bottom-shade),
@@ -1005,10 +1021,8 @@
   transition: color 180ms cubic-bezier(0.16, 1, 0.3, 1);
 }
 .cockpit-button:hover:not(:disabled) {
-  border-color: rgba(200, 154, 90, 0.44);
-  background:
-    linear-gradient(180deg, rgba(255, 244, 218, 0.045), transparent 46%),
-    linear-gradient(180deg, #2b2721, #1d1a16);
+  border-color: var(--control-brass-edge-hover);
+  background: var(--control-surface-hover);
   box-shadow:
     inset 0 1px 0 rgba(255, 235, 195, 0.13),
     inset 0 -1px 0 rgba(0, 0, 0, 0.36),
@@ -1017,7 +1031,7 @@
 }
 .cockpit-button:active:not(:disabled) {
   transform: translateY(1px);
-  background: linear-gradient(180deg, #1a1713, #211c16);
+  background: var(--control-surface-pressed);
   box-shadow:
     inset 0 2px 4px rgba(0, 0, 0, 0.46),
     inset 0 -1px 0 rgba(255, 235, 195, 0.035);
@@ -1030,7 +1044,7 @@
 .cockpit-button[aria-disabled="true"] {
   cursor: not-allowed;
   border-color: rgba(127, 128, 124, 0.14);
-  background: linear-gradient(180deg, #1d1b18, #181715);
+  background: var(--control-surface-disabled);
   box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.025);
   color: var(--text-ghost);
   opacity: 0.68;
@@ -1040,9 +1054,7 @@
 
 .cockpit-button--primary {
   border-color: var(--control-brass-edge);
-  background:
-    linear-gradient(180deg, rgba(255, 226, 169, 0.075), transparent 46%),
-    linear-gradient(180deg, var(--control-bronze-top), var(--control-bronze-bottom));
+  background: var(--control-surface-primary);
   box-shadow:
     inset 0 1px 0 rgba(255, 235, 195, 0.16),
     inset 0 -1px 0 rgba(0, 0, 0, 0.42),
@@ -1050,23 +1062,30 @@
   color: var(--text-hero);
 }
 .cockpit-button--primary:hover:not(:disabled) {
-  border-color: rgba(211, 166, 99, 0.68);
-  background:
-    linear-gradient(180deg, rgba(255, 230, 178, 0.11), transparent 48%),
-    linear-gradient(180deg, #3a2f21, #271f17);
+  border-color: var(--control-brass-edge-strong);
+  background: var(--control-surface-primary-hover);
   box-shadow:
     inset 0 1px 0 rgba(255, 239, 207, 0.2),
     inset 0 -1px 0 rgba(0, 0, 0, 0.43),
     0 2px 5px rgba(0, 0, 0, 0.34);
 }
 .cockpit-button--secondary { color: var(--text-secondary); }
+.cockpit-button--brass-action {
+  --control-icon: var(--accent-brass-hover);
+  border-color: var(--control-brass-edge);
+  color: var(--text-primary);
+}
+.cockpit-button--brass-action:hover:not(:disabled) {
+  border-color: var(--control-brass-edge-strong);
+  background: var(--control-surface-hover);
+}
 .cockpit-button--recovery {
   --control-icon: var(--accent-verdigris);
-  border-color: rgba(120, 153, 141, 0.28);
+  border-color: var(--control-verdigris-edge);
   color: color-mix(in srgb, var(--accent-verdigris) 78%, var(--text-primary));
 }
 .cockpit-button--recovery:hover:not(:disabled) {
-  border-color: rgba(136, 169, 157, 0.48);
+  border-color: var(--control-verdigris-edge-hover);
   background:
     linear-gradient(180deg, rgba(191, 225, 212, 0.045), transparent 46%),
     linear-gradient(180deg, #222b27, #181d1b);
@@ -1076,8 +1095,8 @@
   --control-icon: var(--accent-verdigris);
   color: color-mix(in srgb, var(--accent-verdigris) 72%, var(--text-primary));
 }
-.cockpit-button--large { height: 40px; padding-inline: 1.125rem; gap: 0.5rem; }
-.cockpit-button--compact { height: 32px; padding-inline: 0.6875rem; border-radius: 9px; font-size: var(--text-scale-l6); }
+.cockpit-button--large { height: var(--control-height-lg); padding-inline: 1.125rem; gap: 0.5rem; }
+.cockpit-button--compact { height: var(--control-height-sm); padding-inline: 0.6875rem; border-radius: var(--control-radius-sm); font-size: var(--text-scale-l6); }
 .cockpit-button--compact svg { width: 0.75rem; height: 0.75rem; }
 
 /* The recommendation modes read as one recessed selector with discrete detents. */

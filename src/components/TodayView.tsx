@@ -418,7 +418,7 @@ export const TodayView: React.FC<TodayViewProps> = ({
             </div>
 
             {/* Effort & Filter switchers (Tactile instrument switches) */}
-            {hasTracks && <div className="today-mode-switch self-start lg:self-auto overflow-x-auto max-w-full" aria-label="推荐投入偏好">
+            {hasTracks && <div className="today-mode-switch self-start lg:self-auto overflow-x-auto max-w-full" role="group" aria-label="推荐投入偏好">
               <button
                 onClick={() => onSetEffortFilter('all')}
                 aria-pressed={effortFilter === 'all'}
@@ -702,7 +702,7 @@ export const TodayView: React.FC<TodayViewProps> = ({
 
               <button
                 onClick={() => onStartSession('', undefined, '自由专注')}
-                className="cockpit-button cockpit-button--primary cursor-pointer"
+                className="cockpit-button cockpit-button--secondary cockpit-button--brass-action cursor-pointer"
               >
                 <Play className="w-3.5 h-3.5" />
                 <span>自由专注</span>
