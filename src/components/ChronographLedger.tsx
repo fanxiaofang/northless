@@ -3,6 +3,7 @@ import { Trash2 } from 'lucide-react';
 import { ActiveSession, LogEntry, Track } from '../types';
 import { InlineEmptyState } from './InlineEmptyState';
 import { CockpitConfirmAction } from './ui/CockpitConfirmAction';
+import { CockpitTooltip } from './ui/CockpitTooltip';
 
 export type LedgerMode = 'live' | 'archive';
 
@@ -153,39 +154,51 @@ export const ChronographLedger: React.FC<ChronographLedgerProps> = ({
             <div className="w-full flex items-center justify-end h-[22px]">
               {isSession ? (
                 /* A. SESSION: Solid lead-in rail + Brass punch ring */
-                <>
-                  <div
-                    className={`rail-fade-in ${
-                      isArchive ? 'rail-archive' : 'rail-session'
-                    } ${getRailWidthStyle()} transition-opacity duration-150`}
-                  />
-                  <div
-                    className={`${
-                      isArchive ? 'punch-node-session-archive' : 'punch-node-session'
-                    } ml-1.5`}
-                  />
-                </>
+                <CockpitTooltip content="专注 Session">
+                  <span role="img" aria-label="专注 Session" className="inline-flex items-center">
+                    <div
+                      className={`rail-fade-in ${
+                        isArchive ? 'rail-archive' : 'rail-session'
+                      } ${getRailWidthStyle()} transition-opacity duration-150`}
+                      aria-hidden="true"
+                    />
+                    <div
+                      className={`${
+                        isArchive ? 'punch-node-session-archive' : 'punch-node-session'
+                      } ml-1.5`}
+                      aria-hidden="true"
+                    />
+                  </span>
+                </CockpitTooltip>
               ) : isCompletion || hasTrack ? (
                 /* B. COMPLETION / TRACK NOTE: Lighter & shorter ─◇ (diamond punch) */
-                <>
-                  <div
-                    className={`rail-fade-in ${
-                      isArchive ? 'rail-archive' : 'rail-track'
-                    } w-[18px] sm:w-[20px] transition-opacity duration-150`}
-                  />
-                  <div
-                    className={`${
-                      isArchive ? 'punch-node-track-archive' : 'punch-node-track'
-                    } ml-1.5`}
-                  />
-                </>
+                <CockpitTooltip content="推进记录 · 完成或主线关联">
+                  <span role="img" aria-label="推进记录 · 完成或主线关联" className="inline-flex items-center">
+                    <div
+                      className={`rail-fade-in ${
+                        isArchive ? 'rail-archive' : 'rail-track'
+                      } w-[18px] sm:w-[20px] transition-opacity duration-150`}
+                      aria-hidden="true"
+                    />
+                    <div
+                      className={`${
+                        isArchive ? 'punch-node-track-archive' : 'punch-node-track'
+                      } ml-1.5`}
+                      aria-hidden="true"
+                    />
+                  </span>
+                </CockpitTooltip>
               ) : (
                 /* C. LIFE / FREE NOTE: Dotted tape ONLY (No node, no morse-code double mark) */
-                <span
-                  className="font-mono text-[11px] text-[var(--text-ghost)] select-none tracking-widest mr-1 font-normal"
-                >
-                  ····
-                </span>
+                <CockpitTooltip content="自由记录 · 未关联主线">
+                  <span
+                    role="img"
+                    aria-label="自由记录 · 未关联主线"
+                    className="font-mono text-[11px] text-[var(--text-ghost)] select-none tracking-widest mr-1 font-normal"
+                  >
+                    <span aria-hidden="true">····</span>
+                  </span>
+                </CockpitTooltip>
               )}
             </div>
 

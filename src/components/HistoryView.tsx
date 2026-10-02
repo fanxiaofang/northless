@@ -16,6 +16,22 @@ interface HistoryViewProps {
   currentDateStr: string;
 }
 
+const parseStartedAtMinutes = (startedAt?: string): number | null => {
+  if (!startedAt) return null;
+  const match = /^([01]\d|2[0-3]):([0-5]\d)$/.exec(startedAt);
+  return match ? Number(match[1]) * 60 + Number(match[2]) : null;
+};
+
+const sortEntriesByStartedAt = (entries: LogEntry[]): LogEntry[] =>
+  entries
+    .map((entry, index) => ({ entry, index, minutes: parseStartedAtMinutes(entry.started_at) }))
+    .sort((a, b) => {
+      if (a.minutes === null) return b.minutes === null ? a.index - b.index : 1;
+      if (b.minutes === null) return -1;
+      return a.minutes - b.minutes || a.index - b.index;
+    })
+    .map(({ entry }) => entry);
+
 export const HistoryView: React.FC<HistoryViewProps> = ({
   tracks,
   logs,
@@ -230,7 +246,7 @@ export const HistoryView: React.FC<HistoryViewProps> = ({
               .slice()
               .reverse()
               .map(d => {
-                const dayEntries = weekLogs.filter(l => l.date === d.dateStr);
+                const dayEntries = sortEntriesByStartedAt(weekLogs.filter(l => l.date === d.dateStr));
                 const dayClose = dayCloses.find(dc => dc.date === d.dateStr);
 
                 if (dayEntries.length === 0 && !dayClose) return null;
