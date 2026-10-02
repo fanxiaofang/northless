@@ -120,6 +120,7 @@ export const InboxView: React.FC<InboxViewProps> = ({
               <span className="type-l6 font-mono text-[var(--text-ghost)] hidden sm:inline select-none">⌘ + Enter</span>
               <button
                 type="submit"
+                disabled={!content.trim()}
                 className="cockpit-button cockpit-button--primary cursor-pointer"
               >
                 <Plus aria-hidden="true" />
