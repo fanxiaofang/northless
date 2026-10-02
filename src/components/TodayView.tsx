@@ -250,7 +250,7 @@ export const TodayView: React.FC<TodayViewProps> = ({
                   onClick={() => onStopSession()}
                   className="cockpit-button cockpit-button--primary cursor-pointer"
                 >
-                  <StopCircle className="w-3.5 h-3.5 text-[#c89a5a]" />
+                  <StopCircle className="w-3.5 h-3.5" />
                   <span>停止并记入今日</span>
                 </button>
 
@@ -450,7 +450,7 @@ export const TodayView: React.FC<TodayViewProps> = ({
                         }
                         className="cockpit-button cockpit-button--primary cockpit-button--large cursor-pointer"
                       >
-                        <Play className="w-3.5 h-3.5 text-[#c89a5a]" />
+                        <Play className="w-3.5 h-3.5" />
                         <span>开始专注</span>
                       </button>
 
@@ -532,9 +532,9 @@ export const TodayView: React.FC<TodayViewProps> = ({
                             `${candidate.track.name} · ${candidate.action.title}`
                           )
                         }
-                        className="cockpit-button cockpit-button--secondary cockpit-button--compact cursor-pointer"
+                        className="cockpit-button cockpit-button--secondary cockpit-button--brass-action cockpit-button--compact cursor-pointer"
                       >
-                        <Play className="w-3 h-3 text-[#b8894f]" />
+                        <Play className="w-3 h-3" />
                         <span>开始</span>
                       </button>
                     </div>

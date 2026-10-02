@@ -50,15 +50,15 @@
     --control-surface-pressed: linear-gradient(180deg, #1a1713, #211c16);
     --control-surface-disabled: linear-gradient(180deg, #1d1b18, #181715);
     --control-surface-primary:
-      linear-gradient(180deg, rgba(255, 226, 169, 0.075), transparent 46%),
-      linear-gradient(180deg, #33291d, #211b14);
+      linear-gradient(180deg, rgba(255, 226, 169, 0.045), transparent 46%),
+      linear-gradient(180deg, #2b241b, #1f1a15);
     --control-surface-primary-hover:
-      linear-gradient(180deg, rgba(255, 230, 178, 0.11), transparent 48%),
-      linear-gradient(180deg, #3a2f21, #271f17);
-    --control-brass-edge: rgba(200, 154, 90, 0.46);
-    --control-brass-edge-muted: rgba(184, 137, 79, 0.24);
+      linear-gradient(180deg, rgba(255, 230, 178, 0.095), transparent 48%),
+      linear-gradient(180deg, #362c20, #251e17);
+    --control-brass-edge: rgba(200, 154, 90, 0.36);
+    --control-brass-edge-muted: rgba(184, 137, 79, 0.20);
     --control-brass-edge-hover: rgba(200, 154, 90, 0.44);
-    --control-brass-edge-strong: rgba(211, 166, 99, 0.68);
+    --control-brass-edge-strong: rgba(211, 166, 99, 0.62);
     --control-verdigris-edge: rgba(120, 153, 141, 0.28);
     --control-verdigris-edge-hover: rgba(136, 169, 157, 0.48);
     --control-top-light: rgba(255, 235, 195, 0.095);
@@ -1179,13 +1179,6 @@
     0 2px 4px rgba(0, 0, 0, 0.3);
   color: var(--text-hero);
 }
-.cockpit-button:active:not(:disabled) {
-  transform: translateY(1px);
-  background: var(--control-surface-pressed);
-  box-shadow:
-    inset 0 2px 4px rgba(0, 0, 0, 0.46),
-    inset 0 -1px 0 rgba(255, 235, 195, 0.035);
-}
 .cockpit-button:focus-visible {
   outline: 1px solid rgba(200, 154, 90, 0.7);
   outline-offset: 3px;
@@ -1203,31 +1196,36 @@
 .cockpit-button[aria-disabled="true"] svg { color: var(--text-ghost); filter: none; }
 
 .cockpit-button--primary {
+  --control-icon: color-mix(in srgb, var(--accent-brass) 88%, var(--text-muted));
   border-color: var(--control-brass-edge);
   background: var(--control-surface-primary);
   box-shadow:
-    inset 0 1px 0 rgba(255, 235, 195, 0.16),
+    inset 0 1px 0 rgba(255, 235, 195, 0.10),
     inset 0 -1px 0 rgba(0, 0, 0, 0.42),
     0 2px 4px rgba(0, 0, 0, 0.32);
-  color: var(--text-hero);
+  color: var(--text-title);
 }
 .cockpit-button--primary:hover:not(:disabled) {
+  --control-icon: var(--accent-brass-hover);
   border-color: var(--control-brass-edge-strong);
   background: var(--control-surface-primary-hover);
   box-shadow:
     inset 0 1px 0 rgba(255, 239, 207, 0.2),
     inset 0 -1px 0 rgba(0, 0, 0, 0.43),
     0 2px 5px rgba(0, 0, 0, 0.34);
+  color: var(--text-hero);
 }
 .cockpit-button--secondary { color: var(--text-secondary); }
 .cockpit-button--brass-action {
-  --control-icon: var(--accent-brass-hover);
-  border-color: var(--control-brass-edge);
-  color: var(--text-primary);
+  --control-icon: color-mix(in srgb, var(--accent-brass) 82%, var(--text-muted));
+  border-color: var(--control-brass-edge-muted);
+  color: var(--text-secondary);
 }
 .cockpit-button--brass-action:hover:not(:disabled) {
-  border-color: var(--control-brass-edge-strong);
+  --control-icon: var(--accent-brass-hover);
+  border-color: var(--control-brass-edge-hover);
   background: var(--control-surface-hover);
+  color: var(--text-primary);
 }
 .cockpit-button--recovery {
   --control-icon: var(--accent-verdigris);
@@ -1244,6 +1242,13 @@
 .cockpit-button--complete {
   --control-icon: var(--accent-verdigris);
   color: color-mix(in srgb, var(--accent-verdigris) 72%, var(--text-primary));
+}
+.cockpit-button:active:not(:disabled) {
+  transform: translateY(1px);
+  background: var(--control-surface-pressed);
+  box-shadow:
+    inset 0 2px 4px rgba(0, 0, 0, 0.46),
+    inset 0 -1px 0 rgba(255, 235, 195, 0.035);
 }
 .cockpit-button--large { height: var(--control-height-lg); padding-inline: 1.125rem; gap: 0.5rem; }
 .cockpit-button--compact { height: var(--control-height-sm); padding-inline: 0.6875rem; border-radius: var(--control-radius-sm); font-size: var(--text-scale-l6); }

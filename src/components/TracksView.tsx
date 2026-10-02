@@ -199,7 +199,7 @@ export const TracksView: React.FC<TracksViewProps> = ({
               onClick={() => setShowAddTrackModal(true)}
               className={`cockpit-button cursor-pointer ${hasTracks ? 'cockpit-button--secondary cockpit-button--brass-action' : 'cockpit-button--primary'}`}
             >
-              <Plus className="w-3.5 h-3.5 text-[#c89a5a]" />
+              <Plus className="w-3.5 h-3.5" />
               <span>新建主线</span>
             </button>
           </div>
