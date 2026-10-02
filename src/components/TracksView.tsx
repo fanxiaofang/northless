@@ -12,6 +12,7 @@ import { calculateStalenessDays } from '../lib/recommendation';
 import { InlineEmptyState } from './InlineEmptyState';
 import { CockpitTooltip } from './ui/CockpitTooltip';
 import { CockpitConfirmAction } from './ui/CockpitConfirmAction';
+import { CockpitInspectionNote } from './ui/CockpitInspectionNote';
 
 interface TracksViewProps {
   tracks: Track[];
@@ -121,9 +122,15 @@ export const TracksView: React.FC<TracksViewProps> = ({
   const relatedCards = cards.filter(c => c.track_id === selectedTrack?.id);
 
   // Recent touches for selected track
+  const getLogOccurredAt = (log: LogEntry) => {
+    const eventTime = log.ended_at || log.started_at;
+    if (eventTime) return `${log.date}T${eventTime}`;
+    return log.created_at.includes('T') ? log.created_at : `${log.date}T00:00:00`;
+  };
+
   const trackLogs = logs
     .filter(l => l.track_id === selectedTrack?.id)
-    .sort((a, b) => b.created_at.localeCompare(a.created_at))
+    .sort((a, b) => getLogOccurredAt(b).localeCompare(getLogOccurredAt(a)))
     .slice(0, 6);
 
   // Helper to format log date like "9/30"
@@ -176,12 +183,18 @@ export const TracksView: React.FC<TracksViewProps> = ({
           </div>
 
           <div className="flex flex-wrap items-center gap-3 self-start sm:self-auto">
-            <button
-              onClick={onOpenPhaseSettings}
-              className="cockpit-button cockpit-button--secondary cursor-pointer"
-            >
-              当前阶段: <strong className="text-[#b8894f] font-normal">{currentPhase?.name || '探索期'}</strong>
-            </button>
+            <CockpitTooltip content="管理当前航向">
+              <button
+                type="button"
+                onClick={onOpenPhaseSettings}
+                className="cockpit-status-readout cursor-pointer"
+                aria-label={`管理当前航向：${currentPhase?.name || '探索期'}`}
+              >
+                <span className="cockpit-status-readout__label">CURRENT HEADING / 当前航向</span>
+                <span className="cockpit-status-readout__value">{currentPhase?.name || '探索期'}</span>
+                <ArrowUpRight aria-hidden="true" />
+              </button>
+            </CockpitTooltip>
             <button
               onClick={() => setShowAddTrackModal(true)}
               className={`cockpit-button cursor-pointer ${hasTracks ? 'cockpit-button--secondary cockpit-button--brass-action' : 'cockpit-button--primary'}`}
@@ -291,16 +304,16 @@ export const TracksView: React.FC<TracksViewProps> = ({
                 </h2>
 
                 {/* Purpose Paragraph */}
-                <p className="type-l4 text-[var(--text-primary)] leading-relaxed max-w-2xl pt-0.5">
+                <p className="track-purpose">
                   {selectedTrack.description || '暂无明确目标描述'}
                 </p>
               </div>
 
               {/* Roadmap Scale (Mechanical instrument gauge) */}
               <div className="space-y-3 pt-1">
-                <div className="type-l6 font-mono text-[var(--text-muted)] tracking-wider uppercase flex items-center justify-between pb-1 font-medium">
-                  <span>ROADMAP SCALE / 路线刻度</span>
-                  <span className="text-[var(--text-secondary)] text-[12px] font-sans">点击刻度切换当前阶段</span>
+                <div className="flex items-center justify-between gap-3 pb-1">
+                  <span className="track-section-label">ROADMAP SCALE / 路线刻度</span>
+                  <span className="track-section-help">点击刻度切换当前阶段</span>
                 </div>
 
                 {/* Instrument Gauge Line & Station Markers */}
@@ -408,16 +421,25 @@ export const TracksView: React.FC<TracksViewProps> = ({
 
               {/* NEXT ACTIONS Section */}
               <div className="space-y-3 pt-2">
-                <div className="flex items-center justify-between pb-2 border-b border-[#b8894f]/15">
+                <div className="flex items-center justify-between gap-3 pb-2 border-b border-[#b8894f]/15">
                   <div>
                     <div className="flex items-center gap-2">
-                      <span className="type-l6 font-mono uppercase tracking-wider text-[var(--text-muted)] font-medium">
+                      <span className="track-section-label">
                         {isAddingAction ? 'NEXT ACTIONS / 正在新增' : 'NEXT ACTIONS / 接下来行动'}
                       </span>
+                      {!isAddingAction && (
+                        <CockpitInspectionNote
+                          id="next-actions-popover"
+                          title="关于 Next"
+                          tone="brass"
+                          ariaLabel="查看 Next 说明"
+                        >
+                          <p>最多保留 1–3 个 Next，让真正靠近执行的事情保持清楚。</p>
+                          <p className="inspection-note-secondary">Next 是当前最确定、最容易启动的下一步，不需要提前规划完整路线。</p>
+                        </CockpitInspectionNote>
+                      )}
                     </div>
-                    <p className="type-l5 text-[var(--text-secondary)] mt-0.5 font-normal">
-                      {isAddingAction ? '填写当前最容易启动的第一步' : '最多 1–3 个，保持近处清楚'}
-                    </p>
+                    {isAddingAction && <p className="next-actions-state-help">填写当前最容易启动的第一步</p>}
                   </div>
 
                   {!isAddingAction && (
@@ -599,7 +621,7 @@ export const TracksView: React.FC<TracksViewProps> = ({
                 {/* Later / Backlog candidates */}
                 {laterTrackActions.length > 0 && !isAddingAction && (
                   <div className="pt-3 border-t border-[#b8894f]/12 space-y-2">
-                    <div className="type-l6 font-mono text-[var(--text-muted)] uppercase tracking-wider font-medium">
+                    <div className="track-section-label">
                       LATER / 后续候选
                     </div>
                     <div className="space-y-1">
@@ -624,7 +646,7 @@ export const TracksView: React.FC<TracksViewProps> = ({
                 {/* RECENT TOUCHES Chapter */}
                 <div className="space-y-2">
                   <div className="flex items-center justify-between">
-                    <span className="type-l6 font-mono uppercase tracking-wider text-[var(--text-muted)] font-medium">
+                    <span className="track-section-label">
                       RECENT TOUCHES / 最近发生
                     </span>
                     <span className="type-l6 font-mono text-[var(--text-muted)] text-[12px] font-medium">
@@ -635,30 +657,15 @@ export const TracksView: React.FC<TracksViewProps> = ({
                   {trackLogs.length === 0 ? (
                     <InlineEmptyState className="py-1.5" label="暂无记录" />
                   ) : (
-                    <div className="space-y-1">
-                      {trackLogs.map((l, lIdx) => (
+                    <div className="recent-touch-list">
+                      {trackLogs.map(l => (
                         <div
                           key={l.id}
-                          className="py-1.5 flex items-start gap-3.5 text-left group hover:bg-[#181614]/40 px-1 -mx-1 rounded transition-colors"
+                          className="recent-touch-row"
                         >
-                          <div className="flex items-center gap-1.5 shrink-0 pt-0.5">
-                            {lIdx === 0 && (
-                              <CockpitTooltip content="最近推进"><span className="w-1.5 h-1.5 rounded-full bg-[#78998d]" aria-label="最近推进" /></CockpitTooltip>
-                            )}
-                            <span className="type-l6 font-mono text-[#78998d] font-medium">
-                              {formatLogDate(l.date)}
-                            </span>
-                          </div>
-                          <div className="flex-1 min-w-0">
-                            <span className="type-l4 text-[var(--text-primary)] leading-relaxed group-hover:text-[var(--text-hero)] transition-colors font-medium">
-                              {l.content}
-                            </span>
-                          </div>
-                          {l.duration_minutes && (
-                            <span className="type-l6 font-mono text-[var(--text-muted)] shrink-0 font-medium">
-                              {formatDuration(l.duration_minutes)}
-                            </span>
-                          )}
+                          <span className="recent-touch-date">{formatLogDate(l.date)}</span>
+                          <span className="recent-touch-content">{l.content}</span>
+                          <span className="recent-touch-duration">{formatDuration(l.duration_minutes) ?? ''}</span>
                         </div>
                       ))}
                     </div>
@@ -668,7 +675,7 @@ export const TracksView: React.FC<TracksViewProps> = ({
                 {/* RESOURCES Chapter */}
                 <div className="space-y-2">
                   <div className="flex items-center justify-between">
-                    <span className="type-l6 font-mono uppercase tracking-wider text-[var(--text-muted)] font-medium">
+                    <span className="track-section-label">
                       RESOURCES / 关联资源
                     </span>
                     <span className="type-l6 font-mono text-[var(--text-muted)] text-[12px] font-medium">
