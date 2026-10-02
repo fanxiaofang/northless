@@ -311,7 +311,7 @@ export const TodayView: React.FC<TodayViewProps> = ({
           <div className="flex items-center gap-2.5">
             <CockpitTooltip content="数天未登录时的平稳接回模式"><button
               onClick={onOpenReentryModal}
-              className="btn-secondary px-3 py-1.5 rounded type-l5 text-[#78998d] hover:text-[#88a99d] flex items-center gap-1.5 cursor-pointer font-medium"
+              className="cockpit-button cockpit-button--secondary cockpit-button--recovery cursor-pointer"
               aria-label="接回视角"
             >
               <RotateCw className="w-3.5 h-3.5 text-[#78998d]" />
@@ -320,7 +320,7 @@ export const TodayView: React.FC<TodayViewProps> = ({
 
             <button
               onClick={onOpenEndTodayModal}
-              className="brass-button px-4 py-1.5 rounded type-l5 font-medium text-[var(--text-primary)] hover:text-[var(--text-hero)] flex items-center gap-2 cursor-pointer"
+              className="cockpit-button cockpit-button--secondary cursor-pointer"
             >
               <Calendar className="w-3.5 h-3.5 text-[#c89a5a]" />
               <span>End today · 结束今天</span>
@@ -364,7 +364,7 @@ export const TodayView: React.FC<TodayViewProps> = ({
               <div className="session-action-row self-end md:self-auto">
                 <button
                   onClick={onPauseResumeSession}
-                  className="session-control-button"
+                  className="cockpit-button cockpit-button--secondary cockpit-button--recovery cursor-pointer"
                 >
                   {activeSession.is_running ? (
                     <>
@@ -381,7 +381,7 @@ export const TodayView: React.FC<TodayViewProps> = ({
 
                 <button
                   onClick={() => onStopSession()}
-                  className="brass-button px-4 py-1.5 type-l5 font-medium text-[var(--text-hero)] rounded flex items-center gap-1.5 cursor-pointer"
+                  className="cockpit-button cockpit-button--primary cursor-pointer"
                 >
                   <StopCircle className="w-3.5 h-3.5 text-[#c89a5a]" />
                   <span>停止并记入今日</span>
@@ -402,7 +402,7 @@ export const TodayView: React.FC<TodayViewProps> = ({
 
         {/* SECTION 1: "现在做什么？" (3-in-1 Recommendation System - Section Title Level) */}
         <section className="space-y-4">
-          <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-2">
+          <div className="flex flex-col lg:flex-row lg:items-center justify-between gap-2">
             <div className="section-heading-with-disclosure">
               <h2 className="section-title section-title-with-meta">
                 <span>现在做什么？</span>
@@ -418,50 +418,38 @@ export const TodayView: React.FC<TodayViewProps> = ({
             </div>
 
             {/* Effort & Filter switchers (Tactile instrument switches) */}
-            {hasTracks && <div className="segmented-control self-start sm:self-auto overflow-x-auto max-w-full" aria-label="推荐投入偏好">
+            {hasTracks && <div className="today-mode-switch self-start lg:self-auto overflow-x-auto max-w-full" aria-label="推荐投入偏好">
               <button
                 onClick={() => onSetEffortFilter('all')}
-                className={`segmented-item type-l5 whitespace-nowrap cursor-pointer ${
-                  effortFilter === 'all'
-                    ? 'mode-auto-selected border font-medium'
-                    : 'text-[var(--text-muted)] hover:text-[var(--text-primary)]'
-                }`}
+                aria-pressed={effortFilter === 'all'}
+                className={`segmented-item mode-auto whitespace-nowrap cursor-pointer ${effortFilter === 'all' ? 'is-selected' : ''}`}
               >
                 默认
               </button>
               <button
                 onClick={() => onSetEffortFilter('light')}
-                className={`segmented-item type-l5 whitespace-nowrap cursor-pointer ${
-                  effortFilter === 'light'
-                    ? 'mode-light-selected border font-medium'
-                    : 'text-[var(--text-muted)] hover:text-[#78998d]'
-                }`}
+                aria-pressed={effortFilter === 'light'}
+                className={`segmented-item mode-light whitespace-nowrap cursor-pointer ${effortFilter === 'light' ? 'is-selected' : ''}`}
               >
                 只想做点轻的
               </button>
               <button
                 onClick={() => onSetEffortFilter('normal')}
-                className={`segmented-item type-l5 whitespace-nowrap cursor-pointer ${
-                  effortFilter === 'normal'
-                    ? 'mode-normal-selected border font-medium'
-                    : 'text-[var(--text-muted)] hover:text-[var(--text-primary)]'
-                }`}
+                aria-pressed={effortFilter === 'normal'}
+                className={`segmented-item mode-normal whitespace-nowrap cursor-pointer ${effortFilter === 'normal' ? 'is-selected' : ''}`}
               >
                 正常
               </button>
               <button
                 onClick={() => onSetEffortFilter('deep')}
-                className={`segmented-item type-l5 whitespace-nowrap cursor-pointer ${
-                  effortFilter === 'deep'
-                    ? 'mode-deep-selected border font-medium'
-                    : 'text-[var(--text-muted)] hover:text-[#c87a3e]'
-                }`}
+                aria-pressed={effortFilter === 'deep'}
+                className={`segmented-item mode-deep whitespace-nowrap cursor-pointer ${effortFilter === 'deep' ? 'is-selected' : ''}`}
               >
                 想沉进去
               </button>
               <CockpitTooltip content="换一批候选"><button
                 onClick={onShuffleRecommendations}
-                className="segmented-item type-l5 text-[var(--text-muted)] hover:text-[var(--text-primary)] transition-colors flex items-center gap-1 border-l border-[#b8894f]/15 ml-0.5 pl-2 cursor-pointer font-medium"
+                className="segmented-item mode-shuffle whitespace-nowrap cursor-pointer"
                 aria-label="换一批候选"
               >
                 <RotateCw className="w-3 h-3" />
@@ -593,7 +581,7 @@ export const TodayView: React.FC<TodayViewProps> = ({
                             `${primaryCandidate.track.name} · ${primaryCandidate.action.title}`
                           )
                         }
-                        className="brass-button px-5 py-2 rounded type-l5 font-medium text-[var(--text-primary)] hover:text-[var(--text-hero)] flex items-center gap-2 cursor-pointer"
+                        className="cockpit-button cockpit-button--primary cockpit-button--large cursor-pointer"
                       >
                         <Play className="w-3.5 h-3.5 text-[#c89a5a]" />
                         <span>开始专注</span>
@@ -601,7 +589,7 @@ export const TodayView: React.FC<TodayViewProps> = ({
 
                       <button
                         onClick={() => onCompleteAction(primaryCandidate.action.id)}
-                        className="btn-secondary px-3.5 py-2 rounded type-l5 text-[#78998d] hover:text-[#88a99d] transition-colors flex items-center gap-1.5 cursor-pointer font-medium"
+                        className="cockpit-button cockpit-button--secondary cockpit-button--complete cockpit-button--large cursor-pointer"
                       >
                         <CheckCircle2 className="w-3.5 h-3.5 text-[#78998d]" />
                         <span>直接标记完成</span>
@@ -677,7 +665,7 @@ export const TodayView: React.FC<TodayViewProps> = ({
                             `${candidate.track.name} · ${candidate.action.title}`
                           )
                         }
-                        className="btn-secondary px-3 py-1.5 rounded type-l5 text-[var(--text-primary)] hover:text-[var(--text-hero)] transition-colors flex items-center gap-1.5 cursor-pointer font-medium"
+                        className="cockpit-button cockpit-button--secondary cockpit-button--compact cursor-pointer"
                       >
                         <Play className="w-3 h-3 text-[#b8894f]" />
                         <span>开始</span>
@@ -706,7 +694,7 @@ export const TodayView: React.FC<TodayViewProps> = ({
             <div className="flex items-center gap-2 self-start sm:self-auto">
               <button
                 onClick={onOpenLogModal}
-                className="secondary-create-action cursor-pointer"
+                className="cockpit-button cockpit-button--secondary cursor-pointer"
               >
                 <Plus className="w-3.5 h-3.5" />
                 <span>记一下刚刚做了什么</span>
@@ -714,10 +702,10 @@ export const TodayView: React.FC<TodayViewProps> = ({
 
               <button
                 onClick={() => onStartSession('', undefined, '自由专注')}
-                className="brass-button session-start-button cursor-pointer"
+                className="cockpit-button cockpit-button--primary cursor-pointer"
               >
                 <Play className="w-3.5 h-3.5" />
-                <span>开始专注</span>
+                <span>自由专注</span>
               </button>
             </div>
           </header>
