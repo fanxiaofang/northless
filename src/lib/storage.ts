@@ -25,7 +25,7 @@ const STORAGE_KEYS = {
   SEED_SCHEMA_VERSION: 'gap_cockpit_seed_schema_version',
 };
 
-const CURRENT_SEED_SCHEMA_VERSION = 2;
+const CURRENT_SEED_SCHEMA_VERSION = 3;
 
 const LEGACY_PHASE_NOTES: Record<string, { legacy: string; replacement: string }> = {
   phase_agent: {
@@ -99,6 +99,29 @@ export function getInitialSeedData() {
       role: 'main',
       roadmap: ['基础理解', '小 Demo', '完整项目', '求职包装'],
       current_stage_index: 2,
+      status: 'active',
+      created_at: '2026-09-01',
+      last_touched_at: today,
+    },
+    {
+      id: 'track_snake_demo',
+      name: '蛇形路线演示',
+      description: '用于观察较长路线如何连续折返，并同时呈现已完成、当前与未来阶段。',
+      role: 'main',
+      roadmap: [
+        '方向确认',
+        '资料盘点',
+        '最小原型',
+        '核心实现',
+        '交互打磨',
+        '响应式验证',
+        '边缘场景',
+        '性能检查',
+        '反馈复盘',
+        '发布准备',
+        '长期维护',
+      ],
+      current_stage_index: 5,
       status: 'active',
       created_at: '2026-09-01',
       last_touched_at: today,
@@ -472,13 +495,21 @@ function migrateSeedDataIfNeeded(): void {
     return { ...phase, note: migration.replacement };
   });
 
-  const migratedTracks = tracks.map(track => {
+  let migratedTracks = tracks.map(track => {
     const migration = LEGACY_TRACK_DESCRIPTIONS[track.id];
     if (!migration || track.description !== migration.legacy) return track;
 
     tracksChanged = true;
     return { ...track, description: migration.replacement };
   });
+
+  if (!migratedTracks.some(track => track.id === 'track_snake_demo')) {
+    const snakeDemo = getInitialSeedData().tracks.find(track => track.id === 'track_snake_demo');
+    if (snakeDemo) {
+      migratedTracks = [...migratedTracks, snakeDemo];
+      tracksChanged = true;
+    }
+  }
 
   if (phasesChanged) saveData(STORAGE_KEYS.PHASES, migratedPhases);
   if (tracksChanged) saveData(STORAGE_KEYS.TRACKS, migratedTracks);

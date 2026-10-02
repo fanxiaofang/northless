@@ -36,6 +36,63 @@ interface TracksViewProps {
   onNewTrackComposerDismissed?: () => void;
 }
 
+const ROADMAP_DESKTOP_COLUMNS = 5;
+const ROADMAP_MOBILE_COLUMNS = 3;
+
+const getRoadmapColumnCount = (stageCount: number, maximum: number) =>
+  Math.max(1, Math.min(stageCount, maximum));
+
+type RoadmapDirection = 'forward' | 'reverse';
+type RoadmapConnection = 'inline' | 'turn' | 'none';
+
+interface RoadmapGridPosition {
+  row: number;
+  column: number;
+  direction: RoadmapDirection;
+  connection: RoadmapConnection;
+}
+
+const getStageGridPosition = (
+  index: number,
+  stageCount: number,
+  columnCount: number
+): RoadmapGridPosition => {
+  const rowIndex = Math.floor(index / columnCount);
+  const offsetInRow = index % columnCount;
+  const isReverse = rowIndex % 2 === 1;
+  const isLastStage = index === stageCount - 1;
+
+  return {
+    row: rowIndex + 1,
+    column: isReverse ? columnCount - offsetInRow : offsetInRow + 1,
+    direction: isReverse ? 'reverse' : 'forward',
+    connection: isLastStage
+      ? 'none'
+      : offsetInRow === columnCount - 1
+        ? 'turn'
+        : 'inline',
+  };
+};
+
+const getTrackIndexMeta = (track: Track, currentDateStr: string) => {
+  const roleLabel: Record<TrackRole, string> = {
+    main: 'MAIN',
+    maintenance: 'KEEP',
+    paused: 'PAUSED',
+  };
+  const staleness = calculateStalenessDays(track.last_touched_at, currentDateStr);
+  const stalenessMetric = staleness === 0 ? 'TODAY' : staleness === 999 ? '—' : `${staleness}D`;
+  const stageMetric = track.roadmap.length === 0
+    ? '—'
+    : `${String(track.current_stage_index + 1).padStart(2, '0')}/${String(track.roadmap.length).padStart(2, '0')}`;
+
+  return {
+    roleLabel: roleLabel[track.role],
+    roleClassName: `track-index-role-dot--${track.role}`,
+    metric: track.role === 'main' ? stageMetric : stalenessMetric,
+  };
+};
+
 export const TracksView: React.FC<TracksViewProps> = ({
   tracks,
   actions,
@@ -120,6 +177,14 @@ export const TracksView: React.FC<TracksViewProps> = ({
     .sort((a, b) => a.position - b.position);
 
   const relatedCards = cards.filter(c => c.track_id === selectedTrack?.id);
+  const roadmapDesktopColumns = getRoadmapColumnCount(
+    selectedTrack?.roadmap.length ?? 0,
+    ROADMAP_DESKTOP_COLUMNS
+  );
+  const roadmapMobileColumns = getRoadmapColumnCount(
+    selectedTrack?.roadmap.length ?? 0,
+    ROADMAP_MOBILE_COLUMNS
+  );
 
   // Recent touches for selected track
   const getLogOccurredAt = (log: LogEntry) => {
@@ -153,17 +218,6 @@ export const TracksView: React.FC<TracksViewProps> = ({
     const h = Math.floor(mins / 60);
     const m = mins % 60;
     return m > 0 ? `${h}h${m}m` : `${h}h`;
-  };
-
-  const getRoleHeaderKicker = (role: TrackRole) => {
-    switch (role) {
-      case 'main':
-        return 'MAIN COURSE / 主线档案';
-      case 'maintenance':
-        return 'MAINTENANCE COURSE / 保温档案';
-      case 'paused':
-        return 'PAUSED COURSE / 暂缓档案';
-    }
   };
 
   return (
@@ -209,7 +263,7 @@ export const TracksView: React.FC<TracksViewProps> = ({
         <div className="flex flex-col md:flex-row gap-7 md:gap-8 items-start">
           {/* Left Column: Track Index / 主线目录 */}
           <nav
-            className={`w-full md:w-[190px] shrink-0 space-y-2 md:pr-7 ${
+            className={`w-full md:w-[198px] shrink-0 space-y-2 md:pr-7 ${
               hasTracks ? 'md:border-r md:border-[#b8894f]/12' : ''
             }`}
           >
@@ -228,42 +282,29 @@ export const TracksView: React.FC<TracksViewProps> = ({
               ) : (
                 tracks.map(t => {
                 const isSelected = t.id === selectedTrack?.id;
-                const staleness = calculateStalenessDays(t.last_touched_at, currentDateStr);
-                const isMain = t.role === 'main';
-                const isMaint = t.role === 'maintenance';
-
-                const roleLabel = isMain ? 'MAIN' : isMaint ? 'MAINTENANCE' : 'PAUSED';
-                const stageStr = `${String(t.current_stage_index + 1).padStart(2, '0')}/${String(t.roadmap.length).padStart(2, '0')}`;
-                const stalenessStr = staleness === 0 ? 'TODAY' : staleness === 999 ? '—' : `${staleness}D`;
-                const metaLine = isMain ? `${roleLabel} · ${stageStr}` : `${roleLabel} · ${stalenessStr}`;
+                const { roleLabel, roleClassName, metric } = getTrackIndexMeta(t, currentDateStr);
 
                 return (
                   <button
                     key={t.id}
+                    type="button"
                     onClick={() => setSelectedTrackId(t.id)}
-                    className={`text-left py-2 px-2.5 transition-colors flex flex-col gap-1 shrink-0 md:shrink w-52 md:w-full border-l-2 cursor-pointer ${
-                      isSelected
-                        ? 'border-l-[#b8894f] bg-transparent text-[var(--text-hero)]'
-                        : 'border-l-transparent bg-transparent text-[var(--text-secondary)] hover:text-[var(--text-primary)] hover:border-l-[#54483b]'
-                    }`}
+                    aria-current={isSelected ? 'page' : undefined}
+                    className={`track-index-item shrink-0 md:shrink w-52 md:w-full cursor-pointer ${isSelected ? 'is-selected' : ''}`}
                   >
                     <div className="flex items-center gap-2">
                       <span
-                        className={`w-[7px] h-[7px] rounded-full shrink-0 transition-colors ${
-                          isSelected
-                            ? 'bg-[#b8894f]'
-                            : isMain
-                            ? 'bg-[#8a7250]'
-                            : 'bg-[#54483b]'
-                        }`}
+                        className={`track-index-role-dot ${roleClassName}`}
+                        aria-hidden="true"
                       />
-                      <span className={`type-l4 truncate ${isSelected ? 'font-semibold text-[var(--text-hero)]' : 'font-medium'}`}>
+                      <span className="track-index-title">
                         {t.name}
                       </span>
                     </div>
 
-                    <div className={`pl-3.5 type-l6 font-mono font-medium ${isSelected ? 'text-[#b8894f]' : 'text-[var(--text-muted)]'}`}>
-                      {metaLine}
+                    <div className="track-index-meta">
+                      <span>{roleLabel}</span>
+                      <span className="track-index-metric">{metric}</span>
                     </div>
                   </button>
                 );
@@ -279,7 +320,7 @@ export const TracksView: React.FC<TracksViewProps> = ({
               <div className="surface-optic-soft track-profile-surface track-detail-content-inset py-4 sm:py-5 rounded-lg space-y-3">
                 <div className="flex flex-col sm:flex-row sm:items-baseline justify-between gap-2.5">
                   <div className="type-l6 font-mono text-[var(--text-muted)] uppercase tracking-wider font-medium">
-                    {getRoleHeaderKicker(selectedTrack.role)}
+                    TRACK DOSSIER / 主线档案
                   </div>
 
                   {/* Segmented Role Control */}
@@ -319,20 +360,46 @@ export const TracksView: React.FC<TracksViewProps> = ({
                 {/* Instrument Gauge Line & Station Markers */}
                 <div className="py-2">
                   <div
-                    className="grid gap-2"
+                    className="track-roadmap-grid"
                     style={{
-                      gridTemplateColumns: `repeat(${selectedTrack.roadmap.length}, minmax(0, 1fr))`,
-                    }}
+                      '--roadmap-desktop-columns': roadmapDesktopColumns,
+                      '--roadmap-mobile-columns': roadmapMobileColumns,
+                    } as React.CSSProperties}
                   >
                     {selectedTrack.roadmap.map((stage, idx) => {
                       const isCurrent = idx === selectedTrack.current_stage_index;
                       const isCompleted = idx < selectedTrack.current_stage_index;
+                      const stageState = isCompleted ? 'completed' : isCurrent ? 'current' : 'future';
+                      const desktopPosition = getStageGridPosition(
+                        idx,
+                        selectedTrack.roadmap.length,
+                        roadmapDesktopColumns
+                      );
+                      const mobilePosition = getStageGridPosition(
+                        idx,
+                        selectedTrack.roadmap.length,
+                        roadmapMobileColumns
+                      );
+                      const gridStyle = {
+                        '--roadmap-desktop-column': desktopPosition.column,
+                        '--roadmap-desktop-row': desktopPosition.row,
+                        '--roadmap-mobile-column': mobilePosition.column,
+                        '--roadmap-mobile-row': mobilePosition.row,
+                      } as React.CSSProperties;
+                      const stageStateLabel = isCompleted ? '已完成' : isCurrent ? '当前阶段' : '尚未开始';
 
                       return (
                         <button
                           key={idx}
+                          type="button"
                           onClick={() => onUpdateTrackStage(selectedTrack.id, idx)}
-                          className="group flex flex-col items-start text-left focus:outline-hidden cursor-pointer"
+                          aria-label={`切换到阶段 ${idx + 1}：${stage}，${stageStateLabel}`}
+                          data-desktop-direction={desktopPosition.direction}
+                          data-desktop-connection={desktopPosition.connection}
+                          data-mobile-direction={mobilePosition.direction}
+                          data-mobile-connection={mobilePosition.connection}
+                          className="track-roadmap-stage group cursor-pointer"
+                          style={gridStyle}
                         >
                           {/* Top: 01, 02, 03 Number */}
                           <div
@@ -348,30 +415,15 @@ export const TracksView: React.FC<TracksViewProps> = ({
                           </div>
 
                           {/* Middle: Station Node with Connecting Rail Segment */}
-                          <div className="w-full relative flex items-center h-[20px] mb-2">
-                            {/* Connecting Line to next station */}
-                            {idx < selectedTrack.roadmap.length - 1 && (
-                              <div
-                                className={`absolute left-[10px] right-0 h-[2px] z-0 ${
-                                  isCompleted
-                                    ? 'bg-[#4e6b60]'
-                                    : isCurrent
-                                    ? 'bg-gradient-to-r from-[#b8894f] to-[#30281e]'
-                                    : 'bg-[#25201a]'
-                                }`}
-                              />
-                            )}
-
-                            {/* Connecting Line from prev station */}
-                            {idx > 0 && (
-                              <div
-                                className={`absolute left-0 right-[calc(100%-10px)] h-[2px] z-0 ${
-                                  isCompleted || isCurrent
-                                    ? 'bg-[#4e6b60]'
-                                    : 'bg-[#25201a]'
-                                }`}
-                              />
-                            )}
+                          <span
+                            className={`track-roadmap-turn track-roadmap-turn--${stageState}`}
+                            aria-hidden="true"
+                          />
+                          <div className="track-roadmap-marker">
+                            <span
+                              className={`track-roadmap-link track-roadmap-link--${stageState}`}
+                              aria-hidden="true"
+                            />
 
                             {/* Station Node Marker */}
                             <span
@@ -693,10 +745,10 @@ export const TracksView: React.FC<TracksViewProps> = ({
                           onClick={() => onOpenCard(c)}
                           className="w-full py-1.5 flex items-center justify-between text-left group hover:bg-[#181614]/40 px-1 -mx-1 rounded transition-colors cursor-pointer"
                         >
-                          <span className="type-l4 text-[var(--text-primary)] group-hover:text-[var(--text-hero)] transition-colors truncate pr-4 font-medium">
+                          <span className="type-l5 text-[var(--text-secondary)] group-hover:text-[var(--text-primary)] transition-colors truncate pr-4 font-[450]">
                             {c.title}
                           </span>
-                          <ArrowUpRight className="w-3.5 h-3.5 text-[var(--text-muted)] group-hover:text-[#b8894f] transition-colors shrink-0" />
+                          <ArrowUpRight className="track-resource-arrow" aria-hidden="true" />
                         </button>
                       ))}
                     </div>

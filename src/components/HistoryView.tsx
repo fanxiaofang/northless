@@ -209,7 +209,7 @@ export const HistoryView: React.FC<HistoryViewProps> = ({
               本周日常记录存根
             </h2>
             <span className="type-l6 font-mono text-[var(--text-muted)] uppercase tracking-wider font-medium">
-              DAILY ARCHIVE · 工程日志
+              DAILY ARCHIVE
             </span>
           </header>
 
