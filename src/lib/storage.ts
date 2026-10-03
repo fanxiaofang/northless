@@ -257,7 +257,7 @@ export function getInitialSeedData() {
       id: 'log_today_5',
       date: today,
       type: 'session',
-      content: '继续梳理产品结构，明确 Gap Cockpit 核心流与复古朋克风格',
+      content: '继续梳理产品结构，明确 Northless 核心流与复古朋克风格',
       started_at: '21:10',
       ended_at: '22:20',
       duration_minutes: 70,

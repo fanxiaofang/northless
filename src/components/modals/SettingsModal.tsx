@@ -371,7 +371,7 @@ export const SettingsModal: React.FC<SettingsModalProps> = ({
             <div id="settings-panel-about" role="tabpanel" aria-labelledby="settings-tab-about" className="space-y-4 type-l5 text-[var(--text-secondary)] leading-relaxed">
               <div className="brass-panel settings-surface p-4 space-y-3">
                 <div className="font-display font-semibold type-l4 text-[var(--text-hero)]">
-                  Gap Cockpit V0 核心原则
+                  Northless 核心原则
                 </div>
                 <ul className="space-y-2 list-disc list-inside">
                   <li>

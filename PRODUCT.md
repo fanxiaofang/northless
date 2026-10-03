@@ -6,7 +6,7 @@ product
 
 ## Users
 
-Gap Cockpit serves self-directed explorers, makers, and knowledge workers who do not have a reliable external cadence. They use it as a private, local-first cockpit to capture loose thoughts, keep several long-running tracks warm, and return to meaningful work without turning life into a scoreboard.
+Northless serves self-directed explorers, makers, and knowledge workers who do not have a reliable external cadence. They use it as a private, local-first cockpit to capture loose thoughts, keep several long-running tracks warm, and return to meaningful work without turning life into a scoreboard.
 
 ## Product Purpose
 

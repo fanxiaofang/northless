@@ -375,7 +375,7 @@
   border: 1px solid color-mix(in srgb, var(--accent-brass) 25%, transparent);
   border-radius: var(--control-radius-md);
   background: color-mix(in srgb, var(--surface-selected) 50%, var(--surface-canvas));
-  color: var(--accent-brass-hover);
+  color: var(--accent-brass);
 }
 
 .sidebar-pinned-list {

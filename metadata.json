@@ -1,6 +1,6 @@
 {
-  "name": "Gap Cockpit - 本地个人驾驶舱",
-  "description": "专为无外部节奏探索者打造的复古蒸汽朋克本地个人驾驶舱。记录现实、维持主线、智能推荐下一步。",
+  "name": "Northless - 本地个人驾驶舱",
+  "description": "No fixed north. Still moving. 专为无外部节奏探索者打造的复古蒸汽朋克本地个人驾驶舱。记录现实、维持主线、智能推荐下一步。",
   "requestFramePermissions": [],
   "majorCapabilities": ["MAJOR_CAPABILITY_SERVER_SIDE_GEMINI_API"]
 }
