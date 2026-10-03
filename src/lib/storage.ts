@@ -5,14 +5,11 @@ import {
   InboxItem,
   LogEntry,
   NextAction,
-  Phase,
   Track
 } from '../types';
 import { getTodayDateStr } from './recommendation';
 
 const STORAGE_KEYS = {
-  PHASES: 'gap_cockpit_phases_v0',
-  CURRENT_PHASE_ID: 'gap_cockpit_current_phase_id_v0',
   TRACKS: 'gap_cockpit_tracks_v0',
   ACTIONS: 'gap_cockpit_actions_v0',
   LOGS: 'gap_cockpit_logs_v0',
@@ -25,18 +22,7 @@ const STORAGE_KEYS = {
   SEED_SCHEMA_VERSION: 'gap_cockpit_seed_schema_version',
 };
 
-const CURRENT_SEED_SCHEMA_VERSION = 3;
-
-const LEGACY_PHASE_NOTES: Record<string, { legacy: string; replacement: string }> = {
-  phase_agent: {
-    legacy: '聚焦现代 Agent 与协议生态，打造具备展示度的求职硬核项目。',
-    replacement: '以 Agent 项目为主轴，同时保温算法、Linux/C 与求职准备，形成可持续推进的技术探索节奏。',
-  },
-  phase_job: {
-    legacy: '重点转向简历包装、项目实战复盘与算法高频题巩固。',
-    replacement: '求职成为当前主方向，围绕项目包装、技术复盘、算法巩固与沟通准备集中推进。',
-  },
-};
+const CURRENT_SEED_SCHEMA_VERSION = 4;
 
 const LEGACY_TRACK_DESCRIPTIONS: Record<string, { legacy: string; replacement: string }> = {
   track_agent: {
@@ -76,21 +62,6 @@ export function getInitialSeedData() {
   const d8 = getDaysAgo(8);
   const d18 = getDaysAgo(18);
 
-  const initialPhases: Phase[] = [
-    {
-      id: 'phase_agent',
-      name: 'AI / Agent Exploration',
-      started_at: '2026-09-01',
-      note: '以 Agent 项目为主轴，同时保温算法、Linux/C 与求职准备，形成可持续推进的技术探索节奏。',
-    },
-    {
-      id: 'phase_job',
-      name: 'Job Hunting 冲刺期',
-      started_at: '2026-11-01',
-      note: '求职成为当前主方向，围绕项目包装、技术复盘、算法巩固与沟通准备集中推进。',
-    },
-  ];
-
   const initialTracks: Track[] = [
     {
       id: 'track_agent',
@@ -106,7 +77,7 @@ export function getInitialSeedData() {
     {
       id: 'track_snake_demo',
       name: '蛇形路线演示',
-      description: '用于观察较长路线如何连续折返，并同时呈现已完成、当前与未来阶段。',
+      description: '用于观察较长路线如何连续折返，并同时呈现已完成、当前与未来节点。',
       role: 'main',
       roadmap: [
         '方向确认',
@@ -448,8 +419,6 @@ export function getInitialSeedData() {
   ];
 
   return {
-    phases: initialPhases,
-    currentPhaseId: 'phase_agent',
     tracks: initialTracks,
     actions: initialActions,
     logs: initialLogs,
@@ -478,22 +447,15 @@ export function saveData<T>(key: string, value: T): void {
 }
 
 function migrateSeedDataIfNeeded(): void {
+  localStorage.removeItem('gap_cockpit_phases_v0');
+  localStorage.removeItem('gap_cockpit_current_phase_id_v0');
+
   if (localStorage.getItem(STORAGE_KEYS.SEED_SCHEMA_VERSION) === String(CURRENT_SEED_SCHEMA_VERSION)) {
     return;
   }
 
-  const phases = loadData<Phase[]>(STORAGE_KEYS.PHASES, []);
   const tracks = loadData<Track[]>(STORAGE_KEYS.TRACKS, []);
-  let phasesChanged = false;
   let tracksChanged = false;
-
-  const migratedPhases = phases.map(phase => {
-    const migration = LEGACY_PHASE_NOTES[phase.id];
-    if (!migration || phase.note !== migration.legacy) return phase;
-
-    phasesChanged = true;
-    return { ...phase, note: migration.replacement };
-  });
 
   let migratedTracks = tracks.map(track => {
     const migration = LEGACY_TRACK_DESCRIPTIONS[track.id];
@@ -511,7 +473,6 @@ function migrateSeedDataIfNeeded(): void {
     }
   }
 
-  if (phasesChanged) saveData(STORAGE_KEYS.PHASES, migratedPhases);
   if (tracksChanged) saveData(STORAGE_KEYS.TRACKS, migratedTracks);
   localStorage.setItem(STORAGE_KEYS.SEED_SCHEMA_VERSION, String(CURRENT_SEED_SCHEMA_VERSION));
 }
@@ -519,8 +480,6 @@ function migrateSeedDataIfNeeded(): void {
 export function initializeStorageIfNeeded() {
   if (!localStorage.getItem(STORAGE_KEYS.TRACKS)) {
     const seed = getInitialSeedData();
-    saveData(STORAGE_KEYS.PHASES, seed.phases);
-    saveData(STORAGE_KEYS.CURRENT_PHASE_ID, seed.currentPhaseId);
     saveData(STORAGE_KEYS.TRACKS, seed.tracks);
     saveData(STORAGE_KEYS.ACTIONS, seed.actions);
     saveData(STORAGE_KEYS.LOGS, seed.logs);
@@ -535,8 +494,6 @@ export function initializeStorageIfNeeded() {
 
 export function resetToSeedData() {
   const seed = getInitialSeedData();
-  saveData(STORAGE_KEYS.PHASES, seed.phases);
-  saveData(STORAGE_KEYS.CURRENT_PHASE_ID, seed.currentPhaseId);
   saveData(STORAGE_KEYS.TRACKS, seed.tracks);
   saveData(STORAGE_KEYS.ACTIONS, seed.actions);
   saveData(STORAGE_KEYS.LOGS, seed.logs);
@@ -553,8 +510,6 @@ export function exportAllData() {
   return {
     version: '1.0.0',
     exported_at: new Date().toISOString(),
-    phases: loadData(STORAGE_KEYS.PHASES, []),
-    current_phase_id: loadData(STORAGE_KEYS.CURRENT_PHASE_ID, 'phase_agent'),
     tracks: loadData(STORAGE_KEYS.TRACKS, []),
     actions: loadData(STORAGE_KEYS.ACTIONS, []),
     logs: loadData(STORAGE_KEYS.LOGS, []),
@@ -581,12 +536,6 @@ export function importAllData(jsonStr: string): boolean {
     }
     if (data.cards && Array.isArray(data.cards)) {
       saveData(STORAGE_KEYS.CARDS, data.cards);
-    }
-    if (data.phases && Array.isArray(data.phases)) {
-      saveData(STORAGE_KEYS.PHASES, data.phases);
-    }
-    if (data.current_phase_id) {
-      saveData(STORAGE_KEYS.CURRENT_PHASE_ID, data.current_phase_id);
     }
     if (data.day_closes && Array.isArray(data.day_closes)) {
       saveData(STORAGE_KEYS.DAY_CLOSES, data.day_closes);

@@ -136,7 +136,7 @@ export const CommandPaletteModal: React.FC<CommandPaletteModalProps> = ({
     {
       id: 'action_ai_export',
       category: '工具',
-      title: '复制驾驶舱上下文',
+      title: '复制当前上下文',
       shortcut: '',
       icon: Sparkles,
       action: () => {
@@ -147,7 +147,7 @@ export const CommandPaletteModal: React.FC<CommandPaletteModalProps> = ({
     {
       id: 'action_settings',
       category: '工具',
-      title: '打开驾驶舱偏好与数据管理 (Settings)',
+      title: '打开设置与本地数据 (Settings)',
       shortcut: '',
       icon: Settings,
       action: () => {

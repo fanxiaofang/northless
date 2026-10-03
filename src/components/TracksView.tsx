@@ -7,7 +7,7 @@ import {
   ArrowUpRight,
   Check
 } from 'lucide-react';
-import { Card, LogEntry, NextAction, Phase, Track, TrackRole } from '../types';
+import { Card, LogEntry, NextAction, Track, TrackRole } from '../types';
 import { calculateStalenessDays } from '../lib/recommendation';
 import { InlineEmptyState } from './InlineEmptyState';
 import { CockpitTooltip } from './ui/CockpitTooltip';
@@ -19,7 +19,6 @@ interface TracksViewProps {
   actions: NextAction[];
   logs: LogEntry[];
   cards: Card[];
-  currentPhase?: Phase;
   currentDateStr: string;
   onUpdateTrackRole: (trackId: string, role: TrackRole) => void;
   onUpdateTrackStage: (trackId: string, stageIndex: number) => void;
@@ -29,7 +28,6 @@ interface TracksViewProps {
   onStartSession: (trackId: string, actionId?: string, title?: string) => void;
   onOpenCard: (card: Card) => void;
   onAddNewTrack: (name: string, description: string, role: TrackRole, stages: string[]) => void;
-  onOpenPhaseSettings: () => void;
   shouldOpenNewTrackComposer?: boolean;
   onNewTrackComposerOpened?: () => void;
   onCreatedFromToday?: () => void;
@@ -98,7 +96,6 @@ export const TracksView: React.FC<TracksViewProps> = ({
   actions,
   logs,
   cards,
-  currentPhase,
   currentDateStr,
   onUpdateTrackRole,
   onUpdateTrackStage,
@@ -108,7 +105,6 @@ export const TracksView: React.FC<TracksViewProps> = ({
   onStartSession,
   onOpenCard,
   onAddNewTrack,
-  onOpenPhaseSettings,
   shouldOpenNewTrackComposer = false,
   onNewTrackComposerOpened,
   onCreatedFromToday,
@@ -228,7 +224,7 @@ export const TracksView: React.FC<TracksViewProps> = ({
         <header className="flex flex-col sm:flex-row sm:items-baseline justify-between pb-5 border-b border-[#b8894f]/15 gap-4">
           <div>
             <div className="type-l6 font-mono text-[var(--text-ghost)] tracking-wider uppercase mb-1 font-medium">
-              PHASE DIRECTION / 管方向，不管每天
+              TRACK DIRECTION / 管方向，不管每天
             </div>
             <h1 className="text-[30px] leading-[36px] font-display font-semibold text-[var(--text-hero)] flex items-baseline gap-2.5">
               <span>主线脉络</span>
@@ -237,18 +233,6 @@ export const TracksView: React.FC<TracksViewProps> = ({
           </div>
 
           <div className="flex flex-wrap items-center gap-3 self-start sm:self-auto">
-            <CockpitTooltip content="管理当前航向">
-              <button
-                type="button"
-                onClick={onOpenPhaseSettings}
-                className="cockpit-status-readout cursor-pointer"
-                aria-label={`管理当前航向：${currentPhase?.name || '探索期'}`}
-              >
-                <span className="cockpit-status-readout__label">CURRENT HEADING / 当前航向</span>
-                <span className="cockpit-status-readout__value">{currentPhase?.name || '探索期'}</span>
-                <ArrowUpRight aria-hidden="true" />
-              </button>
-            </CockpitTooltip>
             <button
               onClick={() => setShowAddTrackModal(true)}
               className={`cockpit-button cursor-pointer ${hasTracks ? 'cockpit-button--secondary cockpit-button--brass-action' : 'cockpit-button--primary'}`}
@@ -354,7 +338,7 @@ export const TracksView: React.FC<TracksViewProps> = ({
               <div className="space-y-3 pt-1">
                 <div className="flex items-center justify-between gap-3 pb-1">
                   <span className="track-section-label">ROADMAP SCALE / 路线刻度</span>
-                  <span className="track-section-help">点击刻度切换当前阶段</span>
+                  <span className="track-section-help">点击刻度切换当前位置</span>
                 </div>
 
                 {/* Instrument Gauge Line & Station Markers */}
@@ -386,14 +370,14 @@ export const TracksView: React.FC<TracksViewProps> = ({
                         '--roadmap-mobile-column': mobilePosition.column,
                         '--roadmap-mobile-row': mobilePosition.row,
                       } as React.CSSProperties;
-                      const stageStateLabel = isCompleted ? '已完成' : isCurrent ? '当前阶段' : '尚未开始';
+                      const stageStateLabel = isCompleted ? '已完成' : isCurrent ? '当前位置' : '尚未开始';
 
                       return (
                         <button
                           key={idx}
                           type="button"
                           onClick={() => onUpdateTrackStage(selectedTrack.id, idx)}
-                          aria-label={`切换到阶段 ${idx + 1}：${stage}，${stageStateLabel}`}
+                          aria-label={`切换到路线节点 ${idx + 1}：${stage}，${stageStateLabel}`}
                           data-desktop-direction={desktopPosition.direction}
                           data-desktop-connection={desktopPosition.connection}
                           data-mobile-direction={mobilePosition.direction}
@@ -761,7 +745,7 @@ export const TracksView: React.FC<TracksViewProps> = ({
               <InlineEmptyState
                 className="py-3"
                 label="选择一条主线查看档案"
-                description="目标、阶段与 Next 会显示在这里。"
+                description="目标、路线与 Next 会显示在这里。"
               />
             </div>
           ) : null}
@@ -816,8 +800,8 @@ export const TracksView: React.FC<TracksViewProps> = ({
               </div>
 
               <div>
-                <label className="block text-[var(--text-muted)] mb-1 font-medium">路线阶段</label>
-                <p className="type-l6 text-[var(--text-ghost)] mb-1.5">用逗号分隔，建议 3–5 个阶段。</p>
+                <label className="block text-[var(--text-muted)] mb-1 font-medium">路线节点</label>
+                <p className="type-l6 text-[var(--text-ghost)] mb-1.5">用逗号分隔路线节点，建议先写 3–5 个。</p>
                 <input
                   type="text"
                   value={newTrackStages}

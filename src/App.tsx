@@ -7,7 +7,6 @@ import {
   InboxItem,
   LogEntry,
   NextAction,
-  Phase,
   ScoredCandidate,
   Track,
   TrackRole
@@ -51,11 +50,6 @@ export default function App() {
   // Primary State
   const [currentView, setCurrentView] = useState<'today' | 'tracks' | 'history' | 'inbox'>('today');
 
-  const [phases, setPhases] = useState<Phase[]>(() => loadData(STORAGE_KEYS.PHASES, []));
-  const [currentPhaseId, setCurrentPhaseId] = useState<string>(() =>
-    loadData(STORAGE_KEYS.CURRENT_PHASE_ID, 'phase_agent')
-  );
-
   const [tracks, setTracks] = useState<Track[]>(() => loadData(STORAGE_KEYS.TRACKS, []));
   const [actions, setActions] = useState<NextAction[]>(() => loadData(STORAGE_KEYS.ACTIONS, []));
   const [logs, setLogs] = useState<LogEntry[]>(() => loadData(STORAGE_KEYS.LOGS, []));
@@ -82,7 +76,7 @@ export default function App() {
   const [selectedCardForView, setSelectedCardForView] = useState<Card | null>(null);
   const [showCommandPalette, setShowCommandPalette] = useState<boolean>(false);
   const [showSettingsModal, setShowSettingsModal] = useState<boolean>(false);
-  const [settingsEntry, setSettingsEntry] = useState<{ tab: SettingsTab; focusNewCard: boolean }>({ tab: 'phase', focusNewCard: false });
+  const [settingsEntry, setSettingsEntry] = useState<{ tab: SettingsTab; focusNewCard: boolean }>({ tab: 'cards', focusNewCard: false });
   const [showAiExportModal, setShowAiExportModal] = useState<boolean>(false);
   const [aiExportContent, setAiExportContent] = useState<string>('');
 
@@ -96,14 +90,6 @@ export default function App() {
   }, [todayStr]);
 
   // Synchronize state with LocalStorage
-  useEffect(() => {
-    saveData(STORAGE_KEYS.PHASES, phases);
-  }, [phases]);
-
-  useEffect(() => {
-    saveData(STORAGE_KEYS.CURRENT_PHASE_ID, currentPhaseId);
-  }, [currentPhaseId]);
-
   useEffect(() => {
     saveData(STORAGE_KEYS.TRACKS, tracks);
   }, [tracks]);
@@ -231,11 +217,6 @@ export default function App() {
   ]);
 
   // Derived state
-  const currentPhase = useMemo(
-    () => phases.find(p => p.id === currentPhaseId) || phases[0],
-    [phases, currentPhaseId]
-  );
-
   const pinnedCards = useMemo(
     () => cards.filter(c => c.pinned).sort((a, b) => a.position - b.position),
     [cards]
@@ -529,10 +510,10 @@ export default function App() {
 
   // Cockpit context export
   const handleOpenAiExport = useCallback(() => {
-    const text = generateAiPromptContext(tracks, actions, logs, currentPhase, todayStr);
+    const text = generateAiPromptContext(tracks, actions, logs, todayStr);
     setAiExportContent(text);
     setShowAiExportModal(true);
-  }, [actions, currentPhase, logs, todayStr, tracks]);
+  }, [actions, logs, todayStr, tracks]);
 
   // Data Export & Import
   const handleExportData = useCallback(() => {
@@ -548,8 +529,6 @@ export default function App() {
 
   const handleImportData = useCallback((jsonStr: string) => {
     if (!importAllData(jsonStr)) return false;
-    setPhases(loadData(STORAGE_KEYS.PHASES, []));
-    setCurrentPhaseId(loadData(STORAGE_KEYS.CURRENT_PHASE_ID, 'phase_agent'));
     setTracks(loadData(STORAGE_KEYS.TRACKS, []));
     setActions(loadData(STORAGE_KEYS.ACTIONS, []));
     setLogs(loadData(STORAGE_KEYS.LOGS, []));
@@ -563,8 +542,6 @@ export default function App() {
 
   const handleResetData = useCallback(() => {
     const seed = resetToSeedData();
-    setPhases(seed.phases);
-    setCurrentPhaseId(seed.currentPhaseId);
     setTracks(seed.tracks);
     setActions(seed.actions);
     setLogs(seed.logs);
@@ -587,7 +564,7 @@ export default function App() {
     setCurrentView('today');
   }, []);
 
-  const openSettings = useCallback((tab: SettingsTab = 'phase', focusNewCard = false) => {
+  const openSettings = useCallback((tab: SettingsTab = 'cards', focusNewCard = false) => {
     setSettingsEntry({ tab, focusNewCard });
     setShowSettingsModal(true);
   }, []);
@@ -598,7 +575,6 @@ export default function App() {
       <NavigationSidebar
         currentView={currentView}
         onSelectView={setCurrentView}
-        currentPhase={currentPhase}
         pinnedCards={pinnedCards}
         onOpenCard={card => setSelectedCardForView(card)}
         onOpenAddCard={() => openSettings('cards', true)}
@@ -612,7 +588,6 @@ export default function App() {
         {currentView === 'today' && (
           <TodayView
             currentDateStr={todayStr}
-            currentPhase={currentPhase}
             tracks={tracks}
             actions={actions}
             todayLogs={todayLogs}
@@ -649,7 +624,6 @@ export default function App() {
             actions={actions}
             logs={logs}
             cards={cards}
-            currentPhase={currentPhase}
             currentDateStr={todayStr}
             onUpdateTrackRole={handleUpdateTrackRole}
             onUpdateTrackStage={handleUpdateTrackStage}
@@ -659,7 +633,6 @@ export default function App() {
             onStartSession={handleStartSession}
             onOpenCard={card => setSelectedCardForView(card)}
             onAddNewTrack={handleAddNewTrack}
-            onOpenPhaseSettings={() => openSettings()}
             shouldOpenNewTrackComposer={shouldOpenNewTrackComposer}
             onNewTrackComposerOpened={() => setShouldOpenNewTrackComposer(false)}
             onCreatedFromToday={returnToTodayAfterNewTrack ? () => {
@@ -762,20 +735,6 @@ export default function App() {
           onClose={() => setShowSettingsModal(false)}
           initialTab={settingsEntry.tab}
           focusNewCard={settingsEntry.focusNewCard}
-          todayStr={todayStr}
-          phases={phases}
-          currentPhaseId={currentPhaseId}
-          onSelectPhase={setCurrentPhaseId}
-          onCreatePhase={(name, note) => {
-            const newPhase: Phase = {
-              id: `phase_${Date.now()}`,
-              name,
-              started_at: todayStr,
-              note,
-            };
-            setPhases(prev => [...prev, newPhase]);
-            setCurrentPhaseId(newPhase.id);
-          }}
           cards={cards}
           onAddCard={handleAddCard}
           onTogglePinCard={handleTogglePinCard}

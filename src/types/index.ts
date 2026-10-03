@@ -4,14 +4,6 @@ export type ActionStatus = 'active' | 'done' | 'later';
 export type EntryType = 'session' | 'note';
 export type InboxStatus = 'inbox' | 'promoted' | 'archived';
 
-export interface Phase {
-  id: string;
-  name: string;
-  started_at: string;
-  ended_at?: string;
-  note?: string;
-}
-
 export interface Track {
   id: string;
   name: string;

@@ -9,13 +9,12 @@ import {
   Sparkles,
   Plus
 } from 'lucide-react';
-import { Card, Phase } from '../types';
+import { Card } from '../types';
 import { CockpitTooltip } from './ui/CockpitTooltip';
 
 interface NavigationSidebarProps {
   currentView: 'today' | 'tracks' | 'history' | 'inbox';
   onSelectView: (view: 'today' | 'tracks' | 'history' | 'inbox') => void;
-  currentPhase?: Phase;
   pinnedCards: Card[];
   onOpenCard: (card: Card) => void;
   onOpenAddCard: () => void;
@@ -27,7 +26,6 @@ interface NavigationSidebarProps {
 export const NavigationSidebar: React.FC<NavigationSidebarProps> = ({
   currentView,
   onSelectView,
-  currentPhase,
   pinnedCards,
   onOpenCard,
   onOpenAddCard,
@@ -36,23 +34,18 @@ export const NavigationSidebar: React.FC<NavigationSidebarProps> = ({
   isSessionRunning,
 }) => {
   return (
-    <aside className="w-[220px] h-screen bg-[#11100f] border-r border-[#b8894f]/15 flex flex-col justify-between shrink-0 select-none">
+    <aside className="w-[220px] h-screen bg-[#11100f] border-r border-[#b8894f]/15 flex flex-col shrink-0 select-none">
       {/* Brand Header */}
-      <div>
+      <div className="flex min-h-0 flex-1 flex-col">
         <div className="p-3 border-b border-[#b8894f]/15 flex items-center justify-between gap-2">
           <div className="flex items-center gap-2 min-w-0">
-            <div className="w-6.5 h-6.5 rounded-md bg-[#1d1813] border border-[#b8894f]/25 flex items-center justify-center text-[#c89a5a] relative shrink-0">
+            <div className="sidebar-brand-mark">
               <Compass className="w-3.5 h-3.5 animate-[spin_60s_linear_infinite]" />
               <span className="absolute -top-0.5 -right-0.5 rivet" />
             </div>
-            <div className="min-w-0">
-              <div className="font-brand text-[13px] leading-tight tracking-wider font-semibold text-[var(--text-hero)] uppercase whitespace-nowrap flex items-center gap-1.5">
-                <span>Gap Cockpit</span>
-                <span className="text-[10px] text-[#b8894f] font-mono tracking-normal font-medium">v0</span>
-              </div>
-              <CockpitTooltip content={currentPhase?.name || 'Local Pilot'}><div className="type-l6 text-[var(--text-muted)] truncate max-w-[115px] font-sans font-medium">
-                {currentPhase?.name || 'Local Pilot'}
-              </div></CockpitTooltip>
+            <div className="font-brand text-[13px] leading-tight tracking-wider font-semibold text-[var(--text-hero)] uppercase whitespace-nowrap flex items-center gap-1.5">
+              <span>Gap Cockpit</span>
+              <span className="text-[10px] text-[#b8894f] font-mono tracking-normal font-medium">v0</span>
             </div>
           </div>
           {isSessionRunning && (
@@ -138,7 +131,7 @@ export const NavigationSidebar: React.FC<NavigationSidebarProps> = ({
         </div>
 
         {/* Pinned Cards Section */}
-        <div className="px-2.5 py-1.5">
+        <div className="flex min-h-0 flex-1 flex-col px-2.5 py-1.5">
           <div className="flex items-center justify-between px-2.5 mb-1.5 type-l6 font-mono uppercase tracking-widest text-[var(--text-muted)] font-medium">
             <span>手边入口</span>
             <CockpitTooltip content="收拢新入口"><button
@@ -149,16 +142,16 @@ export const NavigationSidebar: React.FC<NavigationSidebarProps> = ({
               <Plus className="w-3.5 h-3.5" />
             </button></CockpitTooltip>
           </div>
-          <div className="space-y-0.5">
+          <div className="sidebar-pinned-list">
             {pinnedCards.map(card => (
               <button
                 key={card.id}
                 onClick={() => onOpenCard(card)}
-                className="w-full flex items-center px-2.5 py-1.5 rounded type-l5 text-[var(--text-secondary)] hover:text-[var(--text-hero)] hover:bg-[#181613] transition-colors group text-left cursor-pointer font-medium"
+                className="sidebar-entry-row"
               >
                 <span className="min-w-0 flex flex-col gap-0.5">
-                  <span className="truncate">{card.title}</span>
-                  {card.description && <span className="type-l6 font-normal text-[var(--text-muted)] truncate">{card.description}</span>}
+                  <span className="sidebar-entry-title">{card.title}</span>
+                  {card.description && <span className="sidebar-entry-description">{card.description}</span>}
                 </span>
               </button>
             ))}
@@ -168,13 +161,13 @@ export const NavigationSidebar: React.FC<NavigationSidebarProps> = ({
 
       {/* Footer Controls */}
       <div className="p-2.5 border-t border-[#b8894f]/15 space-y-0.5">
-        <CockpitTooltip content="复制当前阶段、主线、Next 与最近记录的 Markdown 上下文"><button
+        <CockpitTooltip content="整理当前主线、Next 与最近记录为 Markdown"><button
           onClick={onOpenAiExport}
           className="w-full flex items-center gap-2 px-2.5 py-1.5 rounded type-l5 text-[var(--text-secondary)] hover:bg-[#181613] hover:text-[var(--text-hero)] transition-colors cursor-pointer font-medium"
-          aria-label="复制驾驶舱上下文"
+          aria-label="复制当前上下文"
         >
           <Sparkles className="w-3.5 h-3.5 text-[var(--text-muted)]" />
-          <span>复制驾驶舱上下文</span>
+          <span>复制当前上下文</span>
         </button></CockpitTooltip>
 
         <button
@@ -182,7 +175,7 @@ export const NavigationSidebar: React.FC<NavigationSidebarProps> = ({
           className="w-full flex items-center gap-2 px-2.5 py-1.5 rounded type-l5 text-[var(--text-secondary)] hover:text-[var(--text-hero)] hover:bg-[#181613] transition-colors cursor-pointer font-medium"
         >
           <Settings className="w-3.5 h-3.5 text-[var(--text-muted)]" />
-          <span>驾驶舱设置</span>
+          <span>设置</span>
         </button>
       </div>
     </aside>

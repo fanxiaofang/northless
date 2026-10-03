@@ -11,14 +11,13 @@ import {
   Pin,
   PinOff
 } from 'lucide-react';
-import { Card, Phase, Track } from '../../types';
+import { Card } from '../../types';
 import { CockpitTooltip } from '../ui/CockpitTooltip';
 import { CockpitModal, CockpitModalFooter } from '../ui/CockpitModal';
 import { CockpitConfirmAction } from '../ui/CockpitConfirmAction';
 
-export type SettingsTab = 'phase' | 'cards' | 'data' | 'about';
+export type SettingsTab = 'cards' | 'data' | 'about';
 const SETTINGS_TABS: readonly [SettingsTab, string][] = [
-  ['phase', '探索阶段'],
   ['cards', '手边入口'],
   ['data', '数据备份'],
   ['about', '设计宪章'],
@@ -37,11 +36,6 @@ interface SettingsModalProps {
   onClose: () => void;
   initialTab?: SettingsTab;
   focusNewCard?: boolean;
-  todayStr: string;
-  phases: Phase[];
-  currentPhaseId: string;
-  onSelectPhase: (phaseId: string) => void;
-  onCreatePhase: (name: string, note?: string) => void;
   cards: Card[];
   onAddCard: (title: string, url: string, description?: string, pinned?: boolean) => void;
   onTogglePinCard: (cardId: string) => void;
@@ -54,13 +48,8 @@ interface SettingsModalProps {
 
 export const SettingsModal: React.FC<SettingsModalProps> = ({
   onClose,
-  initialTab = 'phase',
+  initialTab = 'cards',
   focusNewCard = false,
-  todayStr,
-  phases,
-  currentPhaseId,
-  onSelectPhase,
-  onCreatePhase,
   cards,
   onAddCard,
   onTogglePinCard,
@@ -74,11 +63,6 @@ export const SettingsModal: React.FC<SettingsModalProps> = ({
   const newCardFormRef = useRef<HTMLFormElement>(null);
   const newCardTitleRef = useRef<HTMLInputElement>(null);
   const importInputRef = useRef<HTMLInputElement>(null);
-
-  // New Phase Form
-  const [newPhaseName, setNewPhaseName] = useState('');
-  const [newPhaseNote, setNewPhaseNote] = useState('');
-  const [phaseNameTouched, setPhaseNameTouched] = useState(false);
 
   // New Card Form
   const [newCardTitle, setNewCardTitle] = useState('');
@@ -100,15 +84,6 @@ export const SettingsModal: React.FC<SettingsModalProps> = ({
     });
     return () => cancelAnimationFrame(frame);
   }, [activeTab, focusNewCard]);
-
-  const handleCreatePhase = (e: React.FormEvent) => {
-    e.preventDefault();
-    if (!newPhaseName.trim()) { setPhaseNameTouched(true); return; }
-    onCreatePhase(newPhaseName.trim(), newPhaseNote.trim() || undefined);
-    setNewPhaseName('');
-    setNewPhaseNote('');
-    setPhaseNameTouched(false);
-  };
 
   const handleCreateCard = (e: React.FormEvent) => {
     e.preventDefault();
@@ -144,7 +119,7 @@ export const SettingsModal: React.FC<SettingsModalProps> = ({
 
   return (
     <div className="cockpit-modal-overlay">
-      <div className="cockpit-modal-panel p-6 max-w-2xl w-full h-[80vh] flex flex-col relative">
+      <div className="cockpit-modal-panel settings-modal p-6 max-w-2xl w-full h-[80vh] flex flex-col relative" role="dialog" aria-modal="true" aria-labelledby="settings-title">
         <button
           type="button"
           onClick={onClose}
@@ -158,8 +133,8 @@ export const SettingsModal: React.FC<SettingsModalProps> = ({
         <div className="pb-4 border-b border-[#b8894f]/20">
           <div className="flex items-center gap-2">
             <Settings className="w-4 h-4 text-[#b8894f]" />
-            <h3 className="type-l3 font-semibold text-[var(--text-hero)]">
-              驾驶舱配置与本地数据
+            <h3 id="settings-title" className="type-l3 font-semibold text-[var(--text-hero)]">
+              设置与本地数据
             </h3>
           </div>
           <p className="type-l5 text-[var(--text-secondary)] font-sans mt-1">
@@ -169,7 +144,7 @@ export const SettingsModal: React.FC<SettingsModalProps> = ({
 
         {/* Tabs */}
         <div className="py-3 border-b border-[#b8894f]/15 overflow-x-auto">
-          <div className="segmented-control compact" role="tablist" aria-label="驾驶舱设置分类">
+          <div className="segmented-control compact" role="tablist" aria-label="设置分类">
             {SETTINGS_TABS.map(([tab, label]) => (
               <button
                 key={tab}
@@ -199,90 +174,6 @@ export const SettingsModal: React.FC<SettingsModalProps> = ({
 
         {/* Tab Body */}
         <div className="flex-1 min-h-0 overflow-y-auto py-4 space-y-6 type-l5 font-sans">
-          {activeTab === 'phase' && (
-            <div id="settings-panel-phase" role="tabpanel" aria-labelledby="settings-tab-phase" className="space-y-6">
-              <div className="space-y-3">
-                <div className="type-l6 font-mono font-medium uppercase tracking-wider text-[#b8894f]">
-                  当前探索阶段
-                </div>
-                <p className="section-description">阶段描述整个驾驶舱当前所处的时期背景，不会改变主线角色与 Next。</p>
-                <div className="space-y-2">
-                  {phases.map(p => {
-                    const isCurrent = p.id === currentPhaseId;
-                    return (
-                      <button
-                        key={p.id}
-                        type="button"
-                        onClick={() => onSelectPhase(p.id)}
-                        aria-pressed={isCurrent}
-                        className={`w-full text-left p-3 rounded-lg border transition-all cursor-pointer flex items-center justify-between focus-visible:outline focus-visible:outline-1 focus-visible:outline-[var(--focus-interactive)] ${
-                          isCurrent
-                            ? 'brass-panel-elevated border-[#b8894f]/60'
-                            : 'brass-panel hover:border-[#b8894f]/30'
-                        }`}
-                      >
-                        <div className="min-w-0">
-                          <div className="font-semibold text-[var(--text-primary)] flex items-center gap-2">
-                            <span>{p.name}</span>
-                            {isCurrent && (
-                              <span className="type-l6 text-[#b8894f] px-1.5 py-0.5 bg-[#2d241a] rounded border border-[#b8894f]/30 font-mono font-medium">
-                                活跃
-                              </span>
-                            )}
-                          </div>
-                          {p.note && <p className="type-l6 text-[var(--text-secondary)] mt-0.5 font-sans">{p.note}</p>}
-                        </div>
-                        <div className="type-l6 font-mono text-[var(--text-muted)] font-medium shrink-0 ml-3">
-                          {p.started_at > todayStr ? '计划' : '自'} {p.started_at}
-                        </div>
-                      </button>
-                    );
-                  })}
-                </div>
-              </div>
-
-              {/* Create New Phase */}
-              <form noValidate onSubmit={handleCreatePhase} className="brass-panel p-4 rounded-lg space-y-3">
-                <div className="type-l6 font-mono font-medium uppercase tracking-wider text-[#b8894f]">
-                  开启新探索阶段
-                </div>
-                <div>
-                  <label htmlFor="new-phase-name" className="block text-[var(--text-muted)] mb-1 font-medium">阶段名称</label>
-                  <input
-                    id="new-phase-name"
-                    type="text"
-                    placeholder="如: Job Hunting 冲刺期"
-                    value={newPhaseName}
-                    onChange={e => setNewPhaseName(e.target.value)}
-                    onBlur={() => setPhaseNameTouched(true)}
-                    aria-invalid={phaseNameTouched && !newPhaseName.trim()}
-                    aria-describedby={phaseNameTouched && !newPhaseName.trim() ? 'phase-name-error' : undefined}
-                    className="w-full border border-[var(--control-neutral-edge)] px-3 py-1.5 text-[var(--text-primary)] font-medium"
-                  />
-                  {phaseNameTouched && !newPhaseName.trim() && <p id="phase-name-error" className="cockpit-inline-error">请输入阶段名称</p>}
-                </div>
-                <div>
-                  <label className="block text-[var(--text-muted)] mb-1 font-medium">阶段目标备注 (可选)</label>
-                  <input
-                    type="text"
-                    placeholder="如: 重点转向简历包装、项目实战复盘与算法高频题巩固。"
-                    value={newPhaseNote}
-                    onChange={e => setNewPhaseNote(e.target.value)}
-                    className="w-full border border-[var(--control-neutral-edge)] px-3 py-1.5 text-[var(--text-primary)] font-medium"
-                  />
-                </div>
-                <button
-                  type="submit"
-                  disabled={!newPhaseName.trim()}
-                  className="cockpit-button cockpit-button--primary"
-                >
-                  <Plus className="w-3.5 h-3.5 text-[#b8894f]" />
-                  <span>添加新阶段</span>
-                </button>
-              </form>
-            </div>
-          )}
-
           {activeTab === 'cards' && (
             <div id="settings-panel-cards" role="tabpanel" aria-labelledby="settings-tab-cards" className="space-y-6">
               {/* Existing Cards */}
@@ -294,15 +185,10 @@ export const SettingsModal: React.FC<SettingsModalProps> = ({
                   {cards.map(card => (
                     <div
                       key={card.id}
-                      className="brass-panel p-3 rounded-lg flex items-center justify-between gap-3"
+                      className="brass-panel settings-surface p-3 flex items-center justify-between gap-3"
                     >
                       <div className="space-y-0.5 min-w-0 flex-1">
-                        <div className="font-semibold text-[var(--text-primary)] flex items-center gap-2">
-                          <span>{card.title}</span>
-                          {card.pinned && (
-                            <span className="type-l6 text-[#b8894f] font-mono font-medium">固定在侧边栏</span>
-                          )}
-                        </div>
+                        <div className="font-semibold text-[var(--text-primary)] truncate">{card.title}</div>
                         {card.description && <div className="type-l6 text-[var(--text-secondary)] truncate">{card.description}</div>}
                         <div className="type-l6 text-[var(--text-muted)] font-mono truncate">
                           {card.url}
@@ -314,6 +200,7 @@ export const SettingsModal: React.FC<SettingsModalProps> = ({
                           onClick={() => onTogglePinCard(card.id)}
                           className="cockpit-icon-button cockpit-icon-button--neutral"
                           aria-label={card.pinned ? '取消固定' : '固定到侧边栏'}
+                          aria-pressed={card.pinned}
                         >
                           {card.pinned ? <PinOff /> : <Pin />}
                         </button></CockpitTooltip>
@@ -333,7 +220,7 @@ export const SettingsModal: React.FC<SettingsModalProps> = ({
               </div>
 
               {/* Add New Card */}
-              <form ref={newCardFormRef} noValidate onSubmit={handleCreateCard} className="brass-panel p-4 rounded-lg space-y-3">
+              <form ref={newCardFormRef} noValidate onSubmit={handleCreateCard} className="brass-panel settings-surface p-4 space-y-3">
                 <div className="type-l6 font-mono font-medium uppercase tracking-wider text-[#b8894f]">
                   收拢新入口
                 </div>
@@ -350,7 +237,7 @@ export const SettingsModal: React.FC<SettingsModalProps> = ({
                       onBlur={() => setCardTitleTouched(true)}
                       aria-invalid={cardTitleTouched && !newCardTitle.trim()}
                       aria-describedby={cardTitleTouched && !newCardTitle.trim() ? 'card-title-error' : undefined}
-                      className="w-full border border-[var(--control-neutral-edge)] px-3 py-1.5 text-[var(--text-primary)] font-medium"
+                      className="form-slot min-h-9 px-3 py-1.5 font-medium"
                     />
                     {cardTitleTouched && !newCardTitle.trim() && <p id="card-title-error" className="cockpit-inline-error">请输入入口标题</p>}
                   </div>
@@ -365,7 +252,7 @@ export const SettingsModal: React.FC<SettingsModalProps> = ({
                       onBlur={() => setCardUrlTouched(true)}
                       aria-invalid={cardUrlTouched && !isValidCardUrl(newCardUrl.trim())}
                       aria-describedby={cardUrlTouched && !isValidCardUrl(newCardUrl.trim()) ? 'card-url-error' : undefined}
-                      className="w-full border border-[var(--control-neutral-edge)] px-3 py-1.5 text-[var(--text-primary)] font-medium"
+                      className="form-slot min-h-9 px-3 py-1.5 font-medium"
                     />
                     {cardUrlTouched && !isValidCardUrl(newCardUrl.trim()) && <p id="card-url-error" className="cockpit-inline-error">请输入有效的网址</p>}
                   </div>
@@ -377,12 +264,11 @@ export const SettingsModal: React.FC<SettingsModalProps> = ({
                     placeholder="如: 技术文档与常用素材"
                     value={newCardDesc}
                     onChange={e => setNewCardDesc(e.target.value)}
-                    className="w-full border border-[var(--control-neutral-edge)] px-3 py-1.5 text-[var(--text-primary)] font-medium"
+                    className="form-slot min-h-9 px-3 py-1.5 font-medium"
                   />
                 </div>
                 <button
                   type="submit"
-                  disabled={!newCardTitle.trim() || !isValidCardUrl(newCardUrl.trim())}
                   className="cockpit-button cockpit-button--primary"
                 >
                   <Plus className="w-3.5 h-3.5 text-[#b8894f]" />
@@ -395,12 +281,12 @@ export const SettingsModal: React.FC<SettingsModalProps> = ({
           {activeTab === 'data' && (
             <div id="settings-panel-data" role="tabpanel" aria-labelledby="settings-tab-data" className="space-y-6">
               {/* Context Exporter */}
-              <div className="brass-panel p-4 rounded-lg space-y-2">
+              <div className="brass-panel settings-surface p-4 space-y-2">
                 <div className="type-l6 font-mono font-medium uppercase tracking-wider text-[#b8894f]">
-                  驾驶舱上下文导出
+                  当前上下文
                 </div>
                 <p className="text-[var(--text-secondary)] leading-relaxed">
-                  将当前阶段、主线进展、Next 与最近记录整理为 Markdown，可复制到 AI、笔记或其他工具中。
+                  将主线状态、活跃 Next 与最近记录整理为 Markdown，可复制到 AI、笔记或其他工具。
                 </p>
                 <button
                   onClick={() => {
@@ -410,12 +296,12 @@ export const SettingsModal: React.FC<SettingsModalProps> = ({
                   className="cockpit-button cockpit-button--brass-action mt-2"
                 >
                   <Sparkles className="w-3.5 h-3.5 text-[#b8894f]" />
-                  <span>复制驾驶舱上下文</span>
+                  <span>生成当前上下文</span>
                 </button>
               </div>
 
               {/* Export / Import */}
-              <div className="brass-panel p-4 rounded-lg space-y-4">
+              <div className="brass-panel settings-surface p-4 space-y-4">
                 <div className="type-l6 font-mono font-medium uppercase tracking-wider text-[#b8894f]">
                   本地数据备份与迁移
                 </div>
@@ -442,7 +328,7 @@ export const SettingsModal: React.FC<SettingsModalProps> = ({
               </div>
 
               {/* Reset to Seed */}
-              <div className="brass-panel p-4 rounded-lg space-y-2">
+              <div className="brass-panel settings-surface p-4 space-y-2">
                 <div className="type-l6 font-mono font-medium uppercase tracking-wider text-[#e06c75]">
                   重置演示数据
                 </div>
@@ -462,7 +348,7 @@ export const SettingsModal: React.FC<SettingsModalProps> = ({
 
           {activeTab === 'about' && (
             <div id="settings-panel-about" role="tabpanel" aria-labelledby="settings-tab-about" className="space-y-4 type-l5 text-[var(--text-secondary)] leading-relaxed">
-              <div className="brass-panel p-4 rounded-lg space-y-3">
+              <div className="brass-panel settings-surface p-4 space-y-3">
                 <div className="font-display font-semibold type-l4 text-[var(--text-hero)]">
                   Gap Cockpit V0 核心原则
                 </div>

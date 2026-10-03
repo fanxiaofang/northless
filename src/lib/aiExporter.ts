@@ -1,4 +1,4 @@
-import { LogEntry, NextAction, Phase, Track } from '../types';
+import { LogEntry, NextAction, Track } from '../types';
 
 export interface AIProvider {
   analyzeLog?(logs: LogEntry[]): Promise<string>;
@@ -10,7 +10,6 @@ export function generateAiPromptContext(
   tracks: Track[],
   actions: NextAction[],
   logs: LogEntry[],
-  currentPhase?: Phase,
   todayStr: string = new Date().toISOString().split('T')[0]
 ): string {
   const activeTracks = tracks.filter(t => t.status === 'active');
@@ -25,13 +24,12 @@ export function generateAiPromptContext(
 
   const recentLogs = logs.filter(l => l.date >= sevenDaysAgoStr && l.date <= todayStr);
 
-  const phaseName = currentPhase ? currentPhase.name : 'AI / Agent Exploration';
-
   const trackLines = activeTracks
     .map(t => {
       const roleStr = t.role === 'main' ? '主线 (Main)' : t.role === 'maintenance' ? '保温 (Maintenance)' : '暂缓 (Paused)';
       const lastTouch = t.last_touched_at ? `上次推进: ${t.last_touched_at}` : '尚未触达';
-      return `- **${t.name}** [${roleStr}] · ${lastTouch}\n  目标: ${t.description}\n  阶段: ${t.roadmap.join(' → ')}`;
+      const currentNode = t.roadmap[t.current_stage_index] || '未设置';
+      return `- **${t.name}** [${roleStr}] · ${lastTouch}\n  目标: ${t.description}\n  路线: ${t.roadmap.join(' → ')}\n  当前节点: ${currentNode}`;
     })
     .join('\n');
 
@@ -64,10 +62,7 @@ export function generateAiPromptContext(
     })
     .join('\n');
 
-  return `# Gap Cockpit Context
-
-## Current phase
-${phaseName}
+  return `# 当前上下文
 
 ## Tracks
 ${trackLines}

@@ -22,7 +22,6 @@ import {
   Card,
   LogEntry,
   NextAction,
-  Phase,
   ScoredCandidate,
   Track
 } from '../types';
@@ -32,7 +31,6 @@ import { InlineEmptyState } from './InlineEmptyState';
 
 interface TodayViewProps {
   currentDateStr: string;
-  currentPhase?: Phase;
   tracks: Track[];
   actions: NextAction[];
   todayLogs: LogEntry[];
@@ -60,7 +58,6 @@ interface TodayViewProps {
 
 export const TodayView: React.FC<TodayViewProps> = ({
   currentDateStr,
-  currentPhase,
   tracks,
   todayLogs,
   recommendations,
@@ -589,20 +586,10 @@ export const TodayView: React.FC<TodayViewProps> = ({
           </div>
         </section>
 
-        {/* SECTION 3: Current Phase Minimalist Log Footer */}
+        {/* SECTION 3: Lightweight track overview */}
         <section className="pt-8 pb-4 border-t border-[#b8894f]/15 space-y-4">
           <div className="flex items-start sm:items-center justify-between gap-4">
-            <div>
-              <div className="type-l6 font-mono text-[var(--text-muted)] uppercase tracking-wider mb-1 font-medium">
-                CURRENT PHASE · 当前阶段
-              </div>
-              <h3 className="section-title">
-                {currentPhase?.name || '探索期'}
-              </h3>
-              <p className="section-description">
-                {currentPhase?.note || '一条主线 + 多条保温线'}
-              </p>
-            </div>
+            <h3 className="section-title">当前脉络</h3>
             <button
               onClick={onSelectTrackView}
               className="type-l5 text-[#b8894f] hover:text-[#c89a5a] transition-colors flex items-center gap-1 group py-1 cursor-pointer font-medium"

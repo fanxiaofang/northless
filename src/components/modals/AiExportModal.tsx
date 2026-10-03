@@ -17,7 +17,7 @@ export const AiExportModal: React.FC<AiExportModalProps> = ({ content, onClose }
 
   return (
     <div className="cockpit-modal-overlay">
-      <div className="cockpit-modal-panel p-6 max-w-2xl w-full h-[80vh] flex flex-col relative">
+      <div className="cockpit-modal-panel p-6 max-w-2xl w-full h-[80vh] flex flex-col relative" role="dialog" aria-modal="true" aria-labelledby="context-export-title">
         <button
           onClick={onClose}
           className="cockpit-icon-button cockpit-icon-button--neutral absolute top-4 right-4"
@@ -29,13 +29,13 @@ export const AiExportModal: React.FC<AiExportModalProps> = ({ content, onClose }
         <div className="space-y-1 pb-3 border-b border-[#b8894f]/20">
           <div className="flex items-center gap-2 type-l6 font-mono font-medium text-[#b8894f]">
             <Sparkles className="w-3.5 h-3.5 text-[#b8894f]" />
-            <span>CONTEXT EXPORT / 驾驶舱上下文</span>
+            <span>CONTEXT EXPORT / 当前上下文</span>
           </div>
-          <h3 className="type-l3 font-semibold text-[var(--text-hero)]">
-            复制当前驾驶舱上下文
+          <h3 id="context-export-title" className="type-l3 font-semibold text-[var(--text-hero)]">
+            复制当前上下文
           </h3>
           <p className="type-l5 text-[var(--text-secondary)] font-sans">
-            将当前阶段、主线状态、活跃 Next 与最近 7 天记录整理为 Markdown。可直接粘贴到 ChatGPT、Claude、Gemini，也可以保存到其他笔记或工具中。
+            将主线状态、活跃 Next 与最近 7 天记录整理为 Markdown。可直接粘贴到 ChatGPT、Claude、Gemini，也可以保存到笔记或其他工具。
           </p>
         </div>
 
@@ -44,7 +44,7 @@ export const AiExportModal: React.FC<AiExportModalProps> = ({ content, onClose }
           <textarea
             readOnly
             value={content}
-            className="w-full flex-1 bg-[#100f0e] border border-[#b8894f]/20 rounded p-4 font-mono type-l5 text-[var(--text-primary)] focus:outline-none resize-none leading-relaxed font-medium"
+            className="form-slot w-full flex-1 p-4 font-mono type-l5 resize-none leading-relaxed font-medium"
           />
         </div>
 
@@ -53,17 +53,17 @@ export const AiExportModal: React.FC<AiExportModalProps> = ({ content, onClose }
           <div className="type-l5 text-[var(--text-muted)] font-mono">
             {copied ? (
               <span className="text-[#b8894f] flex items-center gap-1.5 font-medium font-sans">
-                <Check className="w-4 h-4" /> 已复制到剪贴板
+                <Check className="w-4 h-4" /> 已复制
               </span>
             ) : (
-              <span>包含当前阶段、主线状态、活跃 Next 与最近 7 天记录</span>
+              <span>包含当前主线状态、活跃 Next 与最近 7 天记录</span>
             )}
           </div>
 
           <div className="flex items-center gap-2">
             <button
               onClick={onClose}
-              className="px-3 py-1.5 type-l5 text-[var(--text-muted)] hover:text-[var(--text-primary)] cursor-pointer font-medium"
+              className="cockpit-button cockpit-button--secondary"
             >
               关闭
             </button>
@@ -72,7 +72,7 @@ export const AiExportModal: React.FC<AiExportModalProps> = ({ content, onClose }
               className="cockpit-button cockpit-button--primary"
             >
               {copied ? <Check className="w-4 h-4 text-[#b8894f]" /> : <Copy className="w-4 h-4 text-[#b8894f]" />}
-              <span>{copied ? '已复制到剪贴板' : '复制 Markdown 上下文'}</span>
+              <span>{copied ? '已复制' : '复制 Markdown'}</span>
             </button>
           </div>
         </div>
