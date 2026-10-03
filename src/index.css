@@ -330,6 +330,10 @@
   --roadmap-rail-brass: #977348;
   --roadmap-rail-verdigris: #526b61;
   --roadmap-node-well: #181714;
+  --roadmap-turn-radius: 3px;
+  --roadmap-turn-trim: 3px;
+  --roadmap-turn-overhang: 4px;
+  --roadmap-rail-width: 1px;
   display: grid;
   grid-template-columns: repeat(var(--roadmap-mobile-columns), minmax(0, 1fr));
   grid-auto-rows: minmax(5.5rem, auto);
@@ -337,6 +341,9 @@
   row-gap: var(--roadmap-row-gap);
   min-width: 0;
   padding-inline: 0.375rem;
+}
+@media (max-width: 480px) {
+  .track-roadmap-grid { margin-right: 0.75rem; }
 }
 .track-roadmap-stage {
   position: relative;
@@ -453,57 +460,68 @@
   box-shadow: 0 -1px 0 rgba(196, 177, 146, 0.07), 0 1px 0 rgba(0, 0, 0, 0.45);
 }
 .track-roadmap-turn {
+  --roadmap-turn-start: var(--roadmap-rail-dark);
+  --roadmap-turn-end: var(--roadmap-rail-dark);
+  --roadmap-turn-spine: var(--roadmap-rail-dark);
   position: absolute;
   top: 2rem;
   bottom: calc(-1 * (var(--roadmap-row-gap) + 2rem));
   z-index: 0;
   display: none;
   pointer-events: none;
-  border-top: 1px solid;
-  border-bottom: 1px solid;
-  box-shadow: 0 -1px 0 rgba(196, 177, 146, 0.05), 0 1px 0 rgba(0, 0, 0, 0.35);
+  border-top: var(--roadmap-rail-width) solid var(--roadmap-turn-start);
+  border-bottom: var(--roadmap-rail-width) solid var(--roadmap-turn-end);
 }
 .track-roadmap-turn::after {
   position: absolute;
-  top: 0;
-  bottom: 0;
-  width: 2px;
-  content: '';
-  box-shadow: -1px 0 0 rgba(196, 177, 146, 0.05), 1px 0 0 rgba(0, 0, 0, 0.35);
-}
-.track-roadmap-turn::before {
-  position: absolute;
-  top: -2px;
-  z-index: 1;
-  width: 3px;
-  height: 3px;
-  background: var(--roadmap-rail-dark);
+  top: var(--roadmap-turn-trim);
+  bottom: var(--roadmap-turn-trim);
+  width: var(--roadmap-rail-width);
+  background: var(--roadmap-turn-spine);
   content: '';
 }
 .track-roadmap-link--completed { background: var(--roadmap-rail-verdigris); }
+.track-roadmap-link--entering-current {
+  background: linear-gradient(var(--roadmap-link-direction), var(--roadmap-rail-verdigris) 0 70%, var(--roadmap-rail-brass));
+}
+.track-roadmap-link--leaving-current {
+  background: linear-gradient(var(--roadmap-link-direction), var(--roadmap-rail-brass), var(--roadmap-rail-dark) 30%);
+}
 .track-roadmap-link--future { background: var(--roadmap-rail-dark); }
-.track-roadmap-turn--completed { border-color: var(--roadmap-rail-verdigris); }
-.track-roadmap-turn--completed::after, .track-roadmap-turn--completed::before { background: var(--roadmap-rail-verdigris); }
-.track-roadmap-turn--future { border-color: var(--roadmap-rail-dark); }
-.track-roadmap-turn--future::after { background: var(--roadmap-rail-dark); }
-.track-roadmap-turn--current { border-color: var(--roadmap-rail-dark); border-top-color: var(--roadmap-rail-brass); }
-.track-roadmap-turn--current::before { background: var(--roadmap-rail-brass); }
-.track-roadmap-turn--current::after { background: linear-gradient(to bottom, var(--roadmap-rail-brass), var(--roadmap-rail-dark)); }
+.track-roadmap-turn--completed {
+  --roadmap-turn-start: var(--roadmap-rail-verdigris);
+  --roadmap-turn-end: var(--roadmap-rail-verdigris);
+  --roadmap-turn-spine: var(--roadmap-rail-verdigris);
+}
+.track-roadmap-turn--entering-current {
+  --roadmap-turn-start: var(--roadmap-rail-verdigris);
+  --roadmap-turn-end: var(--roadmap-rail-brass);
+  --roadmap-turn-spine: linear-gradient(to bottom, var(--roadmap-rail-verdigris) 0 70%, var(--roadmap-rail-brass));
+}
+.track-roadmap-turn--leaving-current {
+  --roadmap-turn-start: var(--roadmap-rail-brass);
+  --roadmap-turn-end: var(--roadmap-rail-dark);
+  --roadmap-turn-spine: linear-gradient(to bottom, var(--roadmap-rail-brass), var(--roadmap-rail-dark) 30%);
+}
 
 .track-roadmap-stage[data-mobile-connection='inline'] .track-roadmap-link { display: block; }
 .track-roadmap-stage[data-mobile-connection='turn'] .track-roadmap-turn { display: block; }
+.track-roadmap-stage[data-mobile-direction='forward'] { --roadmap-link-direction: to right; }
+.track-roadmap-stage[data-mobile-direction='reverse'] { --roadmap-link-direction: to left; }
 .track-roadmap-stage[data-mobile-direction='forward'] .track-roadmap-link { left: 10px; }
 .track-roadmap-stage[data-mobile-direction='reverse'] .track-roadmap-link { right: calc(100% - 10px); }
-.track-roadmap-stage[data-mobile-direction='forward'] .track-roadmap-link--current { background: linear-gradient(to right, var(--roadmap-rail-brass), var(--roadmap-rail-dark)); }
-.track-roadmap-stage[data-mobile-direction='reverse'] .track-roadmap-link--current { background: linear-gradient(to left, var(--roadmap-rail-brass), var(--roadmap-rail-dark)); }
-.track-roadmap-stage[data-mobile-direction='forward'] .track-roadmap-turn { left: 10px; right: -0.375rem; }
-.track-roadmap-stage[data-mobile-direction='forward'] .track-roadmap-turn { border-top-right-radius: 2px; border-bottom-right-radius: 2px; }
-.track-roadmap-stage[data-mobile-direction='forward'] .track-roadmap-turn::after { right: -1px; }
-.track-roadmap-stage[data-mobile-direction='forward'] .track-roadmap-turn::before { right: -2px; }
-.track-roadmap-stage[data-mobile-direction='reverse'] .track-roadmap-turn { left: -0.375rem; right: calc(100% - 10px); }
-.track-roadmap-stage[data-mobile-direction='reverse'] .track-roadmap-turn { border-top-left-radius: 2px; border-bottom-left-radius: 2px; }
-.track-roadmap-stage[data-mobile-direction='reverse'] .track-roadmap-turn::after { left: -1px; }
-.track-roadmap-stage[data-mobile-direction='reverse'] .track-roadmap-turn::before { left: -2px; }
+.track-roadmap-stage[data-mobile-direction='forward'] .track-roadmap-turn { left: 10px; right: calc(-1 * var(--roadmap-turn-overhang)); }
+.track-roadmap-stage[data-mobile-direction='forward'] .track-roadmap-turn {
+  border-right: var(--roadmap-rail-width) solid transparent;
+  border-radius: 0 var(--roadmap-turn-radius) var(--roadmap-turn-radius) 0;
+}
+.track-roadmap-stage[data-mobile-direction='forward'] .track-roadmap-turn::after { right: calc(-1 * var(--roadmap-rail-width)); }
+.track-roadmap-stage[data-mobile-direction='reverse'] .track-roadmap-turn { left: calc(-1 * var(--roadmap-turn-overhang)); right: calc(100% - 10px); }
+.track-roadmap-stage[data-mobile-direction='reverse'] .track-roadmap-turn {
+  border-left: var(--roadmap-rail-width) solid transparent;
+  border-radius: var(--roadmap-turn-radius) 0 0 var(--roadmap-turn-radius);
+}
+.track-roadmap-stage[data-mobile-direction='reverse'] .track-roadmap-turn::after { left: calc(-1 * var(--roadmap-rail-width)); }
 
 @media (min-width: 768px) {
   .track-roadmap-grid { grid-template-columns: repeat(var(--roadmap-desktop-columns), minmax(0, 1fr)); }
@@ -515,18 +533,24 @@
   .track-roadmap-stage[data-mobile-connection] .track-roadmap-turn { display: none; }
   .track-roadmap-stage[data-desktop-connection='inline'] .track-roadmap-link { display: block; }
   .track-roadmap-stage[data-desktop-connection='turn'] .track-roadmap-turn { display: block; }
+  .track-roadmap-stage[data-desktop-direction='forward'] { --roadmap-link-direction: to right; }
+  .track-roadmap-stage[data-desktop-direction='reverse'] { --roadmap-link-direction: to left; }
   .track-roadmap-stage[data-desktop-direction='forward'] .track-roadmap-link { right: auto; left: 10px; }
   .track-roadmap-stage[data-desktop-direction='reverse'] .track-roadmap-link { right: calc(100% - 10px); left: auto; }
-  .track-roadmap-stage[data-desktop-direction='forward'] .track-roadmap-link--current { background: linear-gradient(to right, var(--roadmap-rail-brass), var(--roadmap-rail-dark)); }
-  .track-roadmap-stage[data-desktop-direction='reverse'] .track-roadmap-link--current { background: linear-gradient(to left, var(--roadmap-rail-brass), var(--roadmap-rail-dark)); }
-  .track-roadmap-stage[data-desktop-direction='forward'] .track-roadmap-turn { right: -0.375rem; left: 10px; }
-  .track-roadmap-stage[data-desktop-direction='forward'] .track-roadmap-turn { border-top-right-radius: 2px; border-bottom-right-radius: 2px; border-top-left-radius: 0; border-bottom-left-radius: 0; }
-  .track-roadmap-stage[data-desktop-direction='forward'] .track-roadmap-turn::after { right: -1px; left: auto; }
-  .track-roadmap-stage[data-desktop-direction='forward'] .track-roadmap-turn::before { right: -2px; left: auto; }
-  .track-roadmap-stage[data-desktop-direction='reverse'] .track-roadmap-turn { right: calc(100% - 10px); left: -0.375rem; }
-  .track-roadmap-stage[data-desktop-direction='reverse'] .track-roadmap-turn { border-top-left-radius: 2px; border-bottom-left-radius: 2px; border-top-right-radius: 0; border-bottom-right-radius: 0; }
-  .track-roadmap-stage[data-desktop-direction='reverse'] .track-roadmap-turn::after { right: auto; left: -1px; }
-  .track-roadmap-stage[data-desktop-direction='reverse'] .track-roadmap-turn::before { right: auto; left: -2px; }
+  .track-roadmap-stage[data-desktop-direction='forward'] .track-roadmap-turn { right: calc(-1 * var(--roadmap-turn-overhang)); left: 10px; }
+  .track-roadmap-stage[data-desktop-direction='forward'] .track-roadmap-turn {
+    border-left: 0;
+    border-right: var(--roadmap-rail-width) solid transparent;
+    border-radius: 0 var(--roadmap-turn-radius) var(--roadmap-turn-radius) 0;
+  }
+  .track-roadmap-stage[data-desktop-direction='forward'] .track-roadmap-turn::after { right: calc(-1 * var(--roadmap-rail-width)); left: auto; }
+  .track-roadmap-stage[data-desktop-direction='reverse'] .track-roadmap-turn { right: calc(100% - 10px); left: calc(-1 * var(--roadmap-turn-overhang)); }
+  .track-roadmap-stage[data-desktop-direction='reverse'] .track-roadmap-turn {
+    border-right: 0;
+    border-left: var(--roadmap-rail-width) solid transparent;
+    border-radius: var(--roadmap-turn-radius) 0 0 var(--roadmap-turn-radius);
+  }
+  .track-roadmap-stage[data-desktop-direction='reverse'] .track-roadmap-turn::after { right: auto; left: calc(-1 * var(--roadmap-rail-width)); }
 }
 
 /* Recent Touches reads as a compact engineering log with stable data lanes. */

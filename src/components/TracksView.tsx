@@ -42,6 +42,7 @@ const getRoadmapColumnCount = (stageCount: number, maximum: number) =>
 
 type RoadmapDirection = 'forward' | 'reverse';
 type RoadmapConnection = 'inline' | 'turn' | 'none';
+type RoadmapConnectionState = 'completed' | 'entering-current' | 'leaving-current' | 'future' | 'none';
 
 interface RoadmapGridPosition {
   row: number;
@@ -70,6 +71,18 @@ const getStageGridPosition = (
         ? 'turn'
         : 'inline',
   };
+};
+
+const getRoadmapConnectionState = (
+  sourceIndex: number,
+  currentStageIndex: number,
+  stageCount: number
+): RoadmapConnectionState => {
+  if (sourceIndex >= stageCount - 1) return 'none';
+  if (sourceIndex < currentStageIndex - 1) return 'completed';
+  if (sourceIndex === currentStageIndex - 1) return 'entering-current';
+  if (sourceIndex === currentStageIndex) return 'leaving-current';
+  return 'future';
 };
 
 const getTrackIndexMeta = (track: Track, currentDateStr: string) => {
@@ -354,6 +367,11 @@ export const TracksView: React.FC<TracksViewProps> = ({
                       const isCurrent = idx === selectedTrack.current_stage_index;
                       const isCompleted = idx < selectedTrack.current_stage_index;
                       const stageState = isCompleted ? 'completed' : isCurrent ? 'current' : 'future';
+                      const connectionState = getRoadmapConnectionState(
+                        idx,
+                        selectedTrack.current_stage_index,
+                        selectedTrack.roadmap.length
+                      );
                       const desktopPosition = getStageGridPosition(
                         idx,
                         selectedTrack.roadmap.length,
@@ -394,12 +412,12 @@ export const TracksView: React.FC<TracksViewProps> = ({
 
                           {/* Middle: Station Node with Connecting Rail Segment */}
                           <span
-                            className={`track-roadmap-turn track-roadmap-turn--${stageState}`}
+                            className={`track-roadmap-turn track-roadmap-turn--${connectionState}`}
                             aria-hidden="true"
                           />
                           <div className={`track-roadmap-marker track-roadmap-marker--${stageState}`}>
                             <span
-                              className={`track-roadmap-link track-roadmap-link--${stageState}`}
+                              className={`track-roadmap-link track-roadmap-link--${connectionState}`}
                               aria-hidden="true"
                             />
 
