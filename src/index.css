@@ -493,6 +493,8 @@
   --roadmap-turn-end: var(--roadmap-rail-verdigris);
   --roadmap-turn-spine: var(--roadmap-rail-verdigris);
 }
+.track-roadmap-turn--completed::after,
+.track-roadmap-turn--future::after { opacity: 0.72; }
 .track-roadmap-turn--entering-current {
   --roadmap-turn-start: var(--roadmap-rail-verdigris);
   --roadmap-turn-end: var(--roadmap-rail-brass);
