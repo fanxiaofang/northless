@@ -2071,6 +2071,32 @@ input[type='number'] { appearance: textfield; }
 .log-field { display: flex; min-width: 0; flex-direction: column; gap: 0.375rem; color: var(--text-muted); font-family: var(--font-ui); font-size: var(--text-scale-l5); font-weight: 500; }
 .log-field-label { display: flex; align-items: center; justify-content: space-between; gap: 0.5rem; }
 .log-two-column { display: grid; grid-template-columns: minmax(0, 0.8fr) minmax(0, 1.2fr); gap: 0.75rem; }
+.log-session-time-layout { display: flex; flex-direction: column; }
+.log-session-time-layout > .log-field:first-child { width: 12rem; max-width: 100%; }
+.cockpit-time-picker { display: inline-flex; width: max-content; max-width: 100%; align-items: center; gap: 0.25rem; }
+.cockpit-time-picker-separator { display: inline-flex; width: 0.875rem; flex: 0 0 0.875rem; justify-content: center; color: var(--text-muted); font-family: var(--font-mono); }
+.time-part-select { position: relative; width: 66px; flex: 0 0 66px; }
+.time-part-trigger { display: flex; width: 66px; height: 45px; align-items: center; justify-content: space-between; gap: 0.25rem; padding: 0 0.5rem; border: 1px solid var(--border-input); border-radius: var(--control-radius-md); background: var(--surface-recessed); color: var(--text-primary); font-family: var(--font-mono); font-size: var(--text-scale-l5); font-variant-numeric: tabular-nums; font-weight: 500; transition: border-color 150ms ease, box-shadow 150ms ease, background-color 150ms ease; }
+.time-part-trigger:hover { background: var(--surface-recessed-hover); }
+.time-part-trigger:focus { outline: none; border-color: var(--focus-interactive); box-shadow: 0 0 0 1px var(--focus-interactive-ring); }
+.time-part-trigger:focus-visible { outline: 1px solid var(--focus-interactive); outline-offset: 3px; }
+.time-part-trigger:disabled { cursor: not-allowed; opacity: 0.6; }
+.time-part-trigger svg { width: 12px; height: 12px; flex: 0 0 auto; color: var(--text-muted); }
+.time-part-options { position: fixed; z-index: 60; box-sizing: border-box; width: 78px; max-height: 248px; overflow-y: auto; padding: 4px; border: 1px solid var(--border-default); border-radius: var(--control-radius-lg); background: var(--surface-overlay); box-shadow: var(--shadow-floating); }
+.time-part-option { display: flex; box-sizing: border-box; width: 100%; min-height: 38px; align-items: center; justify-content: space-between; gap: 0.125rem; padding: 0 0.375rem; border-radius: var(--control-radius-sm); color: var(--text-secondary); font-family: var(--font-mono); font-size: var(--text-scale-l5); font-variant-numeric: tabular-nums; text-align: left; }
+.time-part-option:hover, .time-part-option.is-active { background: color-mix(in srgb, var(--accent-brass) 6%, transparent); color: var(--text-primary); }
+.time-part-option.is-selected { background: color-mix(in srgb, var(--accent-brass) 8%, transparent); color: var(--accent-brass); }
+.time-part-option svg { width: 12px; height: 12px; flex: 0 0 auto; }
+.log-time-range { display: flex; min-width: 0; align-items: end; gap: 0.75rem; }
+.log-time-endpoint { display: flex; width: max-content; min-width: 0; flex: 0 0 auto; flex-direction: column; gap: 0.25rem; color: var(--text-muted); font-size: var(--text-scale-l6); }
+.log-time-arrow { padding-bottom: 0.75rem; color: var(--text-muted); }
+.log-recent-action { align-self: flex-end; }
+.log-derived-duration { display: flex; min-height: 36px; align-items: center; gap: 0.5rem; color: var(--text-primary); font-variant-numeric: tabular-nums; }
+.log-derived-duration small { color: var(--text-muted); font-size: var(--text-scale-l6); font-weight: 400; }
+.log-time-error { color: var(--status-danger-hover); font-size: var(--text-scale-l6); }
+.log-note-time { display: flex; align-items: center; gap: 0.75rem; }
+.log-note-time .cockpit-time-picker { width: fit-content; }
+@media (max-width: 440px) { .log-time-range { align-items: stretch; flex-direction: column; gap: 0.625rem; } .log-time-arrow { display: none; } }
 .log-text-action { color: color-mix(in srgb, var(--accent-brass) 68%, var(--text-muted)); font-family: var(--font-ui); font-size: 0.75rem; font-weight: 500; }
 .log-text-action:hover { color: var(--accent-brass-hover); }
 .log-modal .cockpit-modal-footer .brass-button { display: inline-flex; align-items: center; gap: 0.375rem; }
