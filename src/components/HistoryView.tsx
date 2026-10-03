@@ -96,7 +96,7 @@ export const HistoryView: React.FC<HistoryViewProps> = ({
     <div className="flex-1 overflow-y-auto min-h-screen bg-transparent text-[var(--text-primary)] p-6 lg:p-10">
       <div className="max-w-[880px] mx-auto space-y-8">
         {/* Header */}
-        <header className="flex flex-col sm:flex-row sm:items-center justify-between pb-6 border-b border-[#b8894f]/15 gap-4">
+        <header className="flex flex-col sm:flex-row sm:items-center justify-between pb-6 border-b border-[var(--border-accent-subtle)] gap-4">
           <div>
             <div className="flex items-center gap-2 type-l6 font-mono text-[var(--text-ghost)] tracking-wider uppercase mb-1 font-medium">
               <span>TRAJECTORY / 轨迹，不是成绩单</span>
@@ -108,10 +108,10 @@ export const HistoryView: React.FC<HistoryViewProps> = ({
           </div>
 
           {/* Week Navigator */}
-          <div className="flex items-center gap-2 bg-[#161513] px-3 py-1.5 rounded-lg border border-[#b8894f]/20 self-start sm:self-auto">
+          <div className="flex items-center gap-2 bg-[var(--surface-panel-subtle)] px-3 py-1.5 rounded-lg border border-[var(--border-accent-muted)] self-start sm:self-auto">
             <CockpitTooltip content="上一周"><button
               onClick={() => setWeekOffset(prev => prev - 1)}
-              className="p-1 text-[var(--text-muted)] hover:text-[#c89a5a] transition-colors cursor-pointer"
+              className="p-1 text-[var(--text-muted)] hover:text-[var(--accent-brass-hover)] transition-colors cursor-pointer"
               aria-label="上一周"
             >
               <ChevronLeft className="w-4 h-4" />
@@ -119,14 +119,14 @@ export const HistoryView: React.FC<HistoryViewProps> = ({
 
             <span className="type-l5 font-medium text-[var(--text-primary)] px-2 font-mono">
               {weekDays[0].shortDate} ─ {weekDays[6].shortDate}
-              {weekOffset === 0 && <span className="text-[#b8894f] ml-1.5 font-sans font-medium">(本周)</span>}
+              {weekOffset === 0 && <span className="text-[var(--accent-brass)] ml-1.5 font-sans font-medium">(本周)</span>}
             </span>
 
             <CockpitTooltip content="下一周"><button
               onClick={() => setWeekOffset(prev => prev + 1)}
               disabled={weekOffset >= 0}
               className={`p-1 transition-colors ${
-                weekOffset >= 0 ? 'text-[var(--text-ghost)] cursor-not-allowed' : 'text-[var(--text-muted)] hover:text-[#c89a5a] cursor-pointer'
+                weekOffset >= 0 ? 'text-[var(--text-ghost)] cursor-not-allowed' : 'text-[var(--text-muted)] hover:text-[var(--accent-brass-hover)] cursor-pointer'
               }`}
               aria-label="下一周"
             >
@@ -160,7 +160,7 @@ export const HistoryView: React.FC<HistoryViewProps> = ({
           <div className="overflow-x-auto">
             <table className="w-full text-left">
               <thead>
-                <tr className="border-b border-[#b8894f]/18">
+                <tr className="border-b border-[var(--border-default)]">
                   <th className="py-2.5 type-l5 font-display text-[var(--text-muted)] font-medium w-40">主线</th>
                   {weekDays.map(d => (
                     <th key={d.dateStr} className="py-2.5 text-center type-l6 text-[var(--text-muted)] font-medium">
@@ -174,9 +174,9 @@ export const HistoryView: React.FC<HistoryViewProps> = ({
                   )}
                 </tr>
               </thead>
-              <tbody className="divide-y divide-[#b8894f]/10">
+              <tbody className="divide-y divide-[var(--divider-subtle)]">
                 {trackMatrix.map(({ track, touchedDays, touchCount, totalMinutes }) => (
-                  <tr key={track.id} className="hover:bg-[#191715]/50 transition-colors">
+                  <tr key={track.id} className="hover:bg-[var(--surface-panel)]/50 transition-colors">
                     <td className="py-3 font-medium text-[var(--text-primary)] flex items-center gap-2 type-l5">
                       <span className="truncate">{track.name}</span>
                       <span className="type-l6 text-[var(--text-muted)] font-sans font-medium">
@@ -187,7 +187,7 @@ export const HistoryView: React.FC<HistoryViewProps> = ({
                     {touchedDays.map((touched, idx) => (
                       <td key={idx} className="py-3 text-center">
                         {touched ? (
-                          <div className="w-2 h-2 rounded-full bg-[#b8894f] mx-auto shadow-[0_0_3px_rgba(184,137,79,0.30)]" />
+                          <div className="w-2 h-2 rounded-full bg-[var(--accent-brass)] mx-auto shadow-[0_0_3px_color-mix(in_srgb,var(--accent-brass)_30%,transparent)]" />
                         ) : (
                           <span className="text-[var(--text-ghost)] type-l5">·</span>
                         )}
@@ -220,7 +220,7 @@ export const HistoryView: React.FC<HistoryViewProps> = ({
 
         {/* Daily Archive Logs */}
         <section className="archive-ledger-section pt-4">
-          <header className="ledger-section-header border-b border-[#b8894f]/15 pb-2">
+          <header className="ledger-section-header border-b border-[var(--border-accent-subtle)] pb-2">
             <h2 className="section-title">
               本周日常记录存根
             </h2>
@@ -256,7 +256,7 @@ export const HistoryView: React.FC<HistoryViewProps> = ({
                     {/* Date Section Header */}
                     <div className="archive-day-header">
                       <div className="archive-day-date">
-                        <span className="w-1.5 h-1.5 rounded-full bg-[#b8894f]" />
+                        <span className="w-1.5 h-1.5 rounded-full bg-[var(--accent-brass)]" />
                         <span className="date-group-heading">
                           {d.dateStr} · {d.dayName}
                         </span>
@@ -277,10 +277,10 @@ export const HistoryView: React.FC<HistoryViewProps> = ({
 
                     {/* Day Close Reflection Note */}
                     {dayClose && (
-                      <div className="ml-5 sm:ml-28 pl-4 py-2 border-l-2 border-[#b8894f]/35 type-l5 text-[var(--text-secondary)] italic space-y-1 font-sans bg-[#161513]/50 rounded-r my-2">
+                      <div className="ml-5 sm:ml-28 pl-4 py-2 border-l-2 border-[var(--border-accent)] type-l5 text-[var(--text-secondary)] italic space-y-1 font-sans bg-[var(--surface-panel-subtle)]/50 rounded-r my-2">
                         {dayClose.note && <div>💭 「{dayClose.note}」</div>}
                         {dayClose.carry_forward && (
-                          <div className="text-[#c89a5a] not-italic font-medium">
+                          <div className="text-[var(--accent-brass-hover)] not-italic font-medium">
                             ↳ 明天关注: {dayClose.carry_forward}
                           </div>
                         )}

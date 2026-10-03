@@ -161,10 +161,10 @@ export const TodayView: React.FC<TodayViewProps> = ({
     <div className="flex-1 overflow-y-auto min-h-screen bg-transparent text-[var(--text-primary)] p-6 lg:p-10">
       <div className="max-w-[880px] mx-auto space-y-9">
         {/* Top Header Zone: Date (Strongest Anchor), Real-time Chronometer, End Today */}
-        <header className="flex flex-col sm:flex-row sm:items-center justify-between pb-6 border-b border-[#b8894f]/15 gap-4">
+        <header className="flex flex-col sm:flex-row sm:items-center justify-between pb-6 border-b border-[var(--border-accent-subtle)] gap-4">
           <div>
             <div className="flex items-center gap-2 type-l6 font-mono text-[var(--text-muted)] tracking-wider uppercase mb-1 font-medium">
-              <Compass className="w-3.5 h-3.5 text-[#b8894f]" />
+              <Compass className="w-3.5 h-3.5 text-[var(--accent-brass)]" />
               <span>CHRONOMETER / {nowTimeStr}</span>
             </div>
             <h1 className="type-l1 font-display font-semibold text-[var(--text-hero)]">
@@ -178,7 +178,7 @@ export const TodayView: React.FC<TodayViewProps> = ({
               className="cockpit-button cockpit-button--secondary cockpit-button--recovery cursor-pointer"
               aria-label="接回视角"
             >
-              <RotateCw className="w-3.5 h-3.5 text-[#78998d]" />
+              <RotateCw className="w-3.5 h-3.5 text-[var(--accent-verdigris)]" />
               <span>接回视角</span>
             </button></CockpitTooltip>
 
@@ -186,7 +186,7 @@ export const TodayView: React.FC<TodayViewProps> = ({
               onClick={onOpenEndTodayModal}
               className="cockpit-button cockpit-button--secondary cursor-pointer"
             >
-              <Calendar className="w-3.5 h-3.5 text-[#c89a5a]" />
+              <Calendar className="w-3.5 h-3.5 text-[var(--accent-brass-hover)]" />
               <span>End today · 结束今天</span>
             </button>
           </div>
@@ -201,17 +201,17 @@ export const TodayView: React.FC<TodayViewProps> = ({
             </div>
             <div className="flex flex-col md:flex-row md:items-center justify-between gap-4">
               <div className="flex items-start sm:items-center gap-3.5">
-                <div className="w-12 h-12 rounded-lg bg-[#141d19] border border-[rgba(120,153,141,0.35)] flex items-center justify-center shrink-0 shadow-inner">
-                  <Clock className="w-6 h-6 text-[#78998d] animate-pulse" />
+                <div className="w-12 h-12 rounded-lg bg-[var(--surface-success)] border border-[var(--border-success-strong)] flex items-center justify-center shrink-0 shadow-inner">
+                  <Clock className="w-6 h-6 text-[var(--accent-verdigris)] animate-pulse" />
                 </div>
                 <div>
-                  <div className="flex items-center gap-2 type-l6 text-[#78998d] font-mono font-medium">
-                    <span className="w-2 h-2 rounded-full bg-[#78998d] shadow-[0_0_4px_rgba(120,153,141,0.5)] animate-pulse" />
+                  <div className="flex items-center gap-2 type-l6 text-[var(--accent-verdigris)] font-mono font-medium">
+                    <span className="w-2 h-2 rounded-full bg-[var(--accent-verdigris)] shadow-[0_0_4px_color-mix(in_srgb,var(--accent-verdigris)_50%,transparent)] animate-pulse" />
                     <span>{activeSession.is_running ? 'RUNNING / 正在专注' : 'PAUSED / 暂停中'}</span>
                     <span>·</span>
                     <span className="font-semibold font-mono text-[var(--text-hero)]">{formatSeconds(activeSession.elapsed_seconds)}</span>
                     {!activeSession.is_running && (
-                      <span className="text-[10.5px] px-1.5 py-0.2 bg-[#2d3d37] text-[#78998d] rounded font-mono font-medium">
+                      <span className="text-[10.5px] px-1.5 py-0.2 bg-[var(--surface-success-strong)] text-[var(--accent-verdigris)] rounded font-mono font-medium">
                         PAUSED
                       </span>
                     )}
@@ -237,7 +237,7 @@ export const TodayView: React.FC<TodayViewProps> = ({
                     </>
                   ) : (
                     <>
-                      <Play className="w-3.5 h-3.5 text-[#78998d]" />
+                      <Play className="w-3.5 h-3.5 text-[var(--accent-verdigris)]" />
                       <span>继续</span>
                     </>
                   )}
@@ -390,7 +390,7 @@ export const TodayView: React.FC<TodayViewProps> = ({
                   <div className="absolute top-3 right-3 flex items-center gap-2">
                     <CockpitTooltip content="查看透明算分解释"><button
                       onClick={() => onOpenScoreExplanation(primaryCandidate)}
-                      className="type-l6 text-[var(--text-muted)] hover:text-[#b8894f] flex items-center gap-1 px-2 py-0.5 rounded bg-[#181614] border border-[#b8894f]/15 transition-colors cursor-pointer font-mono font-medium"
+                      className="type-l6 text-[var(--text-muted)] hover:text-[var(--accent-brass)] flex items-center gap-1 px-2 py-0.5 rounded bg-[var(--surface-panel)] border border-[var(--border-accent-subtle)] transition-colors cursor-pointer font-mono font-medium"
                       aria-label="查看透明算分解释"
                     >
                       <HelpCircle className="w-3.5 h-3.5" />
@@ -401,7 +401,7 @@ export const TodayView: React.FC<TodayViewProps> = ({
 
                   <div className="space-y-2.5 max-w-2xl">
                     <div className="flex items-center gap-2 type-l5">
-                      <span className="font-semibold font-display text-[#b8894f]">★ {primaryCandidate.track.name}</span>
+                      <span className="font-semibold font-display text-[var(--accent-brass)]">★ {primaryCandidate.track.name}</span>
                       <span aria-hidden="true" className="text-[var(--text-ghost)]">·</span>
                       <span className={`px-1.5 py-0.5 rounded type-l6 ${
                         primaryCandidate.action.effort === 'light'
@@ -455,7 +455,7 @@ export const TodayView: React.FC<TodayViewProps> = ({
                         onClick={() => onCompleteAction(primaryCandidate.action.id)}
                         className="cockpit-button cockpit-button--secondary cockpit-button--complete cockpit-button--large cursor-pointer"
                       >
-                        <CheckCircle2 className="w-3.5 h-3.5 text-[#78998d]" />
+                        <CheckCircle2 className="w-3.5 h-3.5 text-[var(--accent-verdigris)]" />
                         <span>直接标记完成</span>
                       </button>
                     </div>
@@ -490,11 +490,11 @@ export const TodayView: React.FC<TodayViewProps> = ({
                 return (
                   <div
                     key={candidate.action.id}
-                    className="surface-flat p-3.5 rounded-lg flex flex-col sm:flex-row sm:items-center justify-between gap-3 hover:border-[#b8894f]/25 transition-all"
+                    className="surface-flat p-3.5 rounded-lg flex flex-col sm:flex-row sm:items-center justify-between gap-3 hover:border-[var(--accent-brass)]/25 transition-all"
                   >
                     <div className="space-y-1">
                       <div className="flex items-center gap-2 type-l4 text-[var(--text-primary)]">
-                        <span className="text-[#b8894f] font-medium">○ {candidate.track.name}</span>
+                        <span className="text-[var(--accent-brass)] font-medium">○ {candidate.track.name}</span>
                         <span aria-hidden="true" className="text-[var(--text-ghost)]">·</span>
                         <span className="text-[var(--text-primary)] font-medium">{candidate.action.title}</span>
                       </div>
@@ -516,7 +516,7 @@ export const TodayView: React.FC<TodayViewProps> = ({
                     <div className="flex items-center gap-2 self-end sm:self-auto shrink-0">
                       <CockpitTooltip content="查看算分解释"><button
                         onClick={() => onOpenScoreExplanation(candidate)}
-                        className="p-1 text-[var(--text-muted)] hover:text-[#b8894f] type-l6 cursor-pointer font-medium"
+                        className="p-1 text-[var(--text-muted)] hover:text-[var(--accent-brass)] type-l6 cursor-pointer font-medium"
                         aria-label="查看算分解释"
                       >
                         <HelpCircle className="w-3.5 h-3.5" />
@@ -543,7 +543,7 @@ export const TodayView: React.FC<TodayViewProps> = ({
         </section>
 
         {/* SECTION 2: "今天发生的现实" (Engineering Journal - Reality Timeline) */}
-        <section className="ledger-section pt-4 border-t border-[#b8894f]/15">
+        <section className="ledger-section pt-4 border-t border-[var(--border-accent-subtle)]">
           <header className="ledger-section-header">
             <div className="section-heading-with-disclosure">
               <h2 className="section-title section-title-with-meta">
@@ -587,19 +587,19 @@ export const TodayView: React.FC<TodayViewProps> = ({
         </section>
 
         {/* SECTION 3: Lightweight track overview */}
-        <section className="pt-8 pb-4 border-t border-[#b8894f]/15 space-y-4">
+        <section className="pt-8 pb-4 border-t border-[var(--border-accent-subtle)] space-y-4">
           <div className="flex items-start sm:items-center justify-between gap-4">
             <h3 className="section-title">当前脉络</h3>
             <button
               onClick={onSelectTrackView}
-              className="type-l5 text-[#b8894f] hover:text-[#c89a5a] transition-colors flex items-center gap-1 group py-1 cursor-pointer font-medium"
+              className="type-l5 text-[var(--accent-brass)] hover:text-[var(--accent-brass-hover)] transition-colors flex items-center gap-1 group py-1 cursor-pointer font-medium"
             >
               <span>管理主线</span>
               <ArrowRight className="w-3.5 h-3.5 group-hover:translate-x-0.5 transition-transform" />
             </button>
           </div>
 
-          <div className="divide-y divide-[#b8894f]/10 pt-1">
+          <div className="divide-y divide-[var(--divider-subtle)] pt-1">
             {tracks.map(t => {
               const staleness = calculateStalenessDays(t.last_touched_at, currentDateStr);
               const isMain = t.role === 'main';
@@ -609,16 +609,16 @@ export const TodayView: React.FC<TodayViewProps> = ({
                 <div
                   key={t.id}
                   onClick={onSelectTrackView}
-                  className="flex items-center justify-between py-2.5 px-2 hover:bg-[#181614]/50 rounded transition-colors cursor-pointer group"
+                  className="flex items-center justify-between py-2.5 px-2 hover:bg-[var(--surface-panel)]/50 rounded transition-colors cursor-pointer group"
                 >
                   <div className="flex items-center gap-3">
                     <span
                       className={`w-2 h-2 rounded-full ${
                         isMain
-                          ? 'bg-[#b8894f]'
+                          ? 'bg-[var(--accent-brass)]'
                           : isMaint
-                          ? 'border border-[#7a6b57]'
-                          : 'border border-[#54483b]'
+                          ? 'border border-[var(--border-roadmap-recent)]'
+                          : 'border border-[var(--border-roadmap-idle)]'
                       }`}
                     />
                     <span className="type-l4 font-medium text-[var(--text-primary)] group-hover:text-[var(--text-hero)] transition-colors">
@@ -631,7 +631,7 @@ export const TodayView: React.FC<TodayViewProps> = ({
 
                   <div className="type-l6 font-mono font-medium">
                     {staleness === 0 ? (
-                      <span className="text-[#b8894f] font-semibold">TODAY</span>
+                      <span className="text-[var(--accent-brass)] font-semibold">TODAY</span>
                     ) : staleness === 999 ? (
                       <span className="text-[var(--text-muted)]">—</span>
                     ) : (

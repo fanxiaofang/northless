@@ -130,9 +130,9 @@ export const SettingsModal: React.FC<SettingsModalProps> = ({
         </button>
 
         {/* Modal Header */}
-        <div className="pb-4 border-b border-[#b8894f]/20">
+        <div className="pb-4 border-b border-[var(--border-accent-muted)]">
           <div className="flex items-center gap-2">
-            <Settings className="w-4 h-4 text-[#b8894f]" />
+            <Settings className="w-4 h-4 text-[var(--accent-brass)]" />
             <h3 id="settings-title" className="type-l3 font-semibold text-[var(--text-hero)]">
               设置与本地数据
             </h3>
@@ -143,7 +143,7 @@ export const SettingsModal: React.FC<SettingsModalProps> = ({
         </div>
 
         {/* Tabs */}
-        <div className="py-3 border-b border-[#b8894f]/15 overflow-x-auto">
+        <div className="py-3 border-b border-[var(--border-accent-subtle)] overflow-x-auto">
           <div className="segmented-control compact" role="tablist" aria-label="设置分类">
             {SETTINGS_TABS.map(([tab, label]) => (
               <button
@@ -178,7 +178,7 @@ export const SettingsModal: React.FC<SettingsModalProps> = ({
             <div id="settings-panel-cards" role="tabpanel" aria-labelledby="settings-tab-cards" className="space-y-6">
               {/* Existing Cards */}
               <div className="space-y-2">
-                <div className="type-l6 font-mono font-medium uppercase tracking-wider text-[#b8894f]">
+                <div className="type-l6 font-mono font-medium uppercase tracking-wider text-[var(--accent-brass)]">
                   已收拢的手边入口
                 </div>
                 <div className="space-y-2">
@@ -221,7 +221,7 @@ export const SettingsModal: React.FC<SettingsModalProps> = ({
 
               {/* Add New Card */}
               <form ref={newCardFormRef} noValidate onSubmit={handleCreateCard} className="brass-panel settings-surface p-4 space-y-3">
-                <div className="type-l6 font-mono font-medium uppercase tracking-wider text-[#b8894f]">
+                <div className="type-l6 font-mono font-medium uppercase tracking-wider text-[var(--accent-brass)]">
                   收拢新入口
                 </div>
                 <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
@@ -271,7 +271,7 @@ export const SettingsModal: React.FC<SettingsModalProps> = ({
                   type="submit"
                   className="cockpit-button cockpit-button--primary"
                 >
-                  <Plus className="w-3.5 h-3.5 text-[#b8894f]" />
+                  <Plus className="w-3.5 h-3.5 text-[var(--accent-brass)]" />
                   <span>添加至手边</span>
                 </button>
               </form>
@@ -282,7 +282,7 @@ export const SettingsModal: React.FC<SettingsModalProps> = ({
             <div id="settings-panel-data" role="tabpanel" aria-labelledby="settings-tab-data" className="space-y-6">
               {/* Context Exporter */}
               <div className="brass-panel settings-surface p-4 space-y-2">
-                <div className="type-l6 font-mono font-medium uppercase tracking-wider text-[#b8894f]">
+                <div className="type-l6 font-mono font-medium uppercase tracking-wider text-[var(--accent-brass)]">
                   当前上下文
                 </div>
                 <p className="text-[var(--text-secondary)] leading-relaxed">
@@ -295,14 +295,14 @@ export const SettingsModal: React.FC<SettingsModalProps> = ({
                   }}
                   className="cockpit-button cockpit-button--brass-action mt-2"
                 >
-                  <Sparkles className="w-3.5 h-3.5 text-[#b8894f]" />
+                  <Sparkles className="w-3.5 h-3.5 text-[var(--accent-brass)]" />
                   <span>生成当前上下文</span>
                 </button>
               </div>
 
               {/* Export / Import */}
               <div className="brass-panel settings-surface p-4 space-y-4">
-                <div className="type-l6 font-mono font-medium uppercase tracking-wider text-[#b8894f]">
+                <div className="type-l6 font-mono font-medium uppercase tracking-wider text-[var(--accent-brass)]">
                   本地数据备份与迁移
                 </div>
 
@@ -311,25 +311,25 @@ export const SettingsModal: React.FC<SettingsModalProps> = ({
                     onClick={onExportData}
                     className="cockpit-button cockpit-button--secondary"
                   >
-                    <Download className="w-3.5 h-3.5 text-[#b8894f]" />
+                    <Download className="w-3.5 h-3.5 text-[var(--accent-brass)]" />
                     <span>导出 JSON 备份</span>
                   </button>
 
                   <button type="button" onClick={() => importInputRef.current?.click()} className="cockpit-button cockpit-button--secondary">
-                    <Upload className="w-3.5 h-3.5 text-[#b8894f]" />
+                    <Upload className="w-3.5 h-3.5 text-[var(--accent-brass)]" />
                     <span>导入 JSON 备份</span>
                   </button>
                   <input ref={importInputRef} type="file" accept=".json" onChange={handleFileUpload} className="hidden" aria-label="选择 JSON 备份文件" />
                 </div>
 
                 {importStatus && (
-                  <p className="type-l6 text-[#b8894f] font-mono font-medium">{importStatus}</p>
+                  <p className="type-l6 text-[var(--accent-brass)] font-mono font-medium">{importStatus}</p>
                 )}
               </div>
 
               {/* Reset to Seed */}
               <div className="brass-panel settings-surface p-4 space-y-2">
-                <div className="type-l6 font-mono font-medium uppercase tracking-wider text-[#e06c75]">
+                <div className="type-l6 font-mono font-medium uppercase tracking-wider text-[var(--status-danger)]">
                   重置演示数据
                 </div>
                 <p className="type-l5 text-[var(--text-secondary)]">

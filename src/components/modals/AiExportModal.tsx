@@ -26,9 +26,9 @@ export const AiExportModal: React.FC<AiExportModalProps> = ({ content, onClose }
           <X className="w-4 h-4" />
         </button>
 
-        <div className="space-y-1 pb-3 border-b border-[#b8894f]/20">
-          <div className="flex items-center gap-2 type-l6 font-mono font-medium text-[#b8894f]">
-            <Sparkles className="w-3.5 h-3.5 text-[#b8894f]" />
+        <div className="space-y-1 pb-3 border-b border-[var(--border-accent-muted)]">
+          <div className="flex items-center gap-2 type-l6 font-mono font-medium text-[var(--accent-brass)]">
+            <Sparkles className="w-3.5 h-3.5 text-[var(--accent-brass)]" />
             <span>CONTEXT EXPORT / 当前上下文</span>
           </div>
           <h3 id="context-export-title" className="type-l3 font-semibold text-[var(--text-hero)]">
@@ -49,10 +49,10 @@ export const AiExportModal: React.FC<AiExportModalProps> = ({ content, onClose }
         </div>
 
         {/* Footer */}
-        <div className="flex items-center justify-between pt-2 border-t border-[#b8894f]/15">
+        <div className="flex items-center justify-between pt-2 border-t border-[var(--border-accent-subtle)]">
           <div className="type-l5 text-[var(--text-muted)] font-mono">
             {copied ? (
-              <span className="text-[#b8894f] flex items-center gap-1.5 font-medium font-sans">
+              <span className="text-[var(--accent-brass)] flex items-center gap-1.5 font-medium font-sans">
                 <Check className="w-4 h-4" /> 已复制
               </span>
             ) : (
@@ -71,7 +71,7 @@ export const AiExportModal: React.FC<AiExportModalProps> = ({ content, onClose }
               onClick={handleCopy}
               className="cockpit-button cockpit-button--primary"
             >
-              {copied ? <Check className="w-4 h-4 text-[#b8894f]" /> : <Copy className="w-4 h-4 text-[#b8894f]" />}
+              {copied ? <Check className="w-4 h-4 text-[var(--accent-brass)]" /> : <Copy className="w-4 h-4 text-[var(--accent-brass)]" />}
               <span>{copied ? '已复制' : '复制 Markdown'}</span>
             </button>
           </div>

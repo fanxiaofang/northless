@@ -24,8 +24,8 @@ export const ScoreExplanationModal: React.FC<ScoreExplanationModalProps> = ({
         </button>
 
         <div className="space-y-1">
-          <div className="flex items-center gap-2 type-l6 font-mono font-medium text-[#b8894f]">
-            <ShieldCheck className="w-4 h-4 text-[#b8894f]" />
+          <div className="flex items-center gap-2 type-l6 font-mono font-medium text-[var(--accent-brass)]">
+            <ShieldCheck className="w-4 h-4 text-[var(--accent-brass)]" />
             <span>DETERMINISTIC RECOMMENDATION</span>
           </div>
           <h3 className="type-l3 font-semibold text-[var(--text-hero)]">
@@ -40,25 +40,25 @@ export const ScoreExplanationModal: React.FC<ScoreExplanationModalProps> = ({
         <div className="brass-panel p-4 rounded-lg space-y-2.5 type-l5 text-[var(--text-primary)] font-medium font-sans">
           <div className="flex items-center justify-between">
             <span>主线权重 ({track.role === 'main' ? '主线' : track.role === 'maintenance' ? '保温' : '暂缓'})</span>
-            <span className="text-[#b8894f] font-mono">+{explanation.trackWeight}</span>
+            <span className="text-[var(--accent-brass)] font-mono">+{explanation.trackWeight}</span>
           </div>
 
           <div className="flex items-center justify-between">
             <span>停顿补偿 (Staleness Bonus)</span>
-            <span className="text-[#b8894f] font-mono">+{explanation.stalenessBonus}</span>
+            <span className="text-[var(--accent-brass)] font-mono">+{explanation.stalenessBonus}</span>
           </div>
 
           {explanation.continuityBonus > 0 && (
             <div className="flex items-center justify-between">
               <span>连续推进势头 (Continuity Bonus)</span>
-              <span className="text-[#b8894f] font-mono">+{explanation.continuityBonus}</span>
+              <span className="text-[var(--accent-brass)] font-mono">+{explanation.continuityBonus}</span>
             </div>
           )}
 
           {explanation.clarityBonus !== 0 && (
             <div className="flex items-center justify-between">
               <span>目标清晰度 (Clarity Bonus)</span>
-              <span className={explanation.clarityBonus > 0 ? 'text-[#b8894f] font-mono' : 'text-[#e06c75] font-mono'}>
+              <span className={explanation.clarityBonus > 0 ? 'text-[var(--accent-brass)] font-mono' : 'text-[var(--status-danger)] font-mono'}>
                 {explanation.clarityBonus > 0 ? `+${explanation.clarityBonus}` : explanation.clarityBonus}
               </span>
             </div>
@@ -67,7 +67,7 @@ export const ScoreExplanationModal: React.FC<ScoreExplanationModalProps> = ({
           {explanation.effortMatchBonus !== 0 && (
             <div className="flex items-center justify-between">
               <span>当下意愿负荷匹配 (Effort Match)</span>
-              <span className={explanation.effortMatchBonus > 0 ? 'text-[#b8894f] font-mono' : 'text-[#e06c75] font-mono'}>
+              <span className={explanation.effortMatchBonus > 0 ? 'text-[var(--accent-brass)] font-mono' : 'text-[var(--status-danger)] font-mono'}>
                 {explanation.effortMatchBonus > 0 ? `+${explanation.effortMatchBonus}` : explanation.effortMatchBonus}
               </span>
             </div>
@@ -76,19 +76,19 @@ export const ScoreExplanationModal: React.FC<ScoreExplanationModalProps> = ({
           {explanation.recentOverinvestmentPenalty > 0 && (
             <div className="flex items-center justify-between">
               <span>近期过度集中冷却 (Cool-down)</span>
-              <span className="text-[#e06c75] font-mono">-{explanation.recentOverinvestmentPenalty}</span>
+              <span className="text-[var(--status-danger)] font-mono">-{explanation.recentOverinvestmentPenalty}</span>
             </div>
           )}
 
-          <div className="pt-2 border-t border-[#b8894f]/20 flex items-center justify-between font-bold type-l4">
+          <div className="pt-2 border-t border-[var(--border-accent-muted)] flex items-center justify-between font-bold type-l4">
             <span className="text-[var(--text-hero)]">综合推荐得分 (Total Score)</span>
-            <span className="text-[#b8894f] font-mono type-l3 font-bold">{score}</span>
+            <span className="text-[var(--accent-brass)] font-mono type-l3 font-bold">{score}</span>
           </div>
         </div>
 
         {/* Explain in human words */}
-        <div className="p-3 bg-[#181512] rounded border border-[#b8894f]/15 space-y-1.5 type-l5 text-[var(--text-secondary)] leading-relaxed font-sans">
-          <div className="font-semibold text-[#b8894f]">系统决策依据：</div>
+        <div className="p-3 bg-[var(--surface-panel-subtle)] rounded border border-[var(--border-accent-subtle)] space-y-1.5 type-l5 text-[var(--text-secondary)] leading-relaxed font-sans">
+          <div className="font-semibold text-[var(--accent-brass)]">系统决策依据：</div>
           <ul className="list-disc list-inside space-y-0.5">
             {explanation.reasons.map((r, i) => (
               <li key={i}>{r}</li>

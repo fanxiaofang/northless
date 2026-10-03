@@ -10,6 +10,67 @@
     --font-sans: var(--font-ui); /* legacy alias for existing UI utilities */
     --font-mono: 'IBM Plex Mono', monospace;
 
+    /* Theme Foundation — Dark. Light can override these roles in one place. */
+    --surface-canvas: #151413;
+    --surface-sidebar: #11100f;
+    --surface-sidebar-hover: #181613;
+    --surface-selected: #221c15;
+    --surface-panel: #181715;
+    --surface-panel-subtle: #161514;
+    --surface-panel-raised: #1c1a17;
+    --surface-recessed: rgba(11, 10, 9, 0.24);
+    --surface-recessed-hover: rgba(18, 16, 13, 0.34);
+    --surface-recessed-focus: rgba(12, 12, 10, 0.27);
+    --surface-media: #100f0e;
+    --surface-success: #151c19;
+    --surface-success-strong: #2d3d37;
+    --surface-success-active: #1b2924;
+    --surface-control: #191714;
+    --surface-control-hover: #1d1a16;
+    --surface-control-pressed: #1a1713;
+    --surface-control-disabled: #181715;
+    --surface-overlay: #1c1a17;
+    --surface-floating: #1a1917;
+    --surface-backdrop: rgba(5, 5, 4, 0.71);
+    --surface-scrollbar-thumb: #28241e;
+    --surface-scrollbar-thumb-hover: #383126;
+
+    --border-subtle: rgba(184, 137, 79, 0.12);
+    --border-default: rgba(184, 137, 79, 0.16);
+    --border-strong: rgba(184, 137, 79, 0.20);
+    --border-interactive: rgba(198, 153, 86, 0.15);
+    --border-interactive-hover: rgba(184, 137, 79, 0.28);
+    --border-accent-subtle: rgba(184, 137, 79, 0.15);
+    --border-accent-muted: rgba(184, 137, 79, 0.20);
+    --border-accent: rgba(184, 137, 79, 0.35);
+    --border-success: rgba(120, 153, 141, 0.28);
+    --border-success-strong: rgba(120, 153, 141, 0.40);
+    --border-danger: rgba(176, 92, 92, 0.20);
+    --border-key: #3b3226;
+    --border-key-muted: #30271c;
+    --border-rail-idle: #302a23;
+    --border-roadmap-recent: #7a6b57;
+    --border-roadmap-idle: #54483b;
+    --border-input: var(--border-interactive);
+    --border-input-hover: var(--border-interactive-hover);
+    --border-input-focus: var(--focus-interactive);
+    --divider-subtle: var(--border-subtle);
+
+    --shadow-control: 0 1px 2px rgba(0, 0, 0, 0.18);
+    --shadow-floating: 0 5px 14px rgba(0, 0, 0, 0.24);
+    --shadow-modal: 0 12px 36px rgba(0, 0, 0, 0.38);
+    --status-danger: #e06c75;
+    --status-danger-hover: #d88a8a;
+    --status-danger-highlight: #e09a9a;
+    --status-danger-bg: rgba(176, 92, 92, 0.10);
+    --status-danger-border: var(--border-danger);
+    --status-danger-border-hover: rgba(176, 92, 92, 0.38);
+    --status-success: var(--accent-verdigris);
+    --surface-key: #201c18;
+    --surface-key-hover: #201c17;
+    --focus-brass: rgba(184, 137, 79, 0.55);
+    --focus-action: rgba(200, 154, 90, 0.62);
+
     /* Text Hue Architecture Tokens (5-Rail Hierarchy: Warm, Neutral, Cool Neutral, Brass, Verdigris) */
     --text-hero:      #e6ddcf;  /* Warm Hero (Page titles, primary anchors - Warm Ivory/Parchment) */
     --text-title:     #d5caba;  /* Warm Title (Section titles, partition headings, key object names) */
@@ -44,24 +105,24 @@
     --control-height-sm: 32px;
     --control-surface:
       linear-gradient(180deg, rgba(255, 244, 218, 0.025), transparent 42%),
-      linear-gradient(180deg, #25221d, #191714);
+      linear-gradient(180deg, color-mix(in srgb, var(--surface-control) 94%, var(--text-primary)), var(--surface-control));
     --control-surface-hover:
       linear-gradient(180deg, rgba(255, 244, 218, 0.045), transparent 46%),
-      linear-gradient(180deg, #2b2721, #1d1a16);
+      linear-gradient(180deg, color-mix(in srgb, var(--surface-control-hover) 92%, var(--text-primary)), var(--surface-control-hover));
     --control-surface-secondary:
       linear-gradient(180deg, rgba(235, 226, 211, 0.016), transparent 42%),
-      linear-gradient(180deg, #201e1b, #191816);
+      linear-gradient(180deg, color-mix(in srgb, var(--surface-panel) 96%, var(--text-primary)), var(--surface-panel));
     --control-surface-secondary-hover:
       linear-gradient(180deg, rgba(255, 235, 195, 0.032), transparent 44%),
-      linear-gradient(180deg, #26231f, #1c1a17);
-    --control-surface-pressed: linear-gradient(180deg, #1a1713, #211c16);
-    --control-surface-disabled: linear-gradient(180deg, #1d1b18, #181715);
+      linear-gradient(180deg, color-mix(in srgb, var(--surface-panel-raised) 95%, var(--text-primary)), var(--surface-panel-raised));
+    --control-surface-pressed: linear-gradient(180deg, var(--surface-control-pressed), var(--surface-selected));
+    --control-surface-disabled: linear-gradient(180deg, color-mix(in srgb, var(--surface-control-disabled) 97%, var(--text-primary)), var(--surface-control-disabled));
     --control-surface-primary:
       linear-gradient(180deg, rgba(255, 226, 169, 0.045), transparent 46%),
-      linear-gradient(180deg, #2b241b, #1f1a15);
+      linear-gradient(180deg, color-mix(in srgb, var(--surface-selected) 95%, var(--text-primary)), color-mix(in srgb, var(--surface-selected) 70%, var(--surface-canvas)));
     --control-surface-primary-hover:
       linear-gradient(180deg, rgba(255, 230, 178, 0.095), transparent 48%),
-      linear-gradient(180deg, #362c20, #251e17);
+      linear-gradient(180deg, color-mix(in srgb, var(--surface-selected) 85%, var(--accent-brass)), color-mix(in srgb, var(--surface-selected) 98%, var(--accent-brass)));
     --control-brass-edge: rgba(200, 154, 90, 0.36);
     --control-brass-edge-muted: rgba(184, 137, 79, 0.20);
     --control-brass-edge-hover: rgba(200, 154, 90, 0.44);
@@ -72,8 +133,10 @@
     --control-verdigris-edge-hover: rgba(136, 169, 157, 0.48);
     --control-top-light: rgba(255, 235, 195, 0.095);
     --control-bottom-shade: rgba(0, 0, 0, 0.34);
-    --control-shadow-rest: 0 1px 2px rgba(0, 0, 0, 0.18);
+    --control-shadow-rest: var(--shadow-control);
     --control-shadow-hover: 0 1px 3px rgba(0, 0, 0, 0.22);
+    --control-surface-quiet: color-mix(in srgb, var(--surface-panel-raised) 50%, transparent);
+    --control-surface-quiet-hover: color-mix(in srgb, color-mix(in srgb, var(--surface-selected) 95%, var(--accent-brass)) 70%, transparent);
 
     /* Secondary Accent: Weathered Verdigris 氧化铜绿 (活跃 / 正在运行 / 恢复 / 完成 / 临时健康态 - Visual Weight 70%) */
     --accent-verdigris:       #78998d;
@@ -111,11 +174,11 @@
     --main-max-width: 880px;
 
     /* Semantic Effort Palette (Chemical Patina & Metals) */
-    --effort-light: #78998d;        /* Weathered Verdigris 氧化铜绿 */
+    --effort-light: var(--accent-verdigris);        /* Weathered Verdigris 氧化铜绿 */
     --effort-light-bg: rgba(120, 153, 141, 0.12);
     --effort-light-border: rgba(120, 153, 141, 0.28);
 
-    --effort-normal: #b8894f;       /* Aged Brass 原色黄铜 */
+    --effort-normal: var(--accent-brass);       /* Aged Brass 原色黄铜 */
     --effort-normal-bg: rgba(184, 137, 79, 0.10);
     --effort-normal-border: rgba(184, 137, 79, 0.25);
 
@@ -125,6 +188,11 @@
     --mode-auto: #b8b0a3;
     --mode-auto-bg: rgba(184, 176, 163, 0.06);
     --mode-auto-border: rgba(184, 176, 163, 0.18);
+    --mode-auto-surface: rgba(51, 48, 43, 0.72);
+    --mode-light-surface: rgba(30, 47, 41, 0.70);
+    --mode-normal-surface: rgba(55, 43, 29, 0.72);
+    --mode-deep-active: #bd7b50;
+    --mode-deep-surface: rgba(57, 37, 29, 0.74);
   }
 
   body {
@@ -132,13 +200,13 @@
     font-size: var(--text-scale-l4);
     line-height: var(--line-height-l4);
     font-weight: 450;
-    background-color: #151413;
+    background-color: var(--surface-canvas);
     color: var(--text-primary);
   }
 
   /* Keyboard-first focus visible ring */
   :focus-visible {
-    outline: 1px solid rgba(184, 137, 79, 0.55);
+    outline: 1px solid var(--focus-brass);
     outline-offset: 2px;
   }
 }
@@ -175,10 +243,10 @@
   flex: 0 0 1.625rem;
   align-items: center;
   justify-content: center;
-  border: 1px solid rgba(184, 137, 79, 0.25);
+  border: 1px solid color-mix(in srgb, var(--accent-brass) 25%, transparent);
   border-radius: var(--control-radius-md);
-  background: #1d1813;
-  color: #c89a5a;
+  background: color-mix(in srgb, var(--surface-selected) 50%, var(--surface-canvas));
+  color: var(--accent-brass-hover);
 }
 
 .sidebar-pinned-list {
@@ -202,7 +270,7 @@
 }
 
 .sidebar-entry-row + .sidebar-entry-row { margin-top: 0.1875rem; }
-.sidebar-entry-row:hover { background: rgba(31, 28, 24, 0.58); color: var(--text-hero); }
+.sidebar-entry-row:hover { background: color-mix(in srgb, var(--surface-sidebar-hover) 58%, transparent); color: var(--text-hero); }
 .sidebar-entry-title { overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
 .sidebar-entry-description {
   display: -webkit-box;
@@ -283,9 +351,9 @@
   text-align: left;
   transition: border-color 150ms ease, color 150ms ease;
 }
-.track-index-item:hover { border-left-color: rgba(117, 96, 70, 0.48); color: var(--text-primary); }
+.track-index-item:hover { border-left-color: color-mix(in srgb, var(--brass-dim) 48%, transparent); color: var(--text-primary); }
 .track-index-item.is-selected { border-left-color: var(--accent-brass); color: var(--text-hero); }
-.track-index-item:focus-visible { outline: 1px solid rgba(200, 154, 90, 0.62); outline-offset: 2px; }
+.track-index-item:focus-visible { outline: 1px solid var(--focus-action); outline-offset: 2px; }
 .track-index-role-dot {
   width: 7px;
   height: 7px;
@@ -294,7 +362,7 @@
 }
 .track-index-role-dot--main { background: var(--accent-brass); }
 .track-index-role-dot--maintenance { background: var(--accent-verdigris); }
-.track-index-role-dot--paused { background: #5b554d; }
+.track-index-role-dot--paused { background: var(--text-ghost); }
 .track-index-title {
   display: -webkit-box;
   min-width: 0;
@@ -326,10 +394,14 @@
 .track-roadmap-grid {
   --roadmap-column-gap: 0.5rem;
   --roadmap-row-gap: 1.25rem;
-  --roadmap-rail-dark: #302a23;
-  --roadmap-rail-brass: #977348;
-  --roadmap-rail-verdigris: #526b61;
-  --roadmap-node-well: #181714;
+  --roadmap-rail-idle: var(--border-rail-idle);
+  --roadmap-rail-brass: color-mix(in srgb, var(--accent-brass) 75%, var(--surface-panel));
+  --roadmap-rail-verdigris: color-mix(in srgb, var(--accent-verdigris) 65%, var(--surface-panel));
+  --roadmap-node-surface: var(--surface-panel);
+  --roadmap-socket-border: color-mix(in srgb, var(--border-rail-idle) 80%, var(--text-muted));
+  --roadmap-socket-future: color-mix(in srgb, var(--border-rail-idle) 90%, var(--text-muted));
+  --roadmap-socket-hover: color-mix(in srgb, var(--border-rail-idle) 60%, var(--accent-brass));
+  --roadmap-core-future: color-mix(in srgb, var(--border-rail-idle) 80%, var(--accent-brass));
   --roadmap-turn-radius: 3px;
   --roadmap-turn-trim: 3px;
   --roadmap-turn-overhang: 4px;
@@ -388,7 +460,7 @@
   z-index: 2;
   width: 1px;
   height: 4px;
-  background: var(--roadmap-rail-dark);
+  background: var(--roadmap-rail-idle);
   content: '';
 }
 .track-roadmap-marker--completed::before { background: var(--roadmap-rail-verdigris); }
@@ -402,9 +474,9 @@
   flex: none;
   align-items: center;
   justify-content: center;
-  border: 1px solid #403930;
+  border: 1px solid var(--roadmap-socket-border);
   border-radius: 50%;
-  background: var(--roadmap-node-well);
+  background: var(--roadmap-node-surface);
   box-shadow: inset 0 1px 1px rgba(0, 0, 0, 0.55), 0 1px 0 rgba(188, 165, 129, 0.045);
   transition: border-color 160ms ease-out;
 }
@@ -416,16 +488,16 @@
   content: '';
 }
 .track-roadmap-socket--completed { border-color: var(--roadmap-rail-verdigris); color: var(--accent-verdigris); }
-.track-roadmap-socket--completed::before { border-color: rgba(120, 153, 141, 0.2); }
-.track-roadmap-socket--current { border-color: var(--accent-brass); background: #211d17; }
-.track-roadmap-socket--current::before { border-color: rgba(184, 137, 79, 0.28); }
-.track-roadmap-socket--future { border-color: #39332b; }
+.track-roadmap-socket--completed::before { border-color: color-mix(in srgb, var(--accent-verdigris) 20%, transparent); }
+.track-roadmap-socket--current { border-color: var(--accent-brass); background: color-mix(in srgb, var(--surface-panel) 95%, var(--accent-brass)); }
+.track-roadmap-socket--current::before { border-color: color-mix(in srgb, var(--accent-brass) 28%, transparent); }
+.track-roadmap-socket--future { border-color: var(--roadmap-socket-future); }
 .track-roadmap-stage--completed:hover .track-roadmap-socket { border-color: var(--accent-verdigris); }
-.track-roadmap-stage--future:hover .track-roadmap-socket { border-color: #625442; }
+.track-roadmap-stage--future:hover .track-roadmap-socket { border-color: var(--roadmap-socket-hover); }
 .track-roadmap-check { width: 11px; height: 11px; stroke-width: 1.65; }
 .track-roadmap-core { position: relative; z-index: 1; border-radius: 50%; }
 .track-roadmap-core--current { width: 5px; height: 5px; background: var(--accent-brass); }
-.track-roadmap-core--future { width: 3px; height: 3px; background: #4b4033; }
+.track-roadmap-core--future { width: 3px; height: 3px; background: var(--roadmap-core-future); }
 .track-roadmap-current {
   display: flex;
   align-items: center;
@@ -460,9 +532,9 @@
   box-shadow: 0 -1px 0 rgba(196, 177, 146, 0.07), 0 1px 0 rgba(0, 0, 0, 0.45);
 }
 .track-roadmap-turn {
-  --roadmap-turn-start: var(--roadmap-rail-dark);
-  --roadmap-turn-end: var(--roadmap-rail-dark);
-  --roadmap-turn-spine: var(--roadmap-rail-dark);
+  --roadmap-turn-start: var(--roadmap-rail-idle);
+  --roadmap-turn-end: var(--roadmap-rail-idle);
+  --roadmap-turn-spine: var(--roadmap-rail-idle);
   position: absolute;
   top: 2rem;
   bottom: calc(-1 * (var(--roadmap-row-gap) + 2rem));
@@ -485,9 +557,9 @@
   background: linear-gradient(var(--roadmap-link-direction), var(--roadmap-rail-verdigris) 0 70%, var(--roadmap-rail-brass));
 }
 .track-roadmap-link--leaving-current {
-  background: linear-gradient(var(--roadmap-link-direction), var(--roadmap-rail-brass), var(--roadmap-rail-dark) 30%);
+  background: linear-gradient(var(--roadmap-link-direction), var(--roadmap-rail-brass), var(--roadmap-rail-idle) 30%);
 }
-.track-roadmap-link--future { background: var(--roadmap-rail-dark); }
+.track-roadmap-link--future { background: var(--roadmap-rail-idle); }
 .track-roadmap-turn--completed {
   --roadmap-turn-start: var(--roadmap-rail-verdigris);
   --roadmap-turn-end: var(--roadmap-rail-verdigris);
@@ -502,8 +574,8 @@
 }
 .track-roadmap-turn--leaving-current {
   --roadmap-turn-start: var(--roadmap-rail-brass);
-  --roadmap-turn-end: var(--roadmap-rail-dark);
-  --roadmap-turn-spine: linear-gradient(to bottom, var(--roadmap-rail-brass), var(--roadmap-rail-dark) 30%);
+  --roadmap-turn-end: var(--roadmap-rail-idle);
+  --roadmap-turn-spine: linear-gradient(to bottom, var(--roadmap-rail-brass), var(--roadmap-rail-idle) 30%);
 }
 
 .track-roadmap-stage[data-mobile-connection='inline'] .track-roadmap-link { display: block; }
@@ -654,9 +726,9 @@
   width: min(20rem, calc(100vw - 2rem));
   box-sizing: border-box;
   padding: 1rem 1.125rem;
-  border: 1px solid rgba(184, 137, 79, 0.15);
+  border: 1px solid var(--border-accent-subtle);
   border-radius: var(--control-radius-lg);
-  background: #1a1917;
+  background: var(--surface-floating);
   box-shadow: 0 3px 8px rgba(0, 0, 0, 0.16), inset 0 1px 0 rgba(222, 205, 177, 0.025);
   color: var(--text-muted);
   font-family: var(--font-ui);
@@ -667,7 +739,7 @@
   animation: inspection-note-enter 120ms ease-out both;
 }
 .cockpit-inspection-popover.side-top { animation-name: inspection-note-enter-up; }
-.cockpit-inspection-popover.tone-verdigris { border-color: rgba(120, 153, 141, 0.14); }
+.cockpit-inspection-popover.tone-verdigris { border-color: color-mix(in srgb, var(--accent-verdigris) 14%, transparent); }
 .inspection-note-hairline {
   display: block;
   width: 48px;
@@ -886,7 +958,7 @@
   justify-content: space-between;
   gap: 1rem;
   padding-bottom: 0.375rem;
-  border-bottom: 1px solid rgba(184, 137, 79, 0.12);
+  border-bottom: 1px solid var(--border-subtle);
 }
 
 .archive-day-date {
@@ -901,31 +973,31 @@
 
 /* Warm Graphite Chassis: Atmospheric Main Viewport with Subtle Central Reading Field */
 .cockpit-main {
-  background-color: #161514;
+  background-color: var(--surface-panel-subtle);
   background-image:
     /* Central gentle reading field: unobtrusive 1%-2% diffuse air */
     radial-gradient(
       880px 800px at 50% 180px,
-      rgba(198, 153, 86, 0.02) 0%,
-      rgba(198, 153, 86, 0.006) 45%,
+      color-mix(in srgb, var(--accent-brass-hover) 2%, transparent) 0%,
+      color-mix(in srgb, var(--accent-brass-hover) 0.6%, transparent) 45%,
       transparent 70%
     ),
     radial-gradient(
       1100px 700px at 50% -60px,
-      rgba(198, 153, 86, 0.03) 0%,
-      rgba(198, 153, 86, 0.008) 35%,
+      color-mix(in srgb, var(--accent-brass-hover) 3%, transparent) 0%,
+      color-mix(in srgb, var(--accent-brass-hover) 0.8%, transparent) 35%,
       transparent 65%
     ),
     radial-gradient(
       900px 600px at 88% 65%,
-      rgba(107, 135, 124, 0.015) 0%,
+      color-mix(in srgb, var(--accent-verdigris) 1.5%, transparent) 0%,
       transparent 60%
     ),
     linear-gradient(
       180deg,
-      #181715 0%,
-      #161513 50%,
-      #141312 100%
+      var(--surface-panel) 0%,
+      var(--surface-panel-subtle) 50%,
+      var(--surface-canvas) 100%
     );
 }
 
@@ -997,17 +1069,17 @@
 
 .rail-session {
   height: 1.5px;
-  background: linear-gradient(90deg, rgba(85, 78, 70, 0.25) 0%, rgba(140, 128, 114, 0.55) 50%, rgba(184, 137, 79, 0.7) 100%);
+  background: linear-gradient(90deg, rgba(85, 78, 70, 0.25) 0%, rgba(140, 128, 114, 0.55) 50%, color-mix(in srgb, var(--accent-brass) 70%, transparent) 100%);
 }
 
 .rail-track {
   height: 1.5px;
-  background: linear-gradient(90deg, rgba(72, 86, 81, 0.25) 0%, rgba(110, 135, 126, 0.5) 50%, rgba(120, 153, 141, 0.65) 100%);
+  background: linear-gradient(90deg, rgba(72, 86, 81, 0.25) 0%, rgba(110, 135, 126, 0.5) 50%, color-mix(in srgb, var(--accent-verdigris) 65%, transparent) 100%);
 }
 
 .rail-active {
   height: 1.5px;
-  background: linear-gradient(90deg, rgba(90, 118, 108, 0.3) 0%, rgba(136, 169, 157, 0.85) 100%);
+  background: linear-gradient(90deg, rgba(90, 118, 108, 0.3) 0%, color-mix(in srgb, var(--accent-verdigris-hover) 85%, transparent) 100%);
 }
 
 .rail-archive {
@@ -1020,8 +1092,8 @@
   width: 6px;
   height: 6px;
   border-radius: 50%;
-  border: 1.5px solid #b8894f;
-  background: #161514;
+  border: 1.5px solid var(--accent-brass);
+  background: var(--surface-panel-subtle);
   flex-shrink: 0;
 }
 
@@ -1029,8 +1101,8 @@
   width: 5.5px;
   height: 5.5px;
   transform: rotate(45deg);
-  border: 1.2px solid #78998d;
-  background: #161514;
+  border: 1.2px solid var(--accent-verdigris);
+  background: var(--surface-panel-subtle);
   flex-shrink: 0;
 }
 
@@ -1038,9 +1110,9 @@
   width: 6.5px;
   height: 6.5px;
   border-radius: 50%;
-  border: 1.5px solid #88a99d;
-  background: #1b2924;
-  box-shadow: 0 0 4px rgba(136, 169, 157, 0.45);
+  border: 1.5px solid var(--accent-verdigris-hover);
+  background: var(--surface-success-active);
+  box-shadow: 0 0 4px color-mix(in srgb, var(--accent-verdigris-hover) 45%, transparent);
   flex-shrink: 0;
 }
 
@@ -1049,8 +1121,8 @@
   width: 5.5px;
   height: 5.5px;
   border-radius: 50%;
-  border: 1.2px solid #7f807c;
-  background: #161514;
+  border: 1.2px solid var(--text-muted);
+  background: var(--surface-panel-subtle);
   flex-shrink: 0;
 }
 
@@ -1058,8 +1130,8 @@
   width: 5px;
   height: 5px;
   transform: rotate(45deg);
-  border: 1.2px solid #62776f;
-  background: #161514;
+  border: 1.2px solid var(--accent-verdigris);
+  background: var(--surface-panel-subtle);
   flex-shrink: 0;
 }
 
@@ -1070,15 +1142,15 @@
 /* Level 1: Standard Cockpit Surface (Matte, lightweight) */
 .surface-flat,
 .brass-panel {
-  background: rgba(28, 26, 23, 0.55);
-  border: 1px solid rgba(184, 137, 79, 0.12);
+  background: color-mix(in srgb, var(--surface-panel-raised) 55%, transparent);
+  border: 1px solid var(--border-subtle);
   box-shadow: none;
   transition: border-color 0.15s ease;
 }
 
 .surface-flat:hover,
 .brass-panel:hover {
-  border-color: rgba(184, 137, 79, 0.22);
+  border-color: color-mix(in srgb, var(--accent-brass) 22%, transparent);
 }
 
 /* Soft Optical Surface: 60% optical weight for capture and light work trays. */
@@ -1086,15 +1158,15 @@
   background:
     radial-gradient(
       circle at 50% 0%,
-      rgba(198, 153, 86, 0.025) 0%,
+      color-mix(in srgb, var(--accent-brass-hover) 2.5%, transparent) 0%,
       transparent 68%
     ),
     linear-gradient(
       180deg,
-      rgba(27, 24, 20, 0.72),
-      rgba(20, 18, 16, 0.58)
+      color-mix(in srgb, var(--surface-panel-raised) 72%, transparent),
+      color-mix(in srgb, var(--surface-canvas) 58%, transparent)
     );
-  border: 1px solid rgba(198, 153, 86, 0.13);
+  border: 1px solid color-mix(in srgb, var(--accent-brass-hover) 13%, transparent);
   box-shadow:
     inset 0 1px 0 rgba(255, 235, 195, 0.05),
     0 8px 24px rgba(0, 0, 0, 0.12);
@@ -1107,15 +1179,15 @@
   background:
     radial-gradient(
       circle at 50% 0%,
-      rgba(198, 153, 86, 0.02) 0%,
+      color-mix(in srgb, var(--accent-brass-hover) 2%, transparent) 0%,
       transparent 68%
     ),
     linear-gradient(
       180deg,
-      rgba(27, 24, 20, 0.68),
-      rgba(20, 18, 16, 0.54)
+      color-mix(in srgb, var(--surface-panel-raised) 68%, transparent),
+      color-mix(in srgb, var(--surface-canvas) 54%, transparent)
     );
-  border-color: rgba(198, 153, 86, 0.11);
+  border-color: color-mix(in srgb, var(--accent-brass-hover) 11%, transparent);
   box-shadow:
     inset 0 1px 0 rgba(255, 235, 195, 0.04),
     0 6px 18px rgba(0, 0, 0, 0.1);
@@ -1124,9 +1196,9 @@
 /* Strong Optical Surface: analytical and display panels with firmer containment. */
 .surface-optic-strong,
 .matrix-panel {
-  background: radial-gradient(circle at 50% 0%, rgba(184, 137, 79, 0.05) 0%, transparent 68%),
-              linear-gradient(180deg, #1d1a17 0%, #171513 100%);
-  border: 1px solid rgba(184, 137, 79, 0.18);
+  background: radial-gradient(circle at 50% 0%, color-mix(in srgb, var(--accent-brass) 5%, transparent) 0%, transparent 68%),
+              linear-gradient(180deg, var(--surface-panel-raised) 0%, var(--surface-panel-subtle) 100%);
+  border: 1px solid color-mix(in srgb, var(--accent-brass) 18%, transparent);
   box-shadow: 0 4px 16px -2px rgba(0, 0, 0, 0.38),
               inset 0 1px 0 rgba(255, 230, 180, 0.06);
   transition: border-color 0.2s ease, box-shadow 0.2s ease;
@@ -1134,7 +1206,7 @@
 
 .surface-optic-strong:hover,
 .matrix-panel:hover {
-  border-color: rgba(184, 137, 79, 0.26);
+  border-color: color-mix(in srgb, var(--accent-brass) 26%, transparent);
   box-shadow: 0 5px 18px -2px rgba(0, 0, 0, 0.45),
               inset 0 1px 0 rgba(255, 230, 180, 0.09);
 }
@@ -1148,21 +1220,21 @@
 }
 
 .inbox-capture-surface:focus-within {
-  border-color: rgba(198, 153, 86, 0.16);
+  border-color: var(--border-input);
   box-shadow:
     inset 0 1px 0 rgba(255, 235, 195, 0.06),
     0 8px 24px rgba(0, 0, 0, 0.12),
-    0 0 0 1px rgba(184, 137, 79, 0.018);
+    0 0 0 1px color-mix(in srgb, var(--accent-brass) 1.8%, transparent);
 }
 
 .inbox-capture-slot {
   min-height: 5rem;
   padding: 0.75rem 0.75rem 0.625rem;
-  background-color: rgba(8, 8, 7, 0.1);
-  border: 1px solid rgba(198, 153, 86, 0.045);
-  border-top-color: rgba(198, 153, 86, 0.03);
-  border-inline-color: rgba(198, 153, 86, 0.04);
-  border-bottom-color: rgba(198, 153, 86, 0.085);
+  background-color: color-mix(in srgb, var(--surface-canvas) 10%, transparent);
+  border: 1px solid color-mix(in srgb, var(--accent-brass-hover) 4.5%, transparent);
+  border-top-color: color-mix(in srgb, var(--accent-brass-hover) 3%, transparent);
+  border-inline-color: color-mix(in srgb, var(--accent-brass-hover) 4%, transparent);
+  border-bottom-color: color-mix(in srgb, var(--accent-brass-hover) 8.5%, transparent);
   border-radius: var(--control-radius-md);
   box-shadow:
     inset 0 1px 2px rgba(0, 0, 0, 0.16),
@@ -1174,21 +1246,21 @@
 }
 
 .inbox-capture-slot:hover {
-  background-color: rgba(9, 9, 8, 0.12);
-  border-top-color: rgba(198, 153, 86, 0.045);
-  border-inline-color: rgba(198, 153, 86, 0.06);
-  border-bottom-color: rgba(198, 153, 86, 0.105);
+  background-color: color-mix(in srgb, var(--surface-canvas) 12%, transparent);
+  border-top-color: color-mix(in srgb, var(--accent-brass-hover) 4.5%, transparent);
+  border-inline-color: color-mix(in srgb, var(--accent-brass-hover) 6%, transparent);
+  border-bottom-color: color-mix(in srgb, var(--accent-brass-hover) 10.5%, transparent);
 }
 
 .inbox-capture-slot:focus-within {
-  background-color: rgba(10, 10, 9, 0.14);
-  border-top-color: rgba(198, 153, 86, 0.08);
-  border-inline-color: rgba(198, 153, 86, 0.115);
-  border-bottom-color: rgba(198, 153, 86, 0.18);
+  background-color: color-mix(in srgb, var(--surface-canvas) 14%, transparent);
+  border-top-color: color-mix(in srgb, var(--accent-brass-hover) 8%, transparent);
+  border-inline-color: color-mix(in srgb, var(--accent-brass-hover) 11.5%, transparent);
+  border-bottom-color: color-mix(in srgb, var(--accent-brass-hover) 18%, transparent);
   box-shadow:
     inset 0 1px 2px rgba(0, 0, 0, 0.18),
     inset 0 1px 0 rgba(255, 235, 195, 0.022),
-    0 0 0 1px rgba(198, 153, 86, 0.025);
+    0 0 0 1px color-mix(in srgb, var(--accent-brass-hover) 2.5%, transparent);
 }
 
 .inbox-capture-input::placeholder {
@@ -1255,34 +1327,34 @@
 /* Level 2: Featured Surface (Primary recommendation anchor) */
 .surface-featured,
 .brass-panel-elevated {
-  background: radial-gradient(ellipse at 50% 0%, rgba(184, 137, 79, 0.04) 0%, transparent 65%),
-              linear-gradient(180deg, #1c1a17 0%, #161513 100%);
-  border: 1px solid rgba(184, 137, 79, 0.20);
+  background: radial-gradient(ellipse at 50% 0%, color-mix(in srgb, var(--accent-brass) 4%, transparent) 0%, transparent 65%),
+              linear-gradient(180deg, var(--surface-panel-raised) 0%, var(--surface-panel-subtle) 100%);
+  border: 1px solid var(--border-strong);
   box-shadow: 0 3px 12px -2px rgba(0, 0, 0, 0.35), inset 0 1px 0 rgba(255, 230, 180, 0.05);
   transition: border-color 0.15s ease;
 }
 
 .surface-featured:hover,
 .brass-panel-elevated:hover {
-  border-color: rgba(184, 137, 79, 0.30);
+  border-color: color-mix(in srgb, var(--accent-brass) 30%, transparent);
 }
 
 /* Level 3: Instrument Surface (Active live chronometer - clean matte chassis) */
 .surface-instrument {
-  background: radial-gradient(ellipse at 50% 0%, rgba(120, 153, 141, 0.04) 0%, transparent 60%),
-              linear-gradient(180deg, #181f1c 0%, #141816 100%);
-  border: 1px solid rgba(120, 153, 141, 0.28);
+  background: radial-gradient(ellipse at 50% 0%, color-mix(in srgb, var(--accent-verdigris) 4%, transparent) 0%, transparent 60%),
+              linear-gradient(180deg, var(--surface-success) 0%, var(--surface-panel-subtle) 100%);
+  border: 1px solid var(--border-success);
   box-shadow: 0 3px 14px -3px rgba(0, 0, 0, 0.4), inset 0 1px 1px rgba(215, 245, 235, 0.06);
 }
 
 /* Phosphor Optical Glow for Indicators & Chronometer Beacons */
 .phosphor-glow,
 .brass-glow {
-  box-shadow: 0 0 4px rgba(184, 137, 79, 0.28);
+  box-shadow: 0 0 4px color-mix(in srgb, var(--accent-brass) 28%, transparent);
 }
 
 .verdigris-glow {
-  box-shadow: 0 0 4px rgba(120, 153, 141, 0.30);
+  box-shadow: 0 0 4px color-mix(in srgb, var(--accent-verdigris) 30%, transparent);
 }
 
 /* Shared segmented control geometry for Today modes and Quick Add effort. */
@@ -1291,35 +1363,35 @@
   align-items: center;
   gap: 2px;
   padding: 2px;
-  border: 1px solid rgba(184, 137, 79, 0.15);
+  border: 1px solid var(--border-accent-subtle);
   border-radius: var(--control-radius-lg);
-  background: #151412;
+  background: var(--surface-canvas);
 }
 
 /* Active session controls: verdigris runs the instrument, brass ends and records it. */
 .session-action-row { display: flex; align-items: center; gap: 0.5rem; }
-.session-control-button { display: inline-flex; min-height: 32px; align-items: center; gap: 0.375rem; padding: 0 0.75rem; border: 1px solid rgba(120, 153, 141, 0.26); border-radius: var(--control-radius-sm); background: rgba(22, 34, 30, 0.58); color: var(--text-secondary); font-family: var(--font-ui); font-size: var(--text-scale-l5); font-weight: 500; transition: color 150ms ease, background-color 150ms ease, border-color 150ms ease; }
+.session-control-button { display: inline-flex; min-height: 32px; align-items: center; gap: 0.375rem; padding: 0 0.75rem; border: 1px solid var(--border-success); border-radius: var(--control-radius-sm); background: color-mix(in srgb, var(--surface-success-active) 58%, transparent); color: var(--text-secondary); font-family: var(--font-ui); font-size: var(--text-scale-l5); font-weight: 500; transition: color 150ms ease, background-color 150ms ease, border-color 150ms ease; }
 .session-control-button svg { color: var(--accent-verdigris); }
-.session-control-button:hover { border-color: rgba(120, 153, 141, 0.4); background: rgba(34, 53, 46, 0.62); color: var(--text-primary); }
+.session-control-button:hover { border-color: var(--border-success-strong); background: color-mix(in srgb, color-mix(in srgb, var(--surface-success-active) 90%, var(--accent-verdigris)) 62%, transparent); color: var(--text-primary); }
 .session-control-button:focus-visible { outline-color: var(--focus-interactive); }
 .session-abandon-edge { display: inline-flex; margin-left: 0.25rem; }
 .session-abandon-button { display: inline-flex; width: 32px; height: 32px; align-items: center; justify-content: center; border-radius: var(--control-radius-sm); color: var(--text-muted); transition: color 150ms ease, background-color 150ms ease; }
-.session-abandon-button:hover, .session-abandon-button:focus-visible { background: rgba(176, 92, 92, 0.07); color: #c98282; }
+.session-abandon-button:hover, .session-abandon-button:focus-visible { background: var(--status-danger-bg); color: var(--status-danger-hover); }
 .session-abandon-button svg { width: 15px; height: 15px; }
 .session-start-button { display: inline-flex; height: 32px; align-items: center; gap: 0.375rem; padding: 0 0.75rem; border-radius: var(--control-radius-sm); color: var(--text-primary); font-family: var(--font-ui); font-size: var(--text-scale-l5); font-weight: 500; }
 .session-start-button svg { color: var(--accent-brass); }
 
 .cockpit-tooltip-anchor { display: inline-flex; }
-.cockpit-tooltip { position: fixed; z-index: 70; max-width: min(15rem, calc(100vw - 1rem)); padding: 0.375rem 0.5625rem; border: 1px solid rgba(184, 137, 79, 0.16); border-radius: 4px; background: #1a1917; box-shadow: 0 4px 12px rgba(0, 0, 0, 0.22); color: var(--text-secondary); font-family: var(--font-ui); font-size: 0.75rem; font-weight: 450; line-height: 1.4; white-space: pre-line; pointer-events: none; }
-.inline-confirm-popover { position: fixed; z-index: 75; width: min(15rem, calc(100vw - 1rem)); padding: 0.625rem; border: 1px solid rgba(184, 137, 79, 0.16); border-radius: var(--control-radius-lg); background: #1a1917; box-shadow: 0 5px 12px rgba(0, 0, 0, 0.24); }
+.cockpit-tooltip { position: fixed; z-index: 70; max-width: min(15rem, calc(100vw - 1rem)); padding: 0.375rem 0.5625rem; border: 1px solid var(--border-default); border-radius: 4px; background: var(--surface-floating); box-shadow: 0 4px 12px rgba(0, 0, 0, 0.22); color: var(--text-secondary); font-family: var(--font-ui); font-size: 0.75rem; font-weight: 450; line-height: 1.4; white-space: pre-line; pointer-events: none; }
+.inline-confirm-popover { position: fixed; z-index: 75; width: min(15rem, calc(100vw - 1rem)); padding: 0.625rem; border: 1px solid var(--border-default); border-radius: var(--control-radius-lg); background: var(--surface-floating); box-shadow: var(--shadow-floating); }
 .inline-confirm-title { margin: 0; color: var(--text-primary); font-family: var(--font-ui); font-size: var(--text-scale-l5); font-weight: 550; line-height: 1.4; }
 .inline-confirm-description { margin: 0.1875rem 0 0; color: var(--text-muted); font-family: var(--font-ui); font-size: var(--text-scale-l6); line-height: 1.45; }
 .inline-confirm-actions { display: flex; justify-content: flex-end; gap: 0.375rem; margin-top: 0.625rem; }
 .inline-confirm-cancel, .inline-confirm-destructive { min-height: 28px; padding: 0 0.5rem; border-radius: var(--control-radius-sm); font-family: var(--font-ui); font-size: var(--text-scale-l6); font-weight: 500; }
-.inline-confirm-cancel { color: var(--text-secondary); border: 1px solid rgba(120, 153, 141, 0.2); background: rgba(22, 34, 30, 0.42); }
-.inline-confirm-cancel:hover { color: var(--text-primary); background: rgba(34, 53, 46, 0.55); }
-.inline-confirm-destructive { color: #bf7777; }
-.inline-confirm-destructive:hover, .inline-confirm-destructive:focus-visible { background: rgba(176, 92, 92, 0.1); color: #d88a8a; }
+.inline-confirm-cancel { color: var(--text-secondary); border: 1px solid var(--border-success); background: color-mix(in srgb, var(--surface-success-active) 42%, transparent); }
+.inline-confirm-cancel:hover { color: var(--text-primary); background: color-mix(in srgb, color-mix(in srgb, var(--surface-success-active) 90%, var(--accent-verdigris)) 55%, transparent); }
+.inline-confirm-destructive { color: var(--status-danger); }
+.inline-confirm-destructive:hover, .inline-confirm-destructive:focus-visible { background: var(--status-danger-bg); color: var(--status-danger-hover); }
 
 /* Compact density keeps inline form parameters aligned with 30px controls. */
 .segmented-control.compact {
@@ -1348,7 +1420,7 @@
 }
 
 .segmented-control .segmented-item:hover:not(.is-selected) {
-  background: rgba(184, 137, 79, 0.045);
+  background: color-mix(in srgb, var(--accent-brass) 4.5%, transparent);
   color: var(--text-secondary);
 }
 
@@ -1360,7 +1432,7 @@
 
 .segmented-control .segmented-item:active { transform: translateY(1px); }
 .segmented-control .segmented-item:focus-visible {
-  outline: 1px solid rgba(200, 154, 90, 0.62);
+  outline: 1px solid var(--focus-action);
   outline-offset: 2px;
 }
 
@@ -1396,8 +1468,8 @@
 /* Primary Button: Brass Button (Precise, crisp, tactile) */
 .brass-button {
   border-radius: var(--control-radius-md);
-  background: linear-gradient(180deg, #2a241c 0%, #1d1914 100%);
-  border: 1px solid rgba(184, 137, 79, 0.32);
+  background: linear-gradient(180deg, color-mix(in srgb, var(--surface-selected) 95%, var(--text-primary)) 0%, color-mix(in srgb, var(--surface-selected) 70%, var(--surface-canvas)) 100%);
+  border: 1px solid color-mix(in srgb, var(--accent-brass) 32%, transparent);
   box-shadow: inset 0 1px 0 rgba(255, 235, 195, 0.10), 0 1px 3px rgba(0, 0, 0, 0.3);
   color: var(--text-primary);
   font-weight: 500;
@@ -1405,8 +1477,8 @@
 }
 
 .brass-button:hover {
-  background: linear-gradient(180deg, #332b20 0%, #221c15 100%);
-  border-color: rgba(200, 154, 90, 0.50);
+  background: linear-gradient(180deg, color-mix(in srgb, var(--surface-selected) 85%, var(--accent-brass)) 0%, var(--surface-selected) 100%);
+  border-color: color-mix(in srgb, var(--accent-brass-hover) 50%, transparent);
   color: var(--text-hero);
   box-shadow: inset 0 1px 0 rgba(255, 235, 195, 0.15), 0 2px 5px rgba(0, 0, 0, 0.35);
 }
@@ -1419,16 +1491,16 @@
 /* Secondary Button: Lightweight flat with clean hover feedback */
 .btn-secondary {
   border-radius: var(--control-radius-md);
-  background: rgba(28, 25, 22, 0.50);
-  border: 1px solid rgba(184, 137, 79, 0.18);
+  background: var(--control-surface-quiet);
+  border: 1px solid color-mix(in srgb, var(--accent-brass) 18%, transparent);
   color: var(--text-primary);
   font-weight: 500;
   transition: all 0.15s ease;
 }
 
 .btn-secondary:hover {
-  background: rgba(36, 32, 27, 0.70);
-  border-color: rgba(184, 137, 79, 0.36);
+  background: var(--control-surface-quiet-hover);
+  border-color: color-mix(in srgb, var(--accent-brass) 36%, transparent);
   color: var(--text-hero);
 }
 
@@ -1484,13 +1556,13 @@
   color: var(--text-primary);
 }
 .cockpit-button:focus-visible {
-  outline: 1px solid rgba(200, 154, 90, 0.7);
+  outline: 1px solid var(--focus-action);
   outline-offset: 3px;
 }
 .cockpit-button:disabled,
 .cockpit-button[aria-disabled="true"] {
   cursor: not-allowed;
-  border-color: rgba(127, 128, 124, 0.14);
+  border-color: color-mix(in srgb, var(--text-muted) 14%, transparent);
   background: var(--control-surface-disabled);
   box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.025);
   color: var(--text-ghost);
@@ -1551,21 +1623,21 @@
 }
 
 .cockpit-button--danger {
-  --control-icon: #c98282;
-  border-color: rgba(176, 92, 92, 0.2);
+  --control-icon: var(--status-danger-hover);
+  border-color: var(--status-danger-border);
   background: var(--control-surface-secondary);
-  color: #c98282;
+  color: var(--status-danger-hover);
 }
 .cockpit-button--danger:hover:not(:disabled) {
-  border-color: rgba(176, 92, 92, 0.38);
+  border-color: var(--status-danger-border-hover);
   background: var(--control-surface-secondary-hover);
-  color: #e09a9a;
+  color: var(--status-danger-highlight);
 }
 .cockpit-button--recovery:hover:not(:disabled) {
   border-color: var(--control-verdigris-edge-hover);
   background:
     linear-gradient(180deg, rgba(191, 225, 212, 0.045), transparent 46%),
-    linear-gradient(180deg, #222b27, #181d1b);
+    linear-gradient(180deg, var(--surface-success-active), var(--surface-success));
   color: var(--verdigris-strong);
 }
 .cockpit-button--complete {
@@ -1613,10 +1685,10 @@
 }
 .cockpit-icon-button svg { width: 0.9375rem; height: 0.9375rem; }
 .cockpit-confirm-action { display: inline-flex; align-items: center; }
-.cockpit-inline-error { margin-top: 0.25rem; color: #c98282; font-size: var(--text-scale-l6); line-height: 1.35; }
+.cockpit-inline-error { margin-top: 0.25rem; color: var(--status-danger-hover); font-size: var(--text-scale-l6); line-height: 1.35; }
 .cockpit-icon-button:active { transform: translateY(1px); }
 .cockpit-icon-button:focus-visible {
-  outline: 1px solid rgba(200, 154, 90, 0.62);
+  outline: 1px solid var(--focus-action);
   outline-offset: 2px;
 }
 .cockpit-icon-button--neutral:hover,
@@ -1628,15 +1700,15 @@
 .cockpit-icon-button--complete:hover,
 .cockpit-icon-button--complete:focus-visible {
   border-color: var(--control-verdigris-edge);
-  background: rgba(120, 153, 141, 0.075);
+  background: color-mix(in srgb, var(--accent-verdigris) 7.5%, transparent);
   color: var(--accent-verdigris-hover);
 }
 .cockpit-icon-button--danger:hover,
 .cockpit-icon-button--danger:focus-visible,
 .cockpit-icon-button--danger[aria-expanded="true"] {
-  border-color: rgba(176, 92, 92, 0.2);
-  background: rgba(176, 92, 92, 0.075);
-  color: #c98282;
+  border-color: var(--status-danger-border);
+  background: var(--status-danger-bg);
+  color: var(--status-danger-hover);
 }
 
 .cockpit-action-text {
@@ -1652,7 +1724,7 @@
   font-weight: 500;
   transition: color 150ms ease, background-color 150ms ease;
 }
-.cockpit-action-text:hover { background: rgba(184, 137, 79, 0.035); color: var(--text-primary); }
+.cockpit-action-text:hover { background: color-mix(in srgb, var(--accent-brass) 3.5%, transparent); color: var(--text-primary); }
 .cockpit-action-text:active { transform: translateY(1px); }
 
 /* The recommendation modes read as one recessed selector with discrete detents. */
@@ -1662,11 +1734,11 @@
   align-items: center;
   gap: 3px;
   padding: 3px;
-  border: 1px solid rgba(184, 137, 79, 0.19);
+  border: 1px solid color-mix(in srgb, var(--accent-brass) 19%, transparent);
   border-radius: var(--control-radius-lg);
   background:
     linear-gradient(180deg, rgba(0, 0, 0, 0.28), rgba(255, 235, 195, 0.018)),
-    #12110f;
+    var(--surface-sidebar);
   box-shadow:
     inset 0 2px 4px rgba(0, 0, 0, 0.42),
     inset 0 -1px 0 rgba(255, 235, 195, 0.035);
@@ -1691,14 +1763,14 @@
 }
 .today-mode-switch .segmented-item:hover:not(.is-selected) {
   color: var(--text-secondary);
-  background: rgba(184, 137, 79, 0.045);
+  background: color-mix(in srgb, var(--accent-brass) 4.5%, transparent);
 }
 .today-mode-switch .segmented-item:active { transform: translateY(1px); }
 .today-mode-switch .segmented-item.is-selected {
-  border-color: var(--mode-border, rgba(184, 137, 79, 0.38));
+  border-color: var(--mode-border, color-mix(in srgb, var(--accent-brass) 38%, transparent));
   background:
     linear-gradient(180deg, rgba(255, 235, 195, 0.075), transparent 50%),
-    var(--mode-surface, rgba(55, 45, 32, 0.74));
+    var(--mode-surface, var(--mode-normal-surface));
   box-shadow:
     inset 0 1px 0 rgba(255, 244, 218, 0.1),
     inset 0 -1px 0 rgba(0, 0, 0, 0.36),
@@ -1706,14 +1778,14 @@
   color: var(--mode-color, var(--text-title));
   text-shadow: 0 1px 0 rgba(0, 0, 0, 0.5);
 }
-.today-mode-switch .mode-auto { --mode-color: var(--mode-auto); --mode-border: rgba(184, 176, 163, 0.3); --mode-surface: rgba(51, 48, 43, 0.72); }
-.today-mode-switch .mode-light { --mode-color: var(--effort-light); --mode-border: rgba(120, 153, 141, 0.4); --mode-surface: rgba(30, 47, 41, 0.7); }
-.today-mode-switch .mode-normal { --mode-color: var(--effort-normal); --mode-border: rgba(184, 137, 79, 0.42); --mode-surface: rgba(55, 43, 29, 0.72); }
-.today-mode-switch .mode-deep { --mode-color: #bd7b50; --mode-border: rgba(168, 109, 78, 0.44); --mode-surface: rgba(57, 37, 29, 0.74); }
+.today-mode-switch .mode-auto { --mode-color: var(--mode-auto); --mode-border: color-mix(in srgb, var(--mode-auto) 30%, transparent); --mode-surface: var(--mode-auto-surface); }
+.today-mode-switch .mode-light { --mode-color: var(--effort-light); --mode-border: color-mix(in srgb, var(--accent-verdigris) 40%, transparent); --mode-surface: var(--mode-light-surface); }
+.today-mode-switch .mode-normal { --mode-color: var(--effort-normal); --mode-border: color-mix(in srgb, var(--accent-brass) 42%, transparent); --mode-surface: var(--mode-normal-surface); }
+.today-mode-switch .mode-deep { --mode-color: var(--mode-deep-active); --mode-border: color-mix(in srgb, var(--copper) 44%, transparent); --mode-surface: var(--mode-deep-surface); }
 .today-mode-switch .mode-shuffle {
   margin-left: 0.1875rem;
   padding-left: 0.75rem;
-  border-left-color: rgba(184, 137, 79, 0.16);
+  border-left-color: var(--border-default);
   border-radius: var(--control-radius-sm) var(--control-radius-md) var(--control-radius-md) var(--control-radius-sm);
 }
 .today-mode-switch .mode-shuffle svg { width: 0.75rem; height: 0.75rem; color: var(--accent-brass); }
@@ -1740,9 +1812,9 @@
   align-items: center;
   gap: 0.375rem;
   padding: 0 0.75rem;
-  border: 1px solid rgba(184, 137, 79, 0.18);
+  border: 1px solid color-mix(in srgb, var(--accent-brass) 18%, transparent);
   border-radius: var(--control-radius-sm);
-  background: rgba(28, 25, 22, 0.50);
+  background: var(--control-surface-quiet);
   color: var(--text-primary);
   font-family: var(--font-ui);
   font-size: var(--text-scale-l5);
@@ -1751,11 +1823,11 @@
   transition: color 150ms ease, background-color 150ms ease, border-color 150ms ease, transform 150ms ease;
 }
 .secondary-create-action svg { width: 0.875rem; height: 0.875rem; color: var(--accent-brass); }
-.secondary-create-action:hover { background: rgba(36, 32, 27, 0.70); border-color: rgba(184, 137, 79, 0.36); color: var(--text-hero); }
+.secondary-create-action:hover { background: var(--control-surface-quiet-hover); border-color: color-mix(in srgb, var(--accent-brass) 36%, transparent); color: var(--text-hero); }
 .secondary-create-action:active { transform: translateY(1px); }
 
 /* Today recommendation: one surface, with an in-place Next editor. */
-.recommendation-empty-surface { border-color: rgba(184, 137, 79, 0.15); }
+.recommendation-empty-surface { border-color: var(--border-accent-subtle); }
 .recommendation-empty-surface .inline-empty-label { color: var(--text-system); }
 .recommendation-empty-surface .inline-empty-description { color: var(--text-system-muted); }
 .recommendation-link-action {
@@ -1766,7 +1838,7 @@
   transition: color 150ms ease;
 }
 .recommendation-link-action:hover { color: var(--accent-brass-hover); }
-.quick-add-composer { margin: 0 1rem; padding: 0.875rem 0 1rem; border-top: 1px solid rgba(198, 153, 86, 0.12); }
+.quick-add-composer { margin: 0 1rem; padding: 0.875rem 0 1rem; border-top: 1px solid color-mix(in srgb, var(--accent-brass-hover) 12%, transparent); }
 .quick-add-composer-header {
   display: flex; align-items: center; justify-content: space-between; margin-bottom: 0.625rem;
   color: color-mix(in srgb, var(--accent-brass) 65%, var(--text-muted)); font-family: var(--font-mono);
@@ -1776,8 +1848,8 @@
 .quick-add-cancel:hover { color: var(--text-primary); }
 .quick-add-slot,
 .inline-action-slot {
-  display: block; width: 100%; min-width: 0; padding: 0.5rem 0.75rem; border: 1px solid rgba(198, 153, 86, 0.16); border-radius: var(--control-radius-md);
-  background: rgba(11, 10, 9, 0.24); box-shadow: inset 0 1px 2px rgba(0, 0, 0, 0.16), inset 0 1px 0 rgba(210, 235, 224, 0.025);
+  display: block; width: 100%; min-width: 0; padding: 0.5rem 0.75rem; border: 1px solid var(--border-input); border-radius: var(--control-radius-md);
+  background: var(--surface-recessed); box-shadow: inset 0 1px 2px rgba(0, 0, 0, 0.16), inset 0 1px 0 rgba(210, 235, 224, 0.025);
   color: var(--text-primary); font-family: var(--font-ui); font-size: var(--text-scale-l4); line-height: var(--line-height-l4); font-weight: 450;
   transition: border-color 150ms ease, box-shadow 150ms ease, background-color 150ms ease;
 }
@@ -1785,32 +1857,32 @@
 .inline-action-slot::placeholder { color: color-mix(in srgb, var(--text-muted) 72%, var(--text-ghost)); font-size: var(--text-scale-l5); line-height: var(--line-height-l5); font-weight: 400; opacity: 1; }
 .quick-add-slot:focus,
 .inline-action-slot:focus {
-  outline: none; border-color: var(--focus-interactive); background: rgba(12, 12, 10, 0.27);
+  outline: none; border-color: var(--focus-interactive); background: var(--surface-recessed-focus);
   box-shadow: inset 0 1px 2px rgba(0, 0, 0, 0.18), inset 0 1px 0 rgba(210, 235, 224, 0.035), 0 0 0 1px var(--focus-interactive-ring);
 }
 .quick-add-controls,
 .inline-action-controls { display: flex; flex-wrap: wrap; align-items: center; gap: 0.5rem; margin-top: 0.625rem; }
 .quick-add-track-control { display: inline-flex; align-items: center; gap: 0.375rem; min-width: 0; color: var(--text-muted); font-family: var(--font-mono); font-size: var(--text-scale-l6); font-weight: 500; }
 .track-listbox { position: relative; }
-.track-listbox-trigger { display: inline-flex; height: 30px; align-items: center; justify-content: space-between; gap: 0.5rem; max-width: min(14rem, 48vw); min-width: 8rem; padding: 0 0.5rem; border: 1px solid rgba(198, 153, 86, 0.14); border-radius: var(--control-radius-sm); background: rgba(13, 12, 10, 0.2); color: var(--text-secondary); font-family: var(--font-ui); font-size: var(--text-scale-l5); line-height: var(--line-height-l5); }
+.track-listbox-trigger { display: inline-flex; height: 30px; align-items: center; justify-content: space-between; gap: 0.5rem; max-width: min(14rem, 48vw); min-width: 8rem; padding: 0 0.5rem; border: 1px solid var(--border-input); border-radius: var(--control-radius-sm); background: var(--surface-recessed); color: var(--text-secondary); font-family: var(--font-ui); font-size: var(--text-scale-l5); line-height: var(--line-height-l5); }
 .track-listbox-trigger > span, .track-listbox-options button > span { min-width: 0; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
 .track-listbox-trigger:focus { outline: none; border-color: var(--focus-interactive); box-shadow: 0 0 0 1px var(--focus-interactive-ring); }
-.track-listbox-options { position: absolute; z-index: 20; right: 0; bottom: calc(100% + 0.375rem); width: 100%; min-width: 100%; padding: 0.25rem; border: 1px solid rgba(184, 137, 79, 0.18); border-radius: var(--control-radius-lg); background: #1c1a17; box-shadow: 0 4px 8px rgba(0, 0, 0, 0.24); }
+.track-listbox-options { position: absolute; z-index: 20; right: 0; bottom: calc(100% + 0.375rem); width: 100%; min-width: 100%; padding: 0.25rem; border: 1px solid var(--border-default); border-radius: var(--control-radius-lg); background: var(--surface-overlay); box-shadow: var(--shadow-floating); }
 .track-listbox-options button { display: flex; width: 100%; height: 30px; min-width: 0; align-items: center; justify-content: space-between; gap: 0.5rem; padding: 0 0.5rem; border-radius: var(--control-radius-sm); color: var(--text-secondary); font-family: var(--font-ui); font-size: var(--text-scale-l5); text-align: left; }
-.track-listbox-options button:hover { background: rgba(184, 137, 79, 0.06); color: var(--text-primary); }
-.track-listbox-options button.is-selected { background: rgba(184, 137, 79, 0.07); color: var(--accent-brass); }
+.track-listbox-options button:hover { background: color-mix(in srgb, var(--accent-brass) 6%, transparent); color: var(--text-primary); }
+.track-listbox-options button.is-selected { background: color-mix(in srgb, var(--accent-brass) 7%, transparent); color: var(--accent-brass); }
 
 /* Cockpit Form System: shared controls and modal physics. */
-.cockpit-modal-overlay { position: fixed; inset: 0; z-index: 50; display: flex; align-items: center; justify-content: center; padding: 1rem; background: rgba(5, 5, 4, 0.71); backdrop-filter: blur(2px); }
-.cockpit-modal-panel { position: relative; width: min(100%, 560px); max-height: calc(100vh - 2rem); overflow: auto; border: 1px solid rgba(184, 137, 79, 0.2); border-radius: var(--control-radius-lg); background: radial-gradient(ellipse at 50% 0%, rgba(184, 137, 79, 0.035), transparent 62%), linear-gradient(180deg, #1c1a17 0%, #171513 100%); box-shadow: 0 12px 36px rgba(0, 0, 0, 0.38), inset 0 1px 0 rgba(255, 230, 180, 0.035); }
+.cockpit-modal-overlay { position: fixed; inset: 0; z-index: 50; display: flex; align-items: center; justify-content: center; padding: 1rem; background: var(--surface-backdrop); backdrop-filter: blur(2px); }
+.cockpit-modal-panel { position: relative; width: min(100%, 560px); max-height: calc(100vh - 2rem); overflow: auto; border: 1px solid var(--border-strong); border-radius: var(--control-radius-lg); background: radial-gradient(ellipse at 50% 0%, color-mix(in srgb, var(--accent-brass) 3.5%, transparent), transparent 62%), linear-gradient(180deg, var(--surface-overlay) 0%, var(--surface-panel-subtle) 100%); box-shadow: var(--shadow-modal), inset 0 1px 0 rgba(255, 230, 180, 0.035); }
 .settings-modal { overflow: hidden; }
-.cockpit-modal-header { display: flex; align-items: flex-start; justify-content: space-between; gap: 1rem; padding: 1.375rem 1.5rem 1rem; border-bottom: 1px solid rgba(184, 137, 79, 0.12); }
+.cockpit-modal-header { display: flex; align-items: flex-start; justify-content: space-between; gap: 1rem; padding: 1.375rem 1.5rem 1rem; border-bottom: 1px solid var(--border-subtle); }
 .cockpit-modal-heading { display: flex; gap: 0.5rem; min-width: 0; }
 .cockpit-modal-heading h3 { margin: 0; color: var(--text-heading); font-family: var(--font-ui); font-size: 1.125rem; line-height: 1.35; font-weight: 600; }
 .cockpit-modal-heading p { margin: 0.25rem 0 0; color: var(--text-supporting); font-family: var(--font-ui); font-size: 0.8125rem; line-height: 1.5; }
 .cockpit-modal-icon { color: var(--accent-brass); padding-top: 0.1rem; }
 .cockpit-modal-close { display: inline-flex; width: 32px; height: 32px; flex: 0 0 32px; align-items: center; justify-content: center; margin: -0.25rem -0.25rem 0 0; border-radius: var(--control-radius-sm); color: var(--text-muted); transition: color 150ms ease, background-color 150ms ease; }
-.cockpit-modal-close:hover { color: var(--text-primary); background: rgba(184, 137, 79, 0.05); }
+.cockpit-modal-close:hover { color: var(--text-primary); background: color-mix(in srgb, var(--accent-brass) 5%, transparent); }
 .cockpit-modal-close svg { width: 14px; height: 14px; }
 .cockpit-modal-body { padding: 1.125rem 1.5rem; }
 .cockpit-modal-footer { display: flex; justify-content: flex-end; align-items: center; gap: 0.5rem; padding: 0.875rem 1.5rem 1.25rem; }
@@ -1818,37 +1890,37 @@
 .cockpit-modal-footer .btn-ghost { color: var(--text-muted); }
 
 .cockpit-select { position: relative; width: 100%; min-width: 0; }
-.cockpit-select-trigger { display: inline-flex; width: 100%; height: 36px; align-items: center; justify-content: space-between; gap: 0.5rem; padding: 0 0.625rem; border: 1px solid rgba(198, 153, 86, 0.15); border-radius: var(--control-radius-md); background: rgba(11, 10, 9, 0.24); color: var(--text-primary); font-family: var(--font-ui); font-size: var(--text-scale-l5); font-weight: 500; text-align: left; transition: border-color 150ms ease, box-shadow 150ms ease, background-color 150ms ease; }
-.cockpit-select-trigger:hover { background: rgba(18, 16, 13, 0.34); }
+.cockpit-select-trigger { display: inline-flex; width: 100%; height: 36px; align-items: center; justify-content: space-between; gap: 0.5rem; padding: 0 0.625rem; border: 1px solid var(--border-input); border-radius: var(--control-radius-md); background: var(--surface-recessed); color: var(--text-primary); font-family: var(--font-ui); font-size: var(--text-scale-l5); font-weight: 500; text-align: left; transition: border-color 150ms ease, box-shadow 150ms ease, background-color 150ms ease; }
+.cockpit-select-trigger:hover { background: var(--surface-recessed-hover); }
 .cockpit-select-trigger:focus { outline: none; border-color: var(--focus-interactive); box-shadow: 0 0 0 1px var(--focus-interactive-ring); }
-.cockpit-select-trigger:focus-visible { outline: 1px solid rgba(200, 154, 90, 0.62); outline-offset: 3px; }
+.cockpit-select-trigger:focus-visible { outline: 1px solid var(--focus-interactive); outline-offset: 3px; }
 .cockpit-select-trigger:disabled { cursor: not-allowed; opacity: 0.6; }
 .cockpit-select-trigger > span { min-width: 0; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
 .cockpit-select-chevron { width: 14px; height: 14px; flex: 0 0 auto; color: var(--text-muted); }
-.cockpit-select-options { position: fixed; z-index: 60; max-height: 220px; overflow-y: auto; padding: 4px; border: 1px solid rgba(184, 137, 79, 0.17); border-radius: var(--control-radius-lg); background: #1c1a17; box-shadow: 0 5px 14px rgba(0, 0, 0, 0.24); }
+.cockpit-select-options { position: fixed; z-index: 60; max-height: 220px; overflow-y: auto; padding: 4px; border: 1px solid var(--border-default); border-radius: var(--control-radius-lg); background: var(--surface-overlay); box-shadow: var(--shadow-floating); }
 .cockpit-select-option { display: flex; width: 100%; min-height: 32px; align-items: center; justify-content: space-between; gap: 0.5rem; padding: 0 0.625rem; border-radius: var(--control-radius-sm); color: var(--text-secondary); font-family: var(--font-ui); font-size: var(--text-scale-l5); font-weight: 500; text-align: left; }
-.cockpit-select-option:hover, .cockpit-select-option.is-active { background: rgba(184, 137, 79, 0.06); color: var(--text-primary); }
-.cockpit-select-option.is-selected { background: rgba(184, 137, 79, 0.08); color: var(--accent-brass); }
+.cockpit-select-option:hover, .cockpit-select-option.is-active { background: color-mix(in srgb, var(--accent-brass) 6%, transparent); color: var(--text-primary); }
+.cockpit-select-option.is-selected { background: color-mix(in srgb, var(--accent-brass) 8%, transparent); color: var(--accent-brass); }
 .cockpit-select-option-copy { display: flex; min-width: 0; flex-direction: column; overflow: hidden; }
 .cockpit-select-option-copy > span { overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
 .cockpit-select-option-copy small { color: var(--text-muted); font-size: 0.6875rem; line-height: 1.25; }
 .cockpit-select-check { width: 12px; height: 12px; flex: 0 0 auto; }
 
-.form-control { display: block; width: 100%; min-width: 0; border: 1px solid rgba(198, 153, 86, 0.15); border-radius: var(--control-radius-md); background: rgba(11, 10, 9, 0.24); color: var(--text-primary); font-family: var(--font-ui); transition: border-color 150ms ease, box-shadow 150ms ease, background-color 150ms ease; }
+.form-control { display: block; width: 100%; min-width: 0; border: 1px solid var(--border-input); border-radius: var(--control-radius-md); background: var(--surface-recessed); color: var(--text-primary); font-family: var(--font-ui); transition: border-color 150ms ease, box-shadow 150ms ease, background-color 150ms ease; }
 .form-control--single { min-height: 36px; padding: 0.5rem 0.625rem; }
 .form-control--textarea { min-height: 88px; padding: 0.625rem; resize: vertical; }
-.form-control:focus { outline: none; border-color: var(--focus-interactive); background: rgba(12, 12, 10, 0.27); box-shadow: 0 0 0 1px var(--focus-interactive-ring); }
+.form-control:focus { outline: none; border-color: var(--focus-interactive); background: var(--surface-recessed-focus); box-shadow: 0 0 0 1px var(--focus-interactive-ring); }
 .form-control::placeholder { color: color-mix(in srgb, var(--text-muted) 72%, var(--text-ghost)); opacity: 1; }
-.cockpit-modal-panel input[type='text'], .cockpit-modal-panel input[type='url'], .cockpit-modal-panel input[type='search'], .cockpit-modal-panel textarea { border-color: rgba(198, 153, 86, 0.15); border-radius: var(--control-radius-md); background: rgba(11, 10, 9, 0.24); color: var(--text-primary); font-family: var(--font-ui); }
+.cockpit-modal-panel input[type='text'], .cockpit-modal-panel input[type='url'], .cockpit-modal-panel input[type='search'], .cockpit-modal-panel textarea { border-color: var(--border-input); border-radius: var(--control-radius-md); background: var(--surface-recessed); color: var(--text-primary); font-family: var(--font-ui); }
 .cockpit-modal-panel input[type='text']:focus, .cockpit-modal-panel input[type='url']:focus, .cockpit-modal-panel input[type='search']:focus, .cockpit-modal-panel textarea:focus { outline: none; border-color: var(--focus-interactive); box-shadow: 0 0 0 1px var(--focus-interactive-ring); }
 .cockpit-modal-panel input[type='text']::placeholder, .cockpit-modal-panel input[type='url']::placeholder, .cockpit-modal-panel input[type='search']::placeholder, .cockpit-modal-panel textarea::placeholder { color: color-mix(in srgb, var(--text-muted) 72%, var(--text-ghost)); opacity: 1; }
 .cockpit-modal-panel > button[aria-label='关闭'] { display: inline-flex; width: 32px; height: 32px; align-items: center; justify-content: center; border-radius: var(--control-radius-sm); }
-.cockpit-stepper { display: flex; height: 36px; align-items: stretch; overflow: hidden; border: 1px solid rgba(198, 153, 86, 0.15); border-radius: var(--control-radius-md); background: rgba(11, 10, 9, 0.24); }
+.cockpit-stepper { display: flex; height: 36px; align-items: stretch; overflow: hidden; border: 1px solid var(--border-input); border-radius: var(--control-radius-md); background: var(--surface-recessed); }
 .cockpit-stepper-input { width: 4.25rem; min-height: 34px; flex: 1; padding: 0 0 0 0.625rem; border: 0; background: transparent; }
 .cockpit-stepper-input:focus { box-shadow: none; }
 .cockpit-stepper-unit { display: inline-flex; align-items: center; padding-right: 0.375rem; color: var(--text-muted); font-family: var(--font-mono); font-size: 0.75rem; }
-.cockpit-stepper-button { width: 31px; border-left: 1px solid rgba(184, 137, 79, 0.1); color: var(--text-muted); }
-.cockpit-stepper-button:hover { background: rgba(184, 137, 79, 0.05); color: var(--text-primary); }
+.cockpit-stepper-button { width: 31px; border-left: 1px solid color-mix(in srgb, var(--accent-brass) 10%, transparent); color: var(--text-muted); }
+.cockpit-stepper-button:hover { background: color-mix(in srgb, var(--accent-brass) 5%, transparent); color: var(--text-primary); }
 .cockpit-stepper-button svg { width: 12px; height: 12px; margin: auto; }
 .quick-add-track-control .cockpit-select { width: min(14rem, 48vw); }
 .quick-add-track-control .cockpit-select-trigger { height: 30px; padding-inline: 0.5rem; }
@@ -1859,13 +1931,13 @@ input[type='number'] { appearance: textfield; }
 .segmented-control .segmented-item { border-radius: var(--control-radius-md); }
 .log-modal { width: min(100%, 550px); overflow: visible; }
 .log-modal-body { padding-top: 1.125rem; }
-.log-type-selector { display: grid; grid-template-columns: 1fr 1fr; gap: 2px; padding: 3px; border: 1px solid rgba(184, 137, 79, 0.16); border-radius: var(--control-radius-lg); background: rgba(28, 26, 23, 0.48); }
+.log-type-selector { display: grid; grid-template-columns: 1fr 1fr; gap: 2px; padding: 3px; border: 1px solid var(--border-default); border-radius: var(--control-radius-lg); background: color-mix(in srgb, var(--surface-panel-raised) 48%, transparent); }
 .log-type-selector .segmented-item { display: grid; grid-template-columns: auto 1fr; grid-template-rows: auto auto; align-items: center; justify-content: center; column-gap: 0.375rem; min-height: 46px; padding: 0.375rem 0.5rem; border: 1px solid transparent; color: var(--text-muted); font-family: var(--font-ui); font-size: var(--text-scale-l5); text-align: left; }
 .log-type-selector .segmented-item svg { grid-row: 1 / span 2; width: 15px; height: 15px; color: var(--accent-brass); }
 .log-type-selector .segmented-item span { color: inherit; font-weight: 550; }
 .log-type-selector .segmented-item small { color: var(--text-muted); font-size: 0.6875rem; line-height: 1.25; }
-.log-type-selector .segmented-item:hover { background: rgba(184, 137, 79, 0.04); color: var(--text-secondary); }
-.log-type-selector .segmented-item.is-selected { border-color: rgba(184, 137, 79, 0.27); background: rgba(184, 137, 79, 0.09); color: var(--text-heading); }
+.log-type-selector .segmented-item:hover { background: color-mix(in srgb, var(--accent-brass) 4%, transparent); color: var(--text-secondary); }
+.log-type-selector .segmented-item.is-selected { border-color: color-mix(in srgb, var(--accent-brass) 27%, transparent); background: color-mix(in srgb, var(--accent-brass) 9%, transparent); color: var(--text-heading); }
 .log-form-stack { display: flex; flex-direction: column; gap: 1rem; margin-top: 1rem; }
 .log-field { display: flex; min-width: 0; flex-direction: column; gap: 0.375rem; color: var(--text-muted); font-family: var(--font-ui); font-size: var(--text-scale-l5); font-weight: 500; }
 .log-field-label { display: flex; align-items: center; justify-content: space-between; gap: 0.5rem; }
@@ -1887,7 +1959,7 @@ input[type='number'] { appearance: textfield; }
   min-width: 0;
   gap: 0.75rem;
   padding: 0.25rem 0 0.875rem;
-  border-bottom: 1px solid rgba(184, 137, 79, 0.1);
+  border-bottom: 1px solid color-mix(in srgb, var(--accent-brass) 10%, transparent);
 }
 .inline-action-field { display: grid; min-width: 0; gap: 0.3125rem; }
 .inline-action-label,
@@ -1912,8 +1984,8 @@ input[type='number'] { appearance: textfield; }
   color: var(--effort-light);
 }
 .track-role-selector .segmented-item.is-selected[data-role="paused"] {
-  border-color: rgba(127, 128, 124, 0.22);
-  background: rgba(127, 128, 124, 0.07);
+  border-color: color-mix(in srgb, var(--text-muted) 22%, transparent);
+  background: color-mix(in srgb, var(--text-muted) 7%, transparent);
   color: var(--text-secondary);
 }
 .track-role-selector--wide { display: flex; width: 100%; }
@@ -1931,7 +2003,7 @@ input[type='number'] { appearance: textfield; }
   transition: background-color 150ms ease;
 }
 .track-action-row:hover,
-.track-action-row:focus-within { background: rgba(24, 22, 20, 0.4); }
+.track-action-row:focus-within { background: color-mix(in srgb, var(--surface-panel) 40%, transparent); }
 .track-action-copy { display: flex; flex: 1 1 auto; min-width: 0; align-items: flex-start; gap: 0.875rem; }
 .track-action-controls { display: flex; flex: 0 0 auto; align-items: center; gap: 0.375rem; }
 .track-action-delete { opacity: 0; }
@@ -1943,12 +2015,12 @@ input[type='number'] { appearance: textfield; }
 .mode-normal-selected { border-color: var(--effort-normal-border); background: var(--effort-normal-bg); color: var(--effort-normal); }
 .mode-deep-selected { border-color: var(--effort-deep-border); background: var(--effort-deep-bg); color: var(--effort-deep); }
 
-.form-slot { width: 100%; border: 1px solid rgba(198, 153, 86, 0.16); border-radius: var(--control-radius-md); background: rgba(11, 10, 9, 0.24); box-shadow: inset 0 1px 2px rgba(0, 0, 0, 0.16); color: var(--text-primary); transition: border-color 150ms ease, box-shadow 150ms ease; }
+.form-slot { width: 100%; border: 1px solid var(--border-input); border-radius: var(--control-radius-md); background: var(--surface-recessed); box-shadow: inset 0 1px 2px rgba(0, 0, 0, 0.16); color: var(--text-primary); transition: border-color 150ms ease, box-shadow 150ms ease; }
 .form-slot:focus { outline: none; border-color: var(--focus-interactive); box-shadow: inset 0 1px 2px rgba(0, 0, 0, 0.18), 0 0 0 1px var(--focus-interactive-ring); }
 .form-slot::placeholder { color: color-mix(in srgb, var(--text-muted) 72%, var(--text-ghost)); opacity: 1; }
-.quick-add-save { height: 30px; margin-left: auto; padding: 0 0.625rem; border: 1px solid rgba(184, 137, 79, 0.26); border-radius: var(--control-radius-sm); background: rgba(42, 36, 28, 0.54); color: var(--text-title); font-family: var(--font-ui); font-size: var(--text-scale-l6); font-weight: 500; transition: color 150ms ease, background-color 150ms ease, border-color 150ms ease; }
-.quick-add-save:hover:not(:disabled) { border-color: rgba(200, 154, 90, 0.4); color: var(--text-hero); }
-.quick-add-save:disabled { cursor: default; border-color: rgba(184, 137, 79, 0.1); color: var(--text-ghost); opacity: 0.7; }
+.quick-add-save { height: 30px; margin-left: auto; padding: 0 0.625rem; border: 1px solid var(--border-interactive-hover); border-radius: var(--control-radius-sm); background: color-mix(in srgb, color-mix(in srgb, var(--surface-selected) 92%, var(--accent-brass)) 54%, transparent); color: var(--text-title); font-family: var(--font-ui); font-size: var(--text-scale-l6); font-weight: 500; transition: color 150ms ease, background-color 150ms ease, border-color 150ms ease; }
+.quick-add-save:hover:not(:disabled) { border-color: color-mix(in srgb, var(--accent-brass-hover) 40%, transparent); color: var(--text-hero); }
+.quick-add-save:disabled { cursor: default; border-color: color-mix(in srgb, var(--accent-brass) 10%, transparent); color: var(--text-ghost); opacity: 0.7; }
 @media (min-width: 640px) { .quick-add-composer { margin-inline: 1.25rem; padding-top: 1rem; } }
 @media (max-width: 479px) { .quick-add-save { margin-left: 0; } }
 @media (max-width: 639px) {
@@ -1965,9 +2037,9 @@ input[type='number'] { appearance: textfield; }
 }
 
 .brass-tag {
-  background: rgba(184, 137, 79, 0.10);
-  border: 1px solid rgba(184, 137, 79, 0.22);
-  color: #c89a5a;
+  background: color-mix(in srgb, var(--accent-brass) 10%, transparent);
+  border: 1px solid color-mix(in srgb, var(--accent-brass) 22%, transparent);
+  color: var(--accent-brass-hover);
   font-weight: 500;
 }
 
@@ -1987,13 +2059,13 @@ input[type='number'] { appearance: textfield; }
   height: 6px;
 }
 ::-webkit-scrollbar-track {
-  background: #141312;
+  background: var(--surface-canvas);
 }
 ::-webkit-scrollbar-thumb {
-  background: #28241e;
+  background: var(--surface-scrollbar-thumb);
   border-radius: 3px;
-  border: 1px solid rgba(198, 153, 86, 0.12);
+  border: 1px solid color-mix(in srgb, var(--accent-brass-hover) 12%, transparent);
 }
 ::-webkit-scrollbar-thumb:hover {
-  background: #383126;
+  background: var(--surface-scrollbar-thumb-hover);
 }

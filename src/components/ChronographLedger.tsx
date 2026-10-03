@@ -66,7 +66,7 @@ export const ChronographLedger: React.FC<ChronographLedgerProps> = ({
       {mode === 'live' && activeSession && (
         <div className="ledger-grid rounded bg-white/[0.012]">
           {/* Timestamp Column */}
-          <div className="w-full text-right ledger-time text-[#78998d] select-none pt-0.5">
+          <div className="w-full text-right ledger-time text-[var(--accent-verdigris)] select-none pt-0.5">
             <span className="inline-block animate-pulse">● LIVE</span>
           </div>
 
@@ -91,7 +91,7 @@ export const ChronographLedger: React.FC<ChronographLedgerProps> = ({
           </div>
 
           {/* Elapsed Duration Indicator */}
-          <div className="w-full text-right ledger-duration text-[#78998d] select-none pt-0.5">
+          <div className="w-full text-right ledger-duration text-[var(--accent-verdigris)] select-none pt-0.5">
             {Math.floor(activeSession.elapsed_seconds / 60)}m
           </div>
 
@@ -216,7 +216,7 @@ export const ChronographLedger: React.FC<ChronographLedgerProps> = ({
               {hasTrack && track && (
                 <div className="ledger-event-meta flex items-center gap-1.5 mt-0.5">
                   <span
-                    className="ledger-event-track group-hover:text-[#c89a5a] transition-colors"
+                    className="ledger-event-track group-hover:text-[var(--accent-brass-hover)] transition-colors"
                   >
                     {track.name}
                   </span>
@@ -246,7 +246,7 @@ export const ChronographLedger: React.FC<ChronographLedgerProps> = ({
                     e.stopPropagation();
                     onClick();
                   }}
-                  className="opacity-0 group-hover:opacity-100 transition-opacity p-0.5 text-[var(--text-muted)] hover:text-[#e06c75] cursor-pointer"
+                  className="opacity-0 group-hover:opacity-100 transition-opacity p-0.5 text-[var(--text-muted)] hover:text-[var(--status-danger)] cursor-pointer"
                   aria-label="删除记录"
                   aria-expanded={expanded}
                 >

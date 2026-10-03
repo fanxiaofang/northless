@@ -570,7 +570,7 @@ export default function App() {
   }, []);
 
   return (
-    <div className="flex h-screen w-screen overflow-hidden bg-[#151413] text-[var(--text-primary)]">
+    <div className="flex h-screen w-screen overflow-hidden bg-[var(--surface-canvas)] text-[var(--text-primary)]">
       {/* Navigation Sidebar */}
       <NavigationSidebar
         currentView={currentView}

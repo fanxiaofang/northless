@@ -57,7 +57,7 @@ export const EndTodayModal: React.FC<EndTodayModalProps> = ({
 
         <div className="space-y-1">
           <div className="flex items-center gap-2">
-            <Moon className="w-4 h-4 text-[#b8894f]" />
+            <Moon className="w-4 h-4 text-[var(--accent-brass)]" />
             <h3 className="type-l2 font-semibold text-[var(--text-hero)]">
               End Today · 给今天一个安静的边界
             </h3>
@@ -69,7 +69,7 @@ export const EndTodayModal: React.FC<EndTodayModalProps> = ({
 
         {/* Summary of what moved */}
         <div className="brass-panel p-4 rounded-lg space-y-3">
-          <div className="type-l6 font-mono font-medium uppercase tracking-wider text-[#b8894f]">
+          <div className="type-l6 font-mono font-medium uppercase tracking-wider text-[var(--accent-brass)]">
             今天留下了
           </div>
 
@@ -80,10 +80,10 @@ export const EndTodayModal: React.FC<EndTodayModalProps> = ({
               {touchedTracks.map(t => (
                 <div key={t.id} className="flex items-center justify-between type-l5">
                   <div className="flex items-center gap-2 text-[var(--text-primary)]">
-                    <span className="w-1.5 h-1.5 rounded-full bg-[#b8894f]" />
+                    <span className="w-1.5 h-1.5 rounded-full bg-[var(--accent-brass)]" />
                     <span className="font-medium font-sans">{t.name}</span>
                   </div>
-                  <span className="font-mono text-[#b8894f] font-medium">
+                  <span className="font-mono text-[var(--accent-brass)] font-medium">
                     {trackMinutesMap[t.id] ? formatMinutes(trackMinutesMap[t.id]) : '触达'}
                   </span>
                 </div>
@@ -103,7 +103,7 @@ export const EndTodayModal: React.FC<EndTodayModalProps> = ({
               placeholder="如: 状态平稳，把核心接口逻辑理清楚了。"
               value={reflection}
               onChange={e => setReflection(e.target.value)}
-              className="w-full bg-[#11100f] border border-[#b8894f]/25 rounded px-3 py-2 text-[var(--text-primary)] focus:outline-none focus:border-[#b8894f] font-medium font-sans"
+              className="w-full bg-[var(--surface-sidebar)] border border-[var(--accent-brass)]/25 rounded px-3 py-2 text-[var(--text-primary)] focus:outline-none focus:border-[var(--accent-brass)] font-medium font-sans"
             />
           </div>
 
@@ -117,12 +117,12 @@ export const EndTodayModal: React.FC<EndTodayModalProps> = ({
               placeholder="如: 继续跑 MCP Server 示例。"
               value={carryForward}
               onChange={e => setCarryForward(e.target.value)}
-              className="w-full bg-[#11100f] border border-[#b8894f]/25 rounded px-3 py-2 text-[var(--text-primary)] focus:outline-none focus:border-[#b8894f] font-medium font-sans"
+              className="w-full bg-[var(--surface-sidebar)] border border-[var(--accent-brass)]/25 rounded px-3 py-2 text-[var(--text-primary)] focus:outline-none focus:border-[var(--accent-brass)] font-medium font-sans"
             />
           </div>
 
           {/* Guilt-free design reminder */}
-          <div className="p-3 rounded bg-[#171411] border border-[#b8894f]/15 type-l5 text-[var(--text-secondary)] leading-relaxed font-sans">
+          <div className="p-3 rounded bg-[var(--surface-panel-subtle)] border border-[var(--border-accent-subtle)] type-l5 text-[var(--text-secondary)] leading-relaxed font-sans">
             🌿 <strong className="text-[var(--text-primary)]">设计原则</strong>: End Today 不产生 streak 打卡火焰。今天未 Close 也没有欠账，明天随时平稳接续。
           </div>
 
@@ -138,7 +138,7 @@ export const EndTodayModal: React.FC<EndTodayModalProps> = ({
               type="submit"
               className="brass-button px-5 py-2 font-semibold text-[var(--text-hero)] rounded flex items-center gap-1.5 cursor-pointer"
             >
-              <Check className="w-4 h-4 text-[#b8894f]" />
+              <Check className="w-4 h-4 text-[var(--accent-brass)]" />
               <span>结束今天</span>
             </button>
           </div>

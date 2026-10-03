@@ -181,8 +181,8 @@ export const CommandPaletteModal: React.FC<CommandPaletteModalProps> = ({
     <div className="cockpit-modal-overlay items-start pt-24 p-4">
       <div className="cockpit-modal-panel max-w-xl w-full overflow-hidden animate-fadeIn">
         {/* Search Input */}
-        <div className="p-3.5 border-b border-[#b8894f]/20 flex items-center gap-3 bg-[#181512]">
-          <Search className="w-4 h-4 text-[#b8894f]" />
+        <div className="p-3.5 border-b border-[var(--border-accent-muted)] flex items-center gap-3 bg-[var(--surface-panel-subtle)]">
+          <Search className="w-4 h-4 text-[var(--accent-brass)]" />
           <input
             type="text"
             placeholder="输入指令或搜索动作..."
@@ -191,7 +191,7 @@ export const CommandPaletteModal: React.FC<CommandPaletteModalProps> = ({
             className="w-full bg-transparent type-l4 text-[var(--text-primary)] focus:outline-none placeholder:text-[var(--text-ghost)] font-sans font-medium"
             autoFocus
           />
-          <kbd className="px-1.5 py-0.5 type-l6 font-mono bg-[#201c18] border border-[#3b3226] rounded text-[var(--text-muted)] font-medium">
+          <kbd className="px-1.5 py-0.5 type-l6 font-mono bg-[var(--surface-key)] border border-[var(--border-key)] rounded text-[var(--text-muted)] font-medium">
             ESC
           </kbd>
         </div>
@@ -209,16 +209,16 @@ export const CommandPaletteModal: React.FC<CommandPaletteModalProps> = ({
                 <button
                   key={cmd.id}
                   onClick={cmd.action}
-                  className="w-full flex items-center justify-between p-2.5 rounded hover:bg-[#201c17] text-left transition-colors group cursor-pointer"
+                  className="w-full flex items-center justify-between p-2.5 rounded hover:bg-[var(--surface-key-hover)] text-left transition-colors group cursor-pointer"
                 >
                   <div className="flex items-center gap-3">
-                    <Icon className="w-4 h-4 text-[var(--text-secondary)] group-hover:text-[#b8894f] transition-colors" />
+                    <Icon className="w-4 h-4 text-[var(--text-secondary)] group-hover:text-[var(--accent-brass)] transition-colors" />
                     <div>
                       <div className="type-l4 font-medium text-[var(--text-primary)] group-hover:text-[var(--text-hero)] transition-colors">{cmd.title}</div>
                       <div className="type-l6 font-mono font-medium text-[var(--text-muted)]">{cmd.category}</div>
                     </div>
                   </div>
-                  {cmd.shortcut && <kbd className="px-2 py-0.5 type-l6 font-mono bg-[#161411] border border-[#30271c] rounded text-[var(--text-muted)] group-hover:text-[var(--text-primary)] group-hover:border-[#b8894f]/30 transition-colors font-medium">
+                  {cmd.shortcut && <kbd className="px-2 py-0.5 type-l6 font-mono bg-[var(--surface-panel-subtle)] border border-[var(--border-key-muted)] rounded text-[var(--text-muted)] group-hover:text-[var(--text-primary)] group-hover:border-[var(--accent-brass)]/30 transition-colors font-medium">
                     {cmd.shortcut}
                   </kbd>}
                 </button>

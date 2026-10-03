@@ -14,7 +14,7 @@ export const CardViewerModal: React.FC<CardViewerModalProps> = ({ card, onClose 
     <div className="cockpit-modal-overlay p-3 sm:p-6">
       <div className="cockpit-modal-panel max-w-4xl w-full h-[85vh] flex flex-col overflow-hidden relative">
         {/* Modal Header */}
-        <div className="p-4 border-b border-[#b8894f]/20 flex items-center justify-between bg-[#161411]">
+        <div className="p-4 border-b border-[var(--border-accent-muted)] flex items-center justify-between bg-[var(--surface-panel-subtle)]">
           <div className="space-y-0.5">
             <h3 className="type-l3 font-semibold text-[var(--text-hero)] flex items-center gap-2">
               <span>{card.title}</span>
@@ -33,7 +33,7 @@ export const CardViewerModal: React.FC<CardViewerModalProps> = ({ card, onClose 
               className="cockpit-button cockpit-button--brass-action"
             >
               <span>新标签页打开</span>
-              <ExternalLink className="w-3.5 h-3.5 text-[#b8894f]" />
+              <ExternalLink className="w-3.5 h-3.5 text-[var(--accent-brass)]" />
             </a>
 
             <button
@@ -47,7 +47,7 @@ export const CardViewerModal: React.FC<CardViewerModalProps> = ({ card, onClose 
         </div>
 
         {/* Modal Body / Iframe or Fallback */}
-        <div className="flex-1 bg-[#100f0e] relative flex items-center justify-center p-4">
+        <div className="flex-1 bg-[var(--surface-media)] relative flex items-center justify-center p-4">
           {!iframeError ? (
             <iframe
               src={card.url}
@@ -58,7 +58,7 @@ export const CardViewerModal: React.FC<CardViewerModalProps> = ({ card, onClose 
             />
           ) : (
             <div className="text-center space-y-3 max-w-md p-6 brass-panel rounded-lg">
-              <AlertCircle className="w-8 h-8 text-[#b8894f] mx-auto" />
+              <AlertCircle className="w-8 h-8 text-[var(--accent-brass)] mx-auto" />
               <div className="type-l3 font-semibold text-[var(--text-hero)]">该页面不支持内嵌浏览 (Iframe Restricted)</div>
               <p className="type-l5 text-[var(--text-secondary)] leading-relaxed font-sans">
                 部分网站出于同源策略禁止在框架中展示，这非常正常。Cockpit
@@ -71,7 +71,7 @@ export const CardViewerModal: React.FC<CardViewerModalProps> = ({ card, onClose 
                 className="cockpit-button cockpit-button--brass-action"
               >
                 <span>直接前往 {card.title}</span>
-                <ExternalLink className="w-3.5 h-3.5 text-[#b8894f]" />
+                <ExternalLink className="w-3.5 h-3.5 text-[var(--accent-brass)]" />
               </a>
             </div>
           )}

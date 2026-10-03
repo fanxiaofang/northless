@@ -72,7 +72,7 @@ export const InboxView: React.FC<InboxViewProps> = ({
     <div className="flex-1 overflow-y-auto min-h-screen bg-transparent text-[var(--text-primary)] p-6 lg:p-10">
       <div className="max-w-[880px] mx-auto space-y-8">
         {/* Header - Deliberately no unread count */}
-        <header className="pb-6 border-b border-[#b8894f]/15">
+        <header className="pb-6 border-b border-[var(--border-accent-subtle)]">
           <div className="flex items-center gap-2 type-l6 font-mono text-[var(--text-ghost)] tracking-wider uppercase mb-1 select-none">
             <span>FREE CAPTURE / 允许自由腐烂，无需清零压力</span>
           </div>
@@ -154,7 +154,7 @@ export const InboxView: React.FC<InboxViewProps> = ({
                       {track && (
                         <>
                           <span aria-hidden="true" className="text-[var(--text-ghost)]">·</span>
-                          <span className="text-[#b8894f] font-medium font-sans">#{track.name}</span>
+                          <span className="text-[var(--accent-brass)] font-medium font-sans">#{track.name}</span>
                         </>
                       )}
                     </div>
