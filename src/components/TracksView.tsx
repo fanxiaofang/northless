@@ -382,18 +382,12 @@ export const TracksView: React.FC<TracksViewProps> = ({
                           data-desktop-connection={desktopPosition.connection}
                           data-mobile-direction={mobilePosition.direction}
                           data-mobile-connection={mobilePosition.connection}
-                          className="track-roadmap-stage group cursor-pointer"
+                          className={`track-roadmap-stage track-roadmap-stage--${stageState} group cursor-pointer`}
                           style={gridStyle}
                         >
                           {/* Top: 01, 02, 03 Number */}
                           <div
-                            className={`type-l6 font-mono font-medium pb-1.5 transition-colors ${
-                              isCompleted
-                                ? 'text-[#78998d]'
-                                : isCurrent
-                                ? 'text-[#b8894f] font-semibold'
-                                : 'text-[var(--text-muted)] group-hover:text-[var(--text-primary)]'
-                            }`}
+                            className="track-roadmap-number"
                           >
                             {String(idx + 1).padStart(2, '0')}
                           </div>
@@ -403,28 +397,20 @@ export const TracksView: React.FC<TracksViewProps> = ({
                             className={`track-roadmap-turn track-roadmap-turn--${stageState}`}
                             aria-hidden="true"
                           />
-                          <div className="track-roadmap-marker">
+                          <div className={`track-roadmap-marker track-roadmap-marker--${stageState}`}>
                             <span
                               className={`track-roadmap-link track-roadmap-link--${stageState}`}
                               aria-hidden="true"
                             />
 
                             {/* Station Node Marker */}
-                            <span
-                              className={`relative z-10 w-[20px] h-[20px] rounded-full flex items-center justify-center transition-all ${
-                                isCompleted
-                                  ? 'bg-[#15201c] border-2 border-[#4e6b60] text-[#78998d]'
-                                  : isCurrent
-                                  ? 'bg-[#261e14] border-2 border-[#b8894f] text-[#c89a5a] shadow-2xs'
-                                  : 'bg-[#161513] border-2 border-[#362e24] text-[var(--text-ghost)] group-hover:border-[#524434]'
-                              }`}
-                            >
+                            <span className={`track-roadmap-socket track-roadmap-socket--${stageState}`}>
                               {isCompleted ? (
-                                <Check className="w-3 h-3 text-[#78998d] stroke-[2.5]" />
+                                <Check className="track-roadmap-check" aria-hidden="true" />
                               ) : isCurrent ? (
-                                <span className="w-2 h-2 rounded-full bg-[#b8894f]" />
+                                <span className="track-roadmap-core track-roadmap-core--current" />
                               ) : (
-                                <span className="w-1.5 h-1.5 rounded-full bg-[#362e24] group-hover:bg-[#524434]" />
+                                <span className="track-roadmap-core track-roadmap-core--future" />
                               )}
                             </span>
                           </div>
@@ -443,7 +429,7 @@ export const TracksView: React.FC<TracksViewProps> = ({
                               {stage}
                             </div>
                             {isCurrent && (
-                              <div className="type-l6 font-mono text-[#b8894f] tracking-wider text-[10.5px] uppercase font-semibold">
+                              <div className="track-roadmap-current">
                                 CURRENT
                               </div>
                             )}
