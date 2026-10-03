@@ -34,10 +34,10 @@ export const NavigationSidebar: React.FC<NavigationSidebarProps> = ({
   isSessionRunning,
 }) => {
   return (
-    <aside className="w-[220px] h-screen bg-[var(--surface-sidebar)] border-r border-[var(--border-accent-subtle)] flex flex-col shrink-0 select-none">
+    <aside className="sidebar-root w-[220px] h-screen bg-[var(--surface-sidebar)] border-r border-[var(--border-accent-subtle)] flex flex-col shrink-0 select-none">
       {/* Brand Header */}
       <div className="flex min-h-0 flex-1 flex-col">
-        <div className="p-3 border-b border-[var(--border-accent-subtle)] flex items-center justify-between gap-2">
+        <div className="sidebar-structure-divider p-3 border-b border-[var(--border-accent-subtle)] flex items-center justify-between gap-2">
           <div className="flex items-center gap-2 min-w-0">
             <div className="sidebar-brand-mark">
               <Compass className="w-3.5 h-3.5 animate-[spin_60s_linear_infinite]" />
@@ -60,9 +60,9 @@ export const NavigationSidebar: React.FC<NavigationSidebarProps> = ({
         <div className="px-2.5 py-3 space-y-0.5">
           <button
             onClick={() => onSelectView('today')}
-            className={`w-full flex items-center justify-between px-2.5 py-1.5 rounded type-l5 font-medium transition-all cursor-pointer ${
+            className={`sidebar-nav-item w-full flex items-center justify-between px-2.5 py-1.5 rounded type-l5 font-medium transition-all cursor-pointer ${
               currentView === 'today'
-                ? 'bg-[var(--surface-selected)] text-[var(--text-hero)] border border-[var(--border-accent)] shadow-2xs'
+                ? 'is-selected bg-[var(--surface-selected)] text-[var(--text-hero)] border border-[var(--border-accent)] shadow-2xs'
                 : 'text-[var(--text-secondary)] hover:text-[var(--text-hero)] hover:bg-[var(--surface-sidebar-hover)]'
             }`}
           >
@@ -79,9 +79,9 @@ export const NavigationSidebar: React.FC<NavigationSidebarProps> = ({
 
           <button
             onClick={() => onSelectView('tracks')}
-            className={`w-full flex items-center justify-between px-2.5 py-1.5 rounded type-l5 font-medium transition-all cursor-pointer ${
+            className={`sidebar-nav-item w-full flex items-center justify-between px-2.5 py-1.5 rounded type-l5 font-medium transition-all cursor-pointer ${
               currentView === 'tracks'
-                ? 'bg-[var(--surface-selected)] text-[var(--text-hero)] border border-[var(--border-accent)] shadow-2xs'
+                ? 'is-selected bg-[var(--surface-selected)] text-[var(--text-hero)] border border-[var(--border-accent)] shadow-2xs'
                 : 'text-[var(--text-secondary)] hover:text-[var(--text-hero)] hover:bg-[var(--surface-sidebar-hover)]'
             }`}
           >
@@ -94,9 +94,9 @@ export const NavigationSidebar: React.FC<NavigationSidebarProps> = ({
 
           <button
             onClick={() => onSelectView('history')}
-            className={`w-full flex items-center justify-between px-2.5 py-1.5 rounded type-l5 font-medium transition-all cursor-pointer ${
+            className={`sidebar-nav-item w-full flex items-center justify-between px-2.5 py-1.5 rounded type-l5 font-medium transition-all cursor-pointer ${
               currentView === 'history'
-                ? 'bg-[var(--surface-selected)] text-[var(--text-hero)] border border-[var(--border-accent)] shadow-2xs'
+                ? 'is-selected bg-[var(--surface-selected)] text-[var(--text-hero)] border border-[var(--border-accent)] shadow-2xs'
                 : 'text-[var(--text-secondary)] hover:text-[var(--text-hero)] hover:bg-[var(--surface-sidebar-hover)]'
             }`}
           >
@@ -109,9 +109,9 @@ export const NavigationSidebar: React.FC<NavigationSidebarProps> = ({
 
           <button
             onClick={() => onSelectView('inbox')}
-            className={`w-full flex items-center justify-between px-2.5 py-1.5 rounded type-l5 font-medium transition-all cursor-pointer ${
+            className={`sidebar-nav-item w-full flex items-center justify-between px-2.5 py-1.5 rounded type-l5 font-medium transition-all cursor-pointer ${
               currentView === 'inbox'
-                ? 'bg-[var(--surface-selected)] text-[var(--text-hero)] border border-[var(--border-accent)] shadow-2xs'
+                ? 'is-selected bg-[var(--surface-selected)] text-[var(--text-hero)] border border-[var(--border-accent)] shadow-2xs'
                 : 'text-[var(--text-secondary)] hover:text-[var(--text-hero)] hover:bg-[var(--surface-sidebar-hover)]'
             }`}
           >
@@ -124,10 +124,10 @@ export const NavigationSidebar: React.FC<NavigationSidebarProps> = ({
         </div>
 
         {/* Hairline Divider with single subtle center accent */}
-        <div className="px-2.5 my-1.5 flex items-center gap-2">
-          <div className="h-[1px] bg-[var(--accent-brass)]/12 flex-1" />
-          <span className="w-0.5 h-0.5 rounded-full bg-[var(--accent-brass)]/30" />
-          <div className="h-[1px] bg-[var(--accent-brass)]/12 flex-1" />
+        <div className="sidebar-section-divider px-2.5 my-1.5 flex items-center gap-2">
+          <div className="sidebar-section-rule h-[1px] bg-[var(--accent-brass)]/12 flex-1" />
+          <span className="sidebar-section-dot w-0.5 h-0.5 rounded-full bg-[var(--accent-brass)]/30" />
+          <div className="sidebar-section-rule h-[1px] bg-[var(--accent-brass)]/12 flex-1" />
         </div>
 
         {/* Pinned Cards Section */}
@@ -160,7 +160,7 @@ export const NavigationSidebar: React.FC<NavigationSidebarProps> = ({
       </div>
 
       {/* Footer Controls */}
-      <div className="p-2.5 border-t border-[var(--border-accent-subtle)] space-y-0.5">
+      <div className="sidebar-structure-divider p-2.5 border-t border-[var(--border-accent-subtle)] space-y-0.5">
         <CockpitTooltip content="整理当前主线、Next 与最近记录为 Markdown"><button
           onClick={onOpenAiExport}
           className="w-full flex items-center gap-2 px-2.5 py-1.5 rounded type-l5 text-[var(--text-secondary)] hover:bg-[var(--surface-sidebar-hover)] hover:text-[var(--text-hero)] transition-colors cursor-pointer font-medium"

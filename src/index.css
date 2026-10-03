@@ -198,26 +198,26 @@
 
   [data-theme='light'] {
     color-scheme: light;
-    --surface-canvas: #ebe9e3;
-    --surface-sidebar: #e5e2db;
-    --surface-sidebar-hover: #dfdcd5;
-    --surface-selected: #e2d9c9;
-    --surface-panel: #f1efe9;
+    --surface-canvas: #e7e5df;
+    --surface-sidebar: #dfddd7;
+    --surface-sidebar-hover: #e4e2dc;
+    --surface-selected: #dfdcd5;
+    --surface-panel: #f2f0ea;
     --surface-panel-subtle: #eeece6;
-    --surface-panel-raised: #f4f2ec;
-    --surface-recessed: #e5e2db;
-    --surface-recessed-hover: #dfdcd5;
-    --surface-recessed-focus: #eae8e2;
-    --surface-media: #e2dfd8;
+    --surface-panel-raised: #f5f3ed;
+    --surface-recessed: #eae8e2;
+    --surface-recessed-hover: #e4e2dc;
+    --surface-recessed-focus: #eeece6;
+    --surface-media: #e0ded8;
     --surface-success: #e2e9e2;
     --surface-success-strong: #d0ded3;
     --surface-success-active: #dce7dd;
-    --surface-control: #e9e6df;
-    --surface-control-hover: #efede7;
-    --surface-control-pressed: #ddd9d1;
-    --surface-control-disabled: #e6e3dc;
-    --surface-overlay: #f2f0ea;
-    --surface-floating: #f5f3ed;
+    --surface-control: #e9e7e1;
+    --surface-control-hover: #eeece6;
+    --surface-control-pressed: #dbd9d2;
+    --surface-control-disabled: #e4e2dc;
+    --surface-overlay: #f4f2ec;
+    --surface-floating: #f7f5ef;
     --surface-backdrop: rgba(45, 45, 43, 0.32);
     --surface-scrollbar-thumb: #b7ac9c;
     --surface-scrollbar-thumb-hover: #958875;
@@ -252,15 +252,16 @@
     --focus-brass: rgba(109, 76, 37, 0.68);
     --focus-action: rgba(109, 76, 37, 0.7);
 
-    --text-hero: #29251f;
-    --text-title: #373128;
-    --text-primary: #443e35;
-    --text-secondary: #585249;
-    --text-muted: #676056;
-    --text-ghost: #6b6861;
-    --text-heading: #373128;
-    --text-content: #443e35;
-    --text-supporting: #585249;
+    --text-hero: #272622;
+    --text-title: #33312c;
+    --text-primary: #403d37;
+    --text-secondary: #59564f;
+    --text-muted: #69665f;
+    --text-ghost: #858178;
+    --text-heading: #302e29;
+    --text-content: #403d37;
+    --text-supporting: #59564f;
+    --text-accent: var(--accent-brass);
     --text-system: #4c6157;
     --text-system-muted: #606e64;
     --focus-interactive: rgba(58, 100, 83, 0.58);
@@ -303,8 +304,8 @@
     --control-surface-secondary-hover:
       linear-gradient(180deg, rgba(255, 255, 255, 0.3), transparent 44%),
       linear-gradient(180deg, color-mix(in srgb, var(--surface-panel-raised) 95%, var(--text-primary)), var(--surface-panel-raised));
-    --control-surface-primary: linear-gradient(180deg, color-mix(in srgb, var(--surface-selected) 95%, var(--text-primary)), color-mix(in srgb, var(--surface-selected) 70%, var(--surface-canvas)));
-    --control-surface-primary-hover: linear-gradient(180deg, color-mix(in srgb, var(--surface-selected) 85%, var(--accent-brass)), color-mix(in srgb, var(--surface-selected) 98%, var(--accent-brass)));
+    --control-surface-primary: linear-gradient(180deg, color-mix(in srgb, var(--surface-control) 90%, var(--accent-brass) 10%), color-mix(in srgb, var(--surface-control-pressed) 96%, var(--text-primary) 4%));
+    --control-surface-primary-hover: linear-gradient(180deg, color-mix(in srgb, var(--surface-control-hover) 86%, var(--accent-brass) 14%), color-mix(in srgb, var(--surface-control) 92%, var(--accent-brass) 8%));
 
     --effort-light-bg: rgba(62, 102, 88, 0.1);
     --effort-light-border: rgba(62, 102, 88, 0.27);
@@ -316,9 +317,9 @@
     --mode-auto: #5c574e;
     --mode-auto-bg: rgba(92, 87, 78, 0.07);
     --mode-auto-border: rgba(92, 87, 78, 0.23);
-    --mode-auto-surface: #e4ded3;
-    --mode-light-surface: #dce6dc;
-    --mode-normal-surface: #e7dac5;
+    --mode-auto-surface: #e4e2dc;
+    --mode-light-surface: #e5e8e2;
+    --mode-normal-surface: #e8e4db;
     --mode-deep-active: #86513c;
     --mode-deep-surface: #e8d9ce;
   }
@@ -2199,29 +2200,6 @@ input[type='number'] { appearance: textfield; }
 }
 
 /* Light-only optical corrections for details originally tuned against charcoal. */
-[data-theme='light'] .surface-featured,
-[data-theme='light'] .brass-panel-elevated {
-  box-shadow: 0 1px 4px rgba(45, 45, 43, 0.07), inset 0 1px 0 rgba(255, 255, 255, 0.58);
-  border-color: var(--border-accent-muted);
-}
-[data-theme='light'] .surface-optic-soft,
-[data-theme='light'] .track-profile-surface {
-  box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.58), 0 2px 6px rgba(45, 45, 43, 0.07);
-  border-color: var(--border-subtle);
-}
-[data-theme='light'] .surface-optic-strong,
-[data-theme='light'] .matrix-panel,
-[data-theme='light'] .surface-optic-strong:hover,
-[data-theme='light'] .matrix-panel:hover {
-  background: linear-gradient(180deg, var(--surface-panel-raised) 0%, var(--surface-panel-subtle) 100%);
-  border-color: var(--border-default);
-  box-shadow: 0 2px 5px rgba(45, 45, 43, 0.07), inset 0 1px 0 rgba(255, 255, 255, 0.72);
-}
-[data-theme='light'] .matrix-panel:hover,
-[data-theme='light'] .surface-optic-strong:hover {
-  border-color: var(--border-strong);
-  box-shadow: 0 2px 5px rgba(45, 45, 43, 0.08), inset 0 1px 0 rgba(255, 255, 255, 0.72);
-}
 [data-theme='light'] .matrix-panel tbody tr:hover {
   background-color: color-mix(in srgb, var(--surface-panel) 55%, transparent);
 }
@@ -2255,25 +2233,155 @@ input[type='number'] { appearance: textfield; }
   box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.65), 0 1px 2px rgba(45, 45, 43, 0.09);
   text-shadow: none;
 }
+[data-theme='light'] .rivet {
+  box-shadow: 0 1px 1px rgba(74, 55, 30, 0.29), inset 0 0.5px 0.5px rgba(255, 250, 229, 0.4);
+}
+
+/* Light sidebar: a flat index plane with a quiet current-position rail. */
+[data-theme='light'] .sidebar-root {
+  border-color: var(--border-subtle);
+}
+[data-theme='light'] .sidebar-structure-divider {
+  border-color: var(--border-subtle);
+}
+[data-theme='light'] .sidebar-nav-item.is-selected {
+  background-color: color-mix(in srgb, var(--surface-sidebar) 95%, var(--text-primary));
+  border-color: rgba(67, 68, 66, 0.16);
+  box-shadow: inset 2px 0 0 color-mix(in srgb, var(--accent-brass) 70%, transparent);
+}
+[data-theme='light'] .sidebar-nav-item:not(.is-selected):hover {
+  background-color: var(--surface-sidebar-hover);
+}
+[data-theme='light'] .sidebar-nav-item.is-selected > div > svg {
+  color: var(--accent-brass);
+}
+[data-theme='light'] .sidebar-nav-item.is-selected > span.type-l6 {
+  color: var(--accent-brass);
+}
+[data-theme='light'] .sidebar-section-rule {
+  background-color: rgba(67, 68, 66, 0.18);
+}
+[data-theme='light'] .sidebar-section-dot {
+  background-color: color-mix(in srgb, var(--accent-brass) 16%, transparent);
+}
+[data-theme='light'] .sidebar-brand-mark {
+  border-color: rgba(67, 68, 66, 0.18);
+  background: color-mix(in srgb, var(--surface-sidebar) 55%, var(--surface-panel));
+  color: var(--accent-brass);
+}
+[data-theme='light'] .sidebar-entry-row:hover {
+  background: color-mix(in srgb, var(--surface-sidebar-hover) 52%, transparent);
+}
+[data-theme='light'] .sidebar-structure-divider button:hover {
+  box-shadow: none;
+}
+
+/* Light workspace hierarchy: graphite canvas, archival surfaces, recessed controls. */
+[data-theme='light'] .cockpit-main {
+  background-color: var(--surface-canvas);
+  background-image: linear-gradient(
+    180deg,
+    var(--surface-canvas) 0%,
+    color-mix(in srgb, var(--surface-canvas) 86%, var(--surface-panel) 14%) 100%
+  );
+}
+[data-theme='light'] .surface-flat,
+[data-theme='light'] .brass-panel {
+  background: var(--surface-panel);
+  border-color: var(--border-subtle);
+  box-shadow: none;
+}
+[data-theme='light'] .surface-flat:hover,
+[data-theme='light'] .brass-panel:hover {
+  border-color: var(--border-strong);
+}
+[data-theme='light'] .surface-optic-soft,
+[data-theme='light'] .track-profile-surface,
+[data-theme='light'] .inbox-capture-surface {
+  background: linear-gradient(180deg, var(--surface-panel) 0%, var(--surface-panel-subtle) 100%);
+  border-color: var(--border-default);
+  box-shadow: 0 1px 3px rgba(45, 45, 43, 0.06), inset 0 1px 0 rgba(255, 255, 255, 0.58);
+}
+[data-theme='light'] .surface-featured,
+[data-theme='light'] .brass-panel-elevated {
+  background: linear-gradient(180deg, var(--surface-panel-raised) 0%, var(--surface-panel) 100%);
+  border-color: var(--border-default);
+  box-shadow: 0 2px 5px rgba(45, 45, 43, 0.08), inset 0 1px 0 rgba(255, 255, 255, 0.68);
+}
+[data-theme='light'] .surface-featured:hover,
+[data-theme='light'] .brass-panel-elevated:hover {
+  border-color: var(--border-strong);
+}
+[data-theme='light'] .surface-instrument {
+  background: linear-gradient(
+    180deg,
+    color-mix(in srgb, var(--surface-panel) 94%, var(--accent-verdigris) 6%) 0%,
+    var(--surface-panel-subtle) 100%
+  );
+  box-shadow: 0 1px 4px rgba(45, 45, 43, 0.07), inset 0 1px 0 rgba(255, 255, 255, 0.55);
+}
+[data-theme='light'] .matrix-panel {
+  background: linear-gradient(180deg, var(--surface-panel-raised) 0%, var(--surface-panel) 100%);
+  border-color: var(--border-default);
+  box-shadow: 0 2px 5px rgba(45, 45, 43, 0.07), inset 0 1px 0 rgba(255, 255, 255, 0.72);
+}
+[data-theme='light'] .matrix-panel thead {
+  background-color: color-mix(in srgb, var(--surface-panel) 84%, var(--surface-canvas) 16%);
+}
+[data-theme='light'] .matrix-panel .border-b,
+[data-theme='light'] .matrix-panel tbody tr {
+  border-color: rgba(67, 68, 66, 0.17);
+}
+[data-theme='light'] .matrix-panel:hover {
+  border-color: var(--border-strong);
+  box-shadow: 0 2px 5px rgba(45, 45, 43, 0.08), inset 0 1px 0 rgba(255, 255, 255, 0.72);
+}
+[data-theme='light'] .segmented-control {
+  border-color: var(--border-default);
+  background: var(--surface-recessed);
+}
+[data-theme='light'] .segmented-control .segmented-item:hover:not(.is-selected) {
+  background: color-mix(in srgb, var(--surface-control-hover) 72%, transparent);
+  box-shadow: none;
+}
+[data-theme='light'] .segmented-control .segmented-item.is-selected {
+  border-color: rgba(67, 68, 66, 0.2);
+  background: linear-gradient(180deg, var(--surface-control-hover), var(--surface-control));
+  box-shadow: inset 0 1px 2px rgba(45, 45, 43, 0.1);
+  color: var(--text-heading);
+}
 [data-theme='light'] .inbox-capture-slot,
 [data-theme='light'] .quick-add-slot,
 [data-theme='light'] .inline-action-slot,
-[data-theme='light'] .form-slot {
-  box-shadow: inset 0 1px 2px rgba(45, 45, 43, 0.1);
+[data-theme='light'] .form-slot,
+[data-theme='light'] .cockpit-select-trigger,
+[data-theme='light'] .track-listbox-trigger {
+  border-color: var(--border-interactive);
+  background: var(--surface-recessed);
+  box-shadow: inset 0 1px 1px rgba(45, 45, 43, 0.06);
+}
+[data-theme='light'] .inbox-capture-slot:hover,
+[data-theme='light'] .quick-add-slot:hover,
+[data-theme='light'] .inline-action-slot:hover,
+[data-theme='light'] .form-slot:hover {
+  border-color: var(--border-interactive-hover);
+  background: var(--surface-recessed-hover);
 }
 [data-theme='light'] .inbox-capture-slot:focus-within,
 [data-theme='light'] .quick-add-slot:focus,
 [data-theme='light'] .inline-action-slot:focus,
-[data-theme='light'] .form-slot:focus {
-  box-shadow: inset 0 1px 2px rgba(45, 45, 43, 0.09), 0 0 0 1px var(--focus-interactive-ring);
+[data-theme='light'] .form-slot:focus,
+[data-theme='light'] .cockpit-select-trigger:focus {
+  border-color: var(--focus-interactive);
+  background: var(--surface-recessed-focus);
+  box-shadow: 0 0 0 1px var(--focus-interactive-ring);
 }
 [data-theme='light'] .cockpit-modal-panel {
-  background: linear-gradient(180deg, var(--surface-overlay) 0%, var(--surface-panel-subtle) 100%);
-  box-shadow: var(--shadow-modal), inset 0 1px 0 rgba(255, 255, 255, 0.65);
+  background: linear-gradient(180deg, var(--surface-floating) 0%, var(--surface-overlay) 100%);
+  box-shadow: var(--shadow-modal), inset 0 1px 0 rgba(255, 255, 255, 0.68);
 }
-[data-theme='light'] .cockpit-modal-overlay { background: var(--surface-backdrop); }
-[data-theme='light'] .matrix-panel .border-b,
-[data-theme='light'] .matrix-panel tbody tr { border-color: var(--border-subtle); }
-[data-theme='light'] .rivet {
-  box-shadow: 0 1px 1px rgba(74, 55, 30, 0.29), inset 0 0.5px 0.5px rgba(255, 250, 229, 0.4);
+[data-theme='light'] .cockpit-modal-panel .brass-panel,
+[data-theme='light'] .cockpit-modal-panel .surface-flat {
+  background: var(--surface-panel);
+  border-color: var(--border-subtle);
 }
