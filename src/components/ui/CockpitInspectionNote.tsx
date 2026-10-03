@@ -5,7 +5,7 @@ type InspectionTone = 'brass' | 'verdigris';
 
 interface CockpitInspectionNoteProps {
   id: string;
-  title: string;
+  title?: string;
   tone: InspectionTone;
   ariaLabel: string;
   triggerLabel?: string;
@@ -124,8 +124,8 @@ export const CockpitInspectionNote: React.FC<CockpitInspectionNoteProps> = ({
           onMouseEnter={clearLeaveTimer}
           onMouseLeave={scheduleHoverClose}
         >
-          <span className="inspection-note-hairline" aria-hidden="true" />
-          <p className="inspection-note-title">{title}</p>
+          {title && <p className="inspection-note-title">{title}</p>}
+          {title && <span className="inspection-note-hairline" aria-hidden="true" />}
           <div className="inspection-note-body">{children}</div>
         </div>,
         document.body
