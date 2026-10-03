@@ -1,6 +1,13 @@
 <!doctype html>
-<html lang="zh-CN" class="dark">
+<html lang="zh-CN">
   <head>
+    <script>
+      try {
+        document.documentElement.dataset.theme = localStorage.getItem('gap_cockpit_theme_v1') === 'light' ? 'light' : 'dark';
+      } catch {
+        document.documentElement.dataset.theme = 'dark';
+      }
+    </script>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>Gap Cockpit - 本地个人驾驶舱</title>
@@ -13,7 +20,7 @@
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@600;700&family=Cormorant+Garamond:ital,wght@0,500;0,600;0,700;1,600&family=IBM+Plex+Mono:wght@400;500;600&family=IBM+Plex+Sans:wght@400;500;600;700&family=LXGW+WenKai:wght@400;600;700&family=Noto+Sans+SC:wght@400;500;600&display=swap" rel="stylesheet">
   </head>
-  <body class="bg-[#121110] text-[var(--text-primary)] antialiased selection:bg-[#b8894f]/30 selection:text-[var(--text-hero)]">
+  <body class="bg-[var(--surface-canvas)] text-[var(--text-primary)] antialiased selection:bg-[var(--border-accent)] selection:text-[var(--text-hero)]">
     <div id="root"></div>
     <script type="module" src="/src/main.tsx"></script>
   </body>

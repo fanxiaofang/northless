@@ -41,10 +41,17 @@ import { CardViewerModal } from './components/modals/CardViewerModal';
 import { CommandPaletteModal } from './components/modals/CommandPaletteModal';
 import { SettingsModal, type SettingsTab } from './components/modals/SettingsModal';
 import { AiExportModal } from './components/modals/AiExportModal';
+import { applyTheme, loadThemePreference, saveThemePreference, type ThemeMode } from './lib/themePreference';
 
 initializeStorageIfNeeded();
 
 export default function App() {
+  const [theme, setTheme] = useState<ThemeMode>(loadThemePreference);
+  const handleThemeChange = useCallback((nextTheme: ThemeMode) => {
+    applyTheme(nextTheme);
+    saveThemePreference(nextTheme);
+    setTheme(nextTheme);
+  }, []);
   const todayStr = useMemo(() => getTodayDateStr(), []);
 
   // Primary State
@@ -732,6 +739,8 @@ export default function App() {
 
       {showSettingsModal && (
         <SettingsModal
+          theme={theme}
+          onThemeChange={handleThemeChange}
           onClose={() => setShowSettingsModal(false)}
           initialTab={settingsEntry.tab}
           focusNewCard={settingsEntry.focusNewCard}

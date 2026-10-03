@@ -15,10 +15,12 @@ import { Card } from '../../types';
 import { CockpitTooltip } from '../ui/CockpitTooltip';
 import { CockpitModal, CockpitModalFooter } from '../ui/CockpitModal';
 import { CockpitConfirmAction } from '../ui/CockpitConfirmAction';
+import type { ThemeMode } from '../../lib/themePreference';
 
-export type SettingsTab = 'cards' | 'data' | 'about';
+export type SettingsTab = 'cards' | 'appearance' | 'data' | 'about';
 const SETTINGS_TABS: readonly [SettingsTab, string][] = [
   ['cards', '手边入口'],
+  ['appearance', '外观'],
   ['data', '数据备份'],
   ['about', '设计宪章'],
 ];
@@ -33,6 +35,8 @@ const isValidCardUrl = (value: string): boolean => {
 };
 
 interface SettingsModalProps {
+  theme: ThemeMode;
+  onThemeChange: (theme: ThemeMode) => void;
   onClose: () => void;
   initialTab?: SettingsTab;
   focusNewCard?: boolean;
@@ -47,6 +51,8 @@ interface SettingsModalProps {
 }
 
 export const SettingsModal: React.FC<SettingsModalProps> = ({
+  theme,
+  onThemeChange,
   onClose,
   initialTab = 'cards',
   focusNewCard = false,
@@ -174,6 +180,21 @@ export const SettingsModal: React.FC<SettingsModalProps> = ({
 
         {/* Tab Body */}
         <div className="flex-1 min-h-0 overflow-y-auto py-4 space-y-6 type-l5 font-sans">
+          {activeTab === 'appearance' && (
+            <div id="settings-panel-appearance" role="tabpanel" aria-labelledby="settings-tab-appearance" className="space-y-3">
+              <div className="font-medium text-[var(--text-title)]">主题</div>
+              <div className="segmented-control compact" role="group" aria-label="主题">
+                {(['dark', 'light'] as const).map(mode => (
+                  <button key={mode} type="button" aria-pressed={theme === mode}
+                    className={`segmented-item ${theme === mode ? 'is-selected' : ''}`}
+                    onClick={() => onThemeChange(mode)}>
+                    {mode === 'dark' ? '深色' : '浅色'}
+                  </button>
+                ))}
+              </div>
+              <p className="text-[var(--text-secondary)]">选择工作台的明暗外观。设置保存在当前浏览器。</p>
+            </div>
+          )}
           {activeTab === 'cards' && (
             <div id="settings-panel-cards" role="tabpanel" aria-labelledby="settings-tab-cards" className="space-y-6">
               {/* Existing Cards */}
