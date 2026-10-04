@@ -17,7 +17,6 @@ import {
   dismissReentryPrompt,
   exportAllData,
   applyBackupAtomically,
-  initializeStorageIfNeeded,
   loadData,
   markBackupExported,
   resetToSeedData,
@@ -46,8 +45,6 @@ import { CommandPaletteModal } from './components/modals/CommandPaletteModal';
 import { SettingsModal, type SettingsTab } from './components/modals/SettingsModal';
 import { AiExportModal } from './components/modals/AiExportModal';
 import { applyTheme, loadThemePreference, saveThemePreference, type ThemeMode } from './lib/themePreference';
-
-initializeStorageIfNeeded();
 
 export default function App() {
   const [theme, setTheme] = useState<ThemeMode>(loadThemePreference);

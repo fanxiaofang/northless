@@ -458,7 +458,7 @@ function migrateSeedDataIfNeeded(): void {
   const tracks = loadData<Track[]>(STORAGE_KEYS.TRACKS, []);
   let tracksChanged = false;
 
-  let migratedTracks = tracks.map(track => {
+  const migratedTracks = tracks.map(track => {
     const migration = LEGACY_TRACK_DESCRIPTIONS[track.id];
     if (!migration || track.description !== migration.legacy) return track;
 
@@ -466,30 +466,53 @@ function migrateSeedDataIfNeeded(): void {
     return { ...track, description: migration.replacement };
   });
 
-  if (!migratedTracks.some(track => track.id === 'track_snake_demo')) {
-    const snakeDemo = getInitialSeedData().tracks.find(track => track.id === 'track_snake_demo');
-    if (snakeDemo) {
-      migratedTracks = [...migratedTracks, snakeDemo];
-      tracksChanged = true;
-    }
-  }
-
   if (tracksChanged) saveData(STORAGE_KEYS.TRACKS, migratedTracks);
   localStorage.setItem(STORAGE_KEYS.SEED_SCHEMA_VERSION, String(CURRENT_SEED_SCHEMA_VERSION));
 }
 
-export function initializeStorageIfNeeded() {
-  if (!localStorage.getItem(STORAGE_KEYS.TRACKS)) {
-    const seed = getInitialSeedData();
-    saveData(STORAGE_KEYS.TRACKS, seed.tracks);
-    saveData(STORAGE_KEYS.ACTIONS, seed.actions);
-    saveData(STORAGE_KEYS.LOGS, seed.logs);
-    saveData(STORAGE_KEYS.INBOX, seed.inbox);
-    saveData(STORAGE_KEYS.CARDS, seed.cards);
-    saveData(STORAGE_KEYS.DAY_CLOSES, seed.dayCloses);
+const CORE_STORAGE_KEYS = [
+  STORAGE_KEYS.TRACKS, STORAGE_KEYS.ACTIONS, STORAGE_KEYS.LOGS,
+  STORAGE_KEYS.INBOX, STORAGE_KEYS.CARDS, STORAGE_KEYS.DAY_CLOSES,
+  STORAGE_KEYS.ACTIVE_SESSION,
+] as const;
+
+function hasExistingWorkspace(): boolean {
+  return CORE_STORAGE_KEYS.some(key => localStorage.getItem(key) !== null);
+}
+
+function initializeDemoData(): void {
+  const seed = getInitialSeedData();
+  saveData(STORAGE_KEYS.TRACKS, seed.tracks);
+  saveData(STORAGE_KEYS.ACTIONS, seed.actions);
+  saveData(STORAGE_KEYS.LOGS, seed.logs);
+  saveData(STORAGE_KEYS.INBOX, seed.inbox);
+  saveData(STORAGE_KEYS.CARDS, seed.cards);
+  saveData(STORAGE_KEYS.DAY_CLOSES, seed.dayCloses);
+  saveData(STORAGE_KEYS.ACTIVE_SESSION, null);
+}
+
+function initializeEmptyData(): void {
+  for (const key of CORE_STORAGE_KEYS) {
+    saveData(key, key === STORAGE_KEYS.ACTIVE_SESSION ? null : []);
+  }
+}
+
+function ensureCoreStorageShape(): void {
+  for (const key of CORE_STORAGE_KEYS) {
+    if (localStorage.getItem(key) === null) {
+      saveData(key, key === STORAGE_KEYS.ACTIVE_SESSION ? null : []);
+    }
+  }
+}
+
+export function initializeStorageIfNeeded(): void {
+  if (hasExistingWorkspace()) {
+    ensureCoreStorageShape();
+  } else {
+    if (import.meta.env.DEV) initializeDemoData();
+    else initializeEmptyData();
     saveData(STORAGE_KEYS.LAST_VISIT, getTodayDateStr());
   }
-
   migrateSeedDataIfNeeded();
 }
 
