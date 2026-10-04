@@ -32,7 +32,7 @@ jobs:
       - name: Build for GitHub Pages
         run: npm run build
         env:
-          VITE_BASE_PATH: /gap-cockpit/
+          VITE_BASE_PATH: /northless/
       - name: Configure Pages
         uses: actions/configure-pages@v6
       - name: Upload Pages artifact
