@@ -16,10 +16,14 @@ import {
   checkReentryStatus,
   dismissReentryPrompt,
   exportAllData,
-  importAllData,
+  applyBackupAtomically,
   initializeStorageIfNeeded,
   loadData,
+  markBackupExported,
   resetToSeedData,
+  restoreRecoverySnapshot,
+  type NorthlessBackupV1,
+  type RestoreResult,
   saveData
 } from './lib/storage';
 import {
@@ -529,33 +533,43 @@ export default function App() {
     const url = URL.createObjectURL(blob);
     const a = document.createElement('a');
     a.href = url;
-    a.download = `northless-backup-${todayStr}.json`;
+    const now = new Date();
+    a.download = `northless-backup-${todayStr}-${String(now.getHours()).padStart(2, '0')}-${String(now.getMinutes()).padStart(2, '0')}.json`;
     a.click();
-    URL.revokeObjectURL(url);
+    window.setTimeout(() => URL.revokeObjectURL(url), 1000);
+    markBackupExported();
   }, [todayStr]);
 
-  const handleImportData = useCallback((jsonStr: string) => {
-    if (!importAllData(jsonStr)) return false;
-    setTracks(loadData(STORAGE_KEYS.TRACKS, []));
-    setActions(loadData(STORAGE_KEYS.ACTIONS, []));
-    setLogs(loadData(STORAGE_KEYS.LOGS, []));
-    setInbox(loadData(STORAGE_KEYS.INBOX, []));
-    setCards(loadData(STORAGE_KEYS.CARDS, []));
-    setDayCloses(loadData(STORAGE_KEYS.DAY_CLOSES, []));
+  const syncRestoredData = useCallback((backup: NorthlessBackupV1) => {
+    setTracks(backup.data.tracks);
+    setActions(backup.data.actions);
+    setLogs(backup.data.logs);
+    setInbox(backup.data.inbox);
+    setCards(backup.data.cards);
+    setDayCloses(backup.data.day_closes);
     setActiveSession(null);
-    setShowSettingsModal(false);
-    return true;
+    if (backup.preferences?.theme) {
+      applyTheme(backup.preferences.theme);
+      setTheme(backup.preferences.theme);
+    }
   }, []);
 
-  const handleResetData = useCallback(() => {
-    const seed = resetToSeedData();
-    setTracks(seed.tracks);
-    setActions(seed.actions);
-    setLogs(seed.logs);
-    setInbox(seed.inbox);
-    setCards(seed.cards);
-    setDayCloses(seed.dayCloses);
-    setActiveSession(null);
+  const handleImportData = useCallback((backup: NorthlessBackupV1): RestoreResult => {
+    const result = applyBackupAtomically(backup);
+    if (result.ok) syncRestoredData(result.backup);
+    return result;
+  }, [syncRestoredData]);
+
+  const handleRestoreRecovery = useCallback((): RestoreResult => {
+    const result = restoreRecoverySnapshot();
+    if (result.ok) syncRestoredData(result.backup);
+    return result;
+  }, [syncRestoredData]);
+
+  const handleResetData = useCallback((): RestoreResult => {
+    const result = resetToSeedData();
+    if (!result.ok) return result;
+    syncRestoredData(result.backup);
     setEffortFilter('all');
     setRotationOffset(0);
     setSelectedScoreCandidate(null);
@@ -569,7 +583,8 @@ export default function App() {
     setShouldOpenNewTrackComposer(false);
     setReturnToTodayAfterNewTrack(false);
     setCurrentView('today');
-  }, []);
+    return result;
+  }, [syncRestoredData]);
 
   const openSettings = useCallback((tab: SettingsTab = 'cards', focusNewCard = false) => {
     setSettingsEntry({ tab, focusNewCard });
@@ -745,11 +760,13 @@ export default function App() {
           initialTab={settingsEntry.tab}
           focusNewCard={settingsEntry.focusNewCard}
           cards={cards}
+          dataCounts={{ tracks: tracks.length, actions: actions.length, logs: logs.length, inbox: inbox.length, cards: cards.length }}
           onAddCard={handleAddCard}
           onTogglePinCard={handleTogglePinCard}
           onDeleteCard={handleDeleteCard}
           onExportData={handleExportData}
           onImportData={handleImportData}
+          onRestoreRecovery={handleRestoreRecovery}
           onResetData={handleResetData}
           onOpenAiExport={handleOpenAiExport}
         />

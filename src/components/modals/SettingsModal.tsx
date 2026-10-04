@@ -16,6 +16,8 @@ import { CockpitTooltip } from '../ui/CockpitTooltip';
 import { CockpitModal, CockpitModalFooter } from '../ui/CockpitModal';
 import { CockpitConfirmAction } from '../ui/CockpitConfirmAction';
 import type { ThemeMode } from '../../lib/themePreference';
+import { getLastBackupExportAt, getRecoverySnapshot, parseBackup,
+  type NorthlessBackupV1, type RecoverySnapshot, type RestoreResult } from '../../lib/storage';
 
 export type SettingsTab = 'cards' | 'appearance' | 'data' | 'about';
 const SETTINGS_TABS: readonly [SettingsTab, string][] = [
@@ -41,12 +43,14 @@ interface SettingsModalProps {
   initialTab?: SettingsTab;
   focusNewCard?: boolean;
   cards: Card[];
+  dataCounts: { tracks: number; actions: number; logs: number; inbox: number; cards: number };
   onAddCard: (title: string, url: string, description?: string, pinned?: boolean) => void;
   onTogglePinCard: (cardId: string) => void;
   onDeleteCard: (cardId: string) => void;
   onExportData: () => void;
-  onImportData: (jsonStr: string) => boolean;
-  onResetData: () => void;
+  onImportData: (backup: NorthlessBackupV1) => RestoreResult;
+  onRestoreRecovery: () => RestoreResult;
+  onResetData: () => RestoreResult;
   onOpenAiExport: () => void;
 }
 
@@ -57,11 +61,13 @@ export const SettingsModal: React.FC<SettingsModalProps> = ({
   initialTab = 'cards',
   focusNewCard = false,
   cards,
+  dataCounts,
   onAddCard,
   onTogglePinCard,
   onDeleteCard,
   onExportData,
   onImportData,
+  onRestoreRecovery,
   onResetData,
   onOpenAiExport,
 }) => {
@@ -78,9 +84,22 @@ export const SettingsModal: React.FC<SettingsModalProps> = ({
   const [cardTitleTouched, setCardTitleTouched] = useState(false);
   const [cardUrlTouched, setCardUrlTouched] = useState(false);
 
-  // Import JSON error state
-  const [importStatus, setImportStatus] = useState<string | null>(null);
+  const [pendingBackup, setPendingBackup] = useState<NorthlessBackupV1 | null>(null);
+  const [backupParseError, setBackupParseError] = useState<string | null>(null);
+  const [restoreStatus, setRestoreStatus] = useState<string | null>(null);
+  const [lastExportAt, setLastExportAt] = useState(getLastBackupExportAt);
+  const [recoverySnapshot, setRecoverySnapshot] = useState<RecoverySnapshot | null>(getRecoverySnapshot);
+  const [showRecoveryConfirm, setShowRecoveryConfirm] = useState(false);
   const [showResetConfirm, setShowResetConfirm] = useState(false);
+
+  const formatDate = (value: string) => new Date(value).toLocaleString('zh-CN', {
+    year: 'numeric', month: '2-digit', day: '2-digit', hour: '2-digit', minute: '2-digit',
+  });
+
+  const refreshMetadata = () => {
+    setRecoverySnapshot(getRecoverySnapshot());
+    setLastExportAt(getLastBackupExportAt());
+  };
 
   useEffect(() => {
     if (!focusNewCard || activeTab !== 'cards') return;
@@ -110,17 +129,27 @@ export const SettingsModal: React.FC<SettingsModalProps> = ({
     const file = e.target.files?.[0];
     if (!file) return;
     e.target.value = '';
+    setPendingBackup(null);
+    setBackupParseError(null);
+    setRestoreStatus(null);
     const reader = new FileReader();
     reader.onload = event => {
-      const content = event.target?.result as string;
-      const success = onImportData(content);
-      if (success) {
-        setImportStatus('数据导入成功');
-      } else {
-        setImportStatus('导入失败：JSON 格式不正确');
-      }
+      const content = event.target?.result;
+      const parsed = parseBackup(typeof content === 'string' ? content : '');
+      if (parsed.ok) setPendingBackup(parsed.backup);
+      else setBackupParseError(parsed.message);
     };
+    reader.onerror = () => setBackupParseError('无法读取备份文件，请重新选择');
     reader.readAsText(file);
+  };
+
+  const handleRestore = () => {
+    if (!pendingBackup) return;
+    const result = onImportData(pendingBackup);
+    refreshMetadata();
+    if (!result.ok) { setRestoreStatus(result.message); return; }
+    setRestoreStatus(`已从 ${formatDate(pendingBackup.exported_at)} 的备份恢复。`);
+    setPendingBackup(null);
   };
 
   return (
@@ -301,6 +330,10 @@ export const SettingsModal: React.FC<SettingsModalProps> = ({
 
           {activeTab === 'data' && (
             <div id="settings-panel-data" role="tabpanel" aria-labelledby="settings-tab-data" className="space-y-6">
+              <div className="surface-flat settings-surface p-4 space-y-1">
+                <div className="font-medium text-[var(--text-title)]">本地数据</div>
+                <p className="text-[var(--text-secondary)] leading-relaxed">Northless 的个人数据保存在此浏览器，不依赖云端同步。清除网站数据或更换设备前，请先导出完整备份。</p>
+              </div>
               {/* Context Exporter */}
               <div className="brass-panel settings-surface p-4 space-y-2">
                 <div className="type-l6 font-mono font-medium uppercase tracking-wider text-[var(--accent-brass)]">
@@ -321,32 +354,42 @@ export const SettingsModal: React.FC<SettingsModalProps> = ({
                 </button>
               </div>
 
-              {/* Export / Import */}
-              <div className="brass-panel settings-surface p-4 space-y-4">
+              <div className="brass-panel settings-surface p-4 space-y-3">
                 <div className="type-l6 font-mono font-medium uppercase tracking-wider text-[var(--accent-brass)]">
-                  本地数据备份与迁移
+                  完整备份
                 </div>
-
-                <div className="flex flex-wrap items-center gap-3">
-                  <button
-                    onClick={onExportData}
-                    className="cockpit-button cockpit-button--secondary"
-                  >
-                    <Download className="w-3.5 h-3.5 text-[var(--accent-brass)]" />
-                    <span>导出 JSON 备份</span>
-                  </button>
-
-                  <button type="button" onClick={() => importInputRef.current?.click()} className="cockpit-button cockpit-button--secondary">
-                    <Upload className="w-3.5 h-3.5 text-[var(--accent-brass)]" />
-                    <span>导入 JSON 备份</span>
-                  </button>
-                  <input ref={importInputRef} type="file" accept=".json" onChange={handleFileUpload} className="hidden" aria-label="选择 JSON 备份文件" />
-                </div>
-
-                {importStatus && (
-                  <p className="type-l6 text-[var(--accent-brass)] font-mono font-medium">{importStatus}</p>
-                )}
+                <p className="text-[var(--text-secondary)]">{dataCounts.tracks} 条主线 · {dataCounts.logs} 条记录 · {dataCounts.inbox} 个收集项</p>
+                <p className="type-l6 text-[var(--text-muted)]">{lastExportAt ? `最近导出：${formatDate(lastExportAt)}` : '尚未导出过备份'}</p>
+                <button type="button" onClick={() => { try { onExportData(); refreshMetadata(); setBackupParseError(null); } catch (error) { setBackupParseError(`导出失败：${String(error)}`); } }} className="cockpit-button cockpit-button--secondary">
+                  <Download className="w-3.5 h-3.5 text-[var(--accent-brass)]" /><span>导出完整备份</span>
+                </button>
               </div>
+
+              <div className="brass-panel settings-surface p-4 space-y-3">
+                <div className="type-l6 font-mono font-medium uppercase tracking-wider text-[var(--accent-brass)]">从备份恢复</div>
+                <button type="button" onClick={() => importInputRef.current?.click()} className="cockpit-button cockpit-button--secondary">
+                  <Upload className="w-3.5 h-3.5 text-[var(--accent-brass)]" /><span>选择 Northless 备份</span>
+                </button>
+                <input ref={importInputRef} type="file" accept=".json,application/json" onChange={handleFileUpload} className="hidden" aria-label="选择 Northless 备份文件" />
+                {backupParseError && <p role="alert" className="cockpit-inline-error">{backupParseError}</p>}
+                {pendingBackup && <div className="surface-flat p-3 space-y-2">
+                  <p className="font-medium text-[var(--text-primary)]">备份时间：{formatDate(pendingBackup.exported_at)}</p>
+                  <p className="text-[var(--text-secondary)]">Tracks {pendingBackup.data.tracks.length} · Actions {pendingBackup.data.actions.length} · Logs {pendingBackup.data.logs.length} · Inbox {pendingBackup.data.inbox.length} · Cards {pendingBackup.data.cards.length}</p>
+                  <p className="text-[var(--text-secondary)]">这会替换当前浏览器中的 Northless 数据。</p>
+                  <div className="flex flex-wrap gap-2">
+                    <button type="button" className="cockpit-button cockpit-button--secondary" onClick={() => { setPendingBackup(null); setRestoreStatus(null); }}>取消</button>
+                    <button type="button" className="cockpit-button cockpit-button--primary" onClick={handleRestore}>恢复此备份</button>
+                  </div>
+                </div>}
+                {restoreStatus && <p role="status" className="type-l6 text-[var(--accent-brass)] font-medium">{restoreStatus}</p>}
+              </div>
+
+              {recoverySnapshot && <div className="brass-panel settings-surface p-4 space-y-2">
+                <div className="type-l6 font-mono font-medium uppercase tracking-wider text-[var(--accent-brass)]">上一个本地恢复点</div>
+                <p className="text-[var(--text-primary)]">{formatDate(recoverySnapshot.created_at)} · {recoverySnapshot.reason === 'before-import' ? '导入备份前自动保存' : '重置数据前自动保存'}</p>
+                <p className="text-[var(--text-secondary)]">{recoverySnapshot.backup.data.tracks.length} 条主线 · {recoverySnapshot.backup.data.logs.length} 条记录 · {recoverySnapshot.backup.data.inbox.length} 个收集项</p>
+                <button type="button" className="cockpit-button cockpit-button--secondary" onClick={() => setShowRecoveryConfirm(true)}>恢复到这个状态</button>
+              </div>}
 
               {/* Reset to Seed */}
               <div className="brass-panel settings-surface p-4 space-y-2">
@@ -392,8 +435,19 @@ export const SettingsModal: React.FC<SettingsModalProps> = ({
           )}
         </div>
       </div>
-      {showResetConfirm && <CockpitModal onClose={() => setShowResetConfirm(false)} title="重置演示数据？" subtitle="当前本地数据将被替换为初始演示内容，此操作无法撤销。" className="max-w-md">
-        <CockpitModalFooter><button type="button" className="cockpit-button cockpit-button--secondary" onClick={() => setShowResetConfirm(false)}>取消</button><button type="button" className="cockpit-button cockpit-button--danger" onClick={onResetData}>重置数据</button></CockpitModalFooter>
+      {showRecoveryConfirm && <CockpitModal onClose={() => setShowRecoveryConfirm(false)} title="恢复到本地恢复点？" subtitle="当前数据将被替换。" className="max-w-md">
+        <CockpitModalFooter><button type="button" className="cockpit-button cockpit-button--secondary" onClick={() => setShowRecoveryConfirm(false)}>取消</button><button type="button" className="cockpit-button cockpit-button--primary" onClick={() => {
+          const result = onRestoreRecovery();
+          setShowRecoveryConfirm(false);
+          setRestoreStatus(result.ok ? '已恢复到上一个本地恢复点。' : result.message);
+          refreshMetadata();
+        }}>确认恢复</button></CockpitModalFooter>
+      </CockpitModal>}
+      {showResetConfirm && <CockpitModal onClose={() => setShowResetConfirm(false)} title="重置演示数据？" subtitle="当前本地数据将被替换为初始演示内容。重置前会自动保存一个本地恢复点。" className="max-w-md">
+        <CockpitModalFooter><button type="button" className="cockpit-button cockpit-button--secondary" onClick={() => setShowResetConfirm(false)}>取消</button><button type="button" className="cockpit-button cockpit-button--danger" onClick={() => {
+          const result = onResetData();
+          if (!result.ok) { setRestoreStatus(result.message); setShowResetConfirm(false); refreshMetadata(); }
+        }}>重置数据</button></CockpitModalFooter>
       </CockpitModal>}
     </div>
   );

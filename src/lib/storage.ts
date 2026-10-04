@@ -8,6 +8,7 @@ import {
   Track
 } from '../types';
 import { getTodayDateStr } from './recommendation';
+import { loadThemePreference, THEME_STORAGE_KEY, type ThemeMode } from './themePreference';
 
 const STORAGE_KEYS = {
   TRACKS: 'gap_cockpit_tracks_v0',
@@ -492,59 +493,241 @@ export function initializeStorageIfNeeded() {
   migrateSeedDataIfNeeded();
 }
 
-export function resetToSeedData() {
-  const seed = getInitialSeedData();
-  saveData(STORAGE_KEYS.TRACKS, seed.tracks);
-  saveData(STORAGE_KEYS.ACTIONS, seed.actions);
-  saveData(STORAGE_KEYS.LOGS, seed.logs);
-  saveData(STORAGE_KEYS.INBOX, seed.inbox);
-  saveData(STORAGE_KEYS.CARDS, seed.cards);
-  saveData(STORAGE_KEYS.DAY_CLOSES, seed.dayCloses);
-  saveData(STORAGE_KEYS.ACTIVE_SESSION, null);
-  saveData(STORAGE_KEYS.LAST_VISIT, getTodayDateStr());
-  localStorage.setItem(STORAGE_KEYS.SEED_SCHEMA_VERSION, String(CURRENT_SEED_SCHEMA_VERSION));
-  return seed;
+export const RECOVERY_SNAPSHOT_KEY = 'northless_recovery_snapshot_v1';
+export const LAST_BACKUP_EXPORT_KEY = 'northless_last_backup_export_at_v1';
+
+export interface BackupData {
+  tracks: Track[];
+  actions: NextAction[];
+  logs: LogEntry[];
+  inbox: InboxItem[];
+  cards: Card[];
+  day_closes: DayClose[];
 }
 
-export function exportAllData() {
+export interface NorthlessBackupV1 {
+  kind: 'northless-backup';
+  format_version: 1;
+  exported_at: string;
+  data: BackupData;
+  preferences?: { theme?: ThemeMode };
+}
+
+export type BackupParseResult =
+  | { ok: true; backup: NorthlessBackupV1 }
+  | { ok: false; code: 'INVALID_JSON' | 'INVALID_FORMAT' | 'UNSUPPORTED_VERSION' | 'INVALID_DATA'; message: string };
+
+export type RestoreResult =
+  | { ok: true; backup: NorthlessBackupV1 }
+  | { ok: false; code: 'INVALID_DATA' | 'STORAGE_ERROR' | 'ROLLBACK_FAILED'; message: string };
+
+export interface RecoverySnapshot {
+  created_at: string;
+  reason: 'before-import' | 'before-reset';
+  backup: NorthlessBackupV1;
+}
+
+const DATA_KEYS = {
+  tracks: STORAGE_KEYS.TRACKS,
+  actions: STORAGE_KEYS.ACTIONS,
+  logs: STORAGE_KEYS.LOGS,
+  inbox: STORAGE_KEYS.INBOX,
+  cards: STORAGE_KEYS.CARDS,
+  day_closes: STORAGE_KEYS.DAY_CLOSES,
+} as const;
+
+const isRecord = (value: unknown): value is Record<string, unknown> =>
+  typeof value === 'object' && value !== null && !Array.isArray(value);
+const isString = (value: unknown): value is string => typeof value === 'string';
+const isNumber = (value: unknown): value is number => typeof value === 'number' && Number.isFinite(value);
+const isDate = (value: unknown): value is string => isString(value)
+  && /^\d{4}-\d{2}-\d{2}T\d{2}:\d{2}:\d{2}(?:\.\d+)?(?:Z|[+-]\d{2}:\d{2})$/.test(value)
+  && !Number.isNaN(Date.parse(value));
+const optional = (value: unknown, check: (value: unknown) => boolean) => value === undefined || check(value);
+const oneOf = (value: unknown, options: readonly string[]) => isString(value) && options.includes(value);
+
+const validators: { [K in keyof BackupData]: (value: unknown) => boolean } = {
+  tracks: value => isRecord(value) && isString(value.id) && isString(value.name) && isString(value.description)
+    && oneOf(value.role, ['main', 'maintenance', 'paused']) && Array.isArray(value.roadmap)
+    && value.roadmap.every(isString) && isNumber(value.current_stage_index)
+    && oneOf(value.status, ['active', 'archived']) && isString(value.created_at)
+    && optional(value.last_touched_at, isString),
+  actions: value => isRecord(value) && isString(value.id) && isString(value.track_id)
+    && isString(value.title) && optional(value.note, isString)
+    && oneOf(value.effort, ['light', 'normal', 'deep']) && oneOf(value.status, ['active', 'done', 'later'])
+    && isNumber(value.position) && isString(value.created_at) && optional(value.completed_at, isString),
+  logs: value => isRecord(value) && isString(value.id) && isString(value.date)
+    && optional(value.track_id, isString) && oneOf(value.type, ['session', 'note'])
+    && isString(value.content) && optional(value.started_at, isString)
+    && optional(value.ended_at, isString) && optional(value.duration_minutes, isNumber)
+    && isString(value.created_at),
+  inbox: value => isRecord(value) && isString(value.id) && isString(value.content)
+    && optional(value.track_id, isString) && oneOf(value.status, ['inbox', 'promoted', 'archived'])
+    && isString(value.created_at),
+  cards: value => isRecord(value) && isString(value.id) && isString(value.title)
+    && optional(value.description, isString) && isString(value.url)
+    && oneOf(value.type, ['link', 'embed']) && optional(value.icon, isString)
+    && optional(value.track_id, isString) && typeof value.pinned === 'boolean' && isNumber(value.position),
+  day_closes: value => isRecord(value) && isString(value.date)
+    && optional(value.note, isString) && optional(value.carry_forward, isString)
+    && isString(value.closed_at),
+};
+
+export function validateBackup(value: unknown): BackupParseResult {
+  if (!isRecord(value)) return { ok: false, code: 'INVALID_FORMAT', message: '无法识别为 Northless 备份' };
+  if (value.kind !== 'northless-backup') return { ok: false, code: 'INVALID_FORMAT', message: '无法识别为 Northless 备份' };
+  if (typeof value.format_version === 'number' && value.format_version > 1) {
+    return { ok: false, code: 'UNSUPPORTED_VERSION', message: '此备份版本高于当前 Northless 支持的版本' };
+  }
+  if (value.format_version !== 1) return { ok: false, code: 'UNSUPPORTED_VERSION', message: '不支持此备份版本' };
+  if (!isDate(value.exported_at) || !isRecord(value.data)) {
+    return { ok: false, code: 'INVALID_DATA', message: '备份缺少有效的导出时间或数据' };
+  }
+  for (const key of Object.keys(DATA_KEYS) as (keyof BackupData)[]) {
+    const entries = value.data[key];
+    if (!Array.isArray(entries) || !entries.every(validators[key])) {
+      return { ok: false, code: 'INVALID_DATA', message: `备份中的 ${key} 数据缺失或格式无效` };
+    }
+  }
+  if (value.preferences !== undefined && (!isRecord(value.preferences)
+    || !optional(value.preferences.theme, theme => oneOf(theme, ['dark', 'light'])))) {
+    return { ok: false, code: 'INVALID_DATA', message: '备份中的主题设置无效' };
+  }
+  return { ok: true, backup: value as unknown as NorthlessBackupV1 };
+}
+
+export function parseBackup(jsonString: string): BackupParseResult {
+  let value: unknown;
+  try { value = JSON.parse(jsonString); }
+  catch { return { ok: false, code: 'INVALID_JSON', message: '备份文件不是有效的 JSON' }; }
+  if (isRecord(value) && value.version === '1.0.0' && value.kind === undefined) {
+    const legacy = value;
+    value = {
+      kind: 'northless-backup', format_version: 1, exported_at: value.exported_at,
+      data: Object.fromEntries(Object.keys(DATA_KEYS).map(key => [key, legacy[key]])),
+    };
+  }
+  return validateBackup(value);
+}
+
+function readStoredArray<K extends keyof BackupData>(key: K): BackupData[K] {
+  const raw = localStorage.getItem(DATA_KEYS[key]);
+  const value: unknown = raw === null ? [] : JSON.parse(raw);
+  if (!Array.isArray(value) || !value.every(validators[key])) throw new Error(`当前 ${key} 数据无效`);
+  return value as BackupData[K];
+}
+
+export function createCurrentSnapshot(): NorthlessBackupV1 {
   return {
-    version: '1.0.0',
-    exported_at: new Date().toISOString(),
-    tracks: loadData(STORAGE_KEYS.TRACKS, []),
-    actions: loadData(STORAGE_KEYS.ACTIONS, []),
-    logs: loadData(STORAGE_KEYS.LOGS, []),
-    inbox: loadData(STORAGE_KEYS.INBOX, []),
-    cards: loadData(STORAGE_KEYS.CARDS, []),
-    day_closes: loadData(STORAGE_KEYS.DAY_CLOSES, []),
+    kind: 'northless-backup', format_version: 1, exported_at: new Date().toISOString(),
+    data: {
+      tracks: readStoredArray('tracks'), actions: readStoredArray('actions'),
+      logs: readStoredArray('logs'), inbox: readStoredArray('inbox'),
+      cards: readStoredArray('cards'), day_closes: readStoredArray('day_closes'),
+    },
+    preferences: { theme: loadThemePreference() },
   };
 }
 
-export function importAllData(jsonStr: string): boolean {
-  try {
-    const data = JSON.parse(jsonStr);
-    if (data.tracks && Array.isArray(data.tracks)) {
-      saveData(STORAGE_KEYS.TRACKS, data.tracks);
-    }
-    if (data.actions && Array.isArray(data.actions)) {
-      saveData(STORAGE_KEYS.ACTIONS, data.actions);
-    }
-    if (data.logs && Array.isArray(data.logs)) {
-      saveData(STORAGE_KEYS.LOGS, data.logs);
-    }
-    if (data.inbox && Array.isArray(data.inbox)) {
-      saveData(STORAGE_KEYS.INBOX, data.inbox);
-    }
-    if (data.cards && Array.isArray(data.cards)) {
-      saveData(STORAGE_KEYS.CARDS, data.cards);
-    }
-    if (data.day_closes && Array.isArray(data.day_closes)) {
-      saveData(STORAGE_KEYS.DAY_CLOSES, data.day_closes);
-    }
-    return true;
-  } catch (err) {
-    console.error('Failed to import JSON data:', err);
-    return false;
+export const exportAllData = createCurrentSnapshot;
+
+type RawSnapshot = Record<string, string | null>;
+const TRANSACTION_KEYS = [...Object.values(DATA_KEYS), THEME_STORAGE_KEY, STORAGE_KEYS.ACTIVE_SESSION,
+  STORAGE_KEYS.LAST_VISIT, STORAGE_KEYS.SEED_SCHEMA_VERSION, RECOVERY_SNAPSHOT_KEY];
+
+function captureRawSnapshot(): RawSnapshot {
+  return Object.fromEntries(TRANSACTION_KEYS.map(key => [key, localStorage.getItem(key)]));
+}
+
+export function restoreSnapshot(snapshot: RawSnapshot): void {
+  // Free the space occupied by partial writes before restoring exact old values.
+  for (const [key, value] of Object.entries(snapshot)) {
+    if (localStorage.getItem(key) !== value) localStorage.removeItem(key);
   }
+  for (const [key, value] of Object.entries(snapshot)) {
+    if (value !== null && localStorage.getItem(key) !== value) localStorage.setItem(key, value);
+  }
+}
+
+function writeBackup(backup: NorthlessBackupV1): void {
+  for (const key of Object.keys(DATA_KEYS) as (keyof BackupData)[]) {
+    localStorage.setItem(DATA_KEYS[key], JSON.stringify(backup.data[key]));
+  }
+  if (backup.preferences?.theme) localStorage.setItem(THEME_STORAGE_KEY, backup.preferences.theme);
+  localStorage.setItem(STORAGE_KEYS.ACTIVE_SESSION, 'null');
+}
+
+function failure(error: unknown, rollbackError?: unknown): RestoreResult {
+  const detail = error instanceof Error ? error.message : String(error);
+  if (rollbackError) return { ok: false, code: 'ROLLBACK_FAILED', message: `恢复失败，自动回滚也失败：${detail}；${String(rollbackError)}` };
+  return { ok: false, code: 'STORAGE_ERROR', message: `写入失败，已自动回滚：${detail}` };
+}
+
+function runTransaction(backup: NorthlessBackupV1, reason: RecoverySnapshot['reason'],
+  extraWrite?: () => void): RestoreResult {
+  const validated = validateBackup(backup);
+  if (!validated.ok) return { ok: false, code: 'INVALID_DATA', message: validated.message };
+  let before: RawSnapshot;
+  let current: NorthlessBackupV1;
+  try { before = captureRawSnapshot(); current = createCurrentSnapshot(); }
+  catch (error) { return { ok: false, code: 'STORAGE_ERROR', message: `无法读取当前数据：${String(error)}` }; }
+  try {
+    localStorage.setItem(RECOVERY_SNAPSHOT_KEY, JSON.stringify({
+      created_at: new Date().toISOString(), reason, backup: current,
+    } satisfies RecoverySnapshot));
+    writeBackup(validated.backup);
+    extraWrite?.();
+    return { ok: true, backup: validated.backup };
+  } catch (error) {
+    try { restoreSnapshot(before); return failure(error); }
+    catch (rollbackError) { return failure(error, rollbackError); }
+  }
+}
+
+export function applyBackupAtomically(backup: NorthlessBackupV1): RestoreResult {
+  return runTransaction(backup, 'before-import');
+}
+
+export function getRecoverySnapshot(): RecoverySnapshot | null {
+  try {
+    const raw = localStorage.getItem(RECOVERY_SNAPSHOT_KEY);
+    if (!raw) return null;
+    const value: unknown = JSON.parse(raw);
+    if (!isRecord(value) || !isDate(value.created_at)
+      || !oneOf(value.reason, ['before-import', 'before-reset'])) return null;
+    const parsed = validateBackup(value.backup);
+    return parsed.ok ? value as unknown as RecoverySnapshot : null;
+  } catch { return null; }
+}
+
+export function restoreRecoverySnapshot(): RestoreResult {
+  const snapshot = getRecoverySnapshot();
+  if (!snapshot) return { ok: false, code: 'INVALID_DATA', message: '没有可用的本地恢复点' };
+  return runTransaction(snapshot.backup, 'before-import');
+}
+
+export function clearRecoverySnapshot(): void { localStorage.removeItem(RECOVERY_SNAPSHOT_KEY); }
+export function getLastBackupExportAt(): string | null {
+  try {
+    const value = localStorage.getItem(LAST_BACKUP_EXPORT_KEY);
+    return isDate(value) ? value : null;
+  } catch { return null; }
+}
+export function markBackupExported(): void { localStorage.setItem(LAST_BACKUP_EXPORT_KEY, new Date().toISOString()); }
+
+export function resetToSeedData(): RestoreResult {
+  const seed = getInitialSeedData();
+  const backup: NorthlessBackupV1 = {
+    kind: 'northless-backup', format_version: 1, exported_at: new Date().toISOString(),
+    data: {
+      tracks: seed.tracks, actions: seed.actions, logs: seed.logs,
+      inbox: seed.inbox, cards: seed.cards, day_closes: seed.dayCloses,
+    },
+  };
+  return runTransaction(backup, 'before-reset', () => {
+    localStorage.setItem(STORAGE_KEYS.LAST_VISIT, JSON.stringify(getTodayDateStr()));
+    localStorage.setItem(STORAGE_KEYS.SEED_SCHEMA_VERSION, String(CURRENT_SEED_SCHEMA_VERSION));
+  });
 }
 
 export function checkReentryStatus(todayStr: string = getTodayDateStr()): {
