@@ -19,6 +19,7 @@ export interface Track {
 export interface NextAction {
   id: string;
   track_id: string;
+  stage_index?: number;
   title: string;
   note?: string;
   effort: ActionEffort;
@@ -32,6 +33,7 @@ export interface LogEntry {
   id: string;
   date: string; // YYYY-MM-DD
   track_id?: string;
+  stage_index?: number;
   type: EntryType;
   content: string;
   started_at?: string; // e.g. "14:10"

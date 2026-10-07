@@ -2411,3 +2411,38 @@ input[type='number'] { appearance: textfield; }
   background: var(--surface-panel);
   border-color: var(--border-subtle);
 }
+
+/* Trajectory and Transit Horizon Styles */
+.track-trajectory-panel {
+  isolation: isolate;
+}
+
+.transit-node-card {
+  position: relative;
+  background: linear-gradient(180deg, var(--surface-panel) 0%, var(--surface-panel-subtle) 100%);
+  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.22);
+  transition: all 160ms cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+.transit-node-card:hover {
+  transform: translateY(-1px);
+  box-shadow: 0 3px 8px rgba(0, 0, 0, 0.35);
+}
+
+.transit-node-card:active {
+  transform: translateY(0);
+}
+
+.transit-node-card:focus-visible {
+  outline: 1px solid var(--accent-brass);
+  outline-offset: 2px;
+}
+
+[data-theme='light'] .transit-node-card {
+  box-shadow: 0 1px 3px rgba(45, 45, 43, 0.06), inset 0 1px 0 rgba(255, 255, 255, 0.5);
+}
+
+[data-theme='light'] .transit-node-card:hover {
+  box-shadow: 0 3px 8px rgba(45, 45, 43, 0.1);
+}
+

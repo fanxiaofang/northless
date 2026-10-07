@@ -23,7 +23,7 @@ const STORAGE_KEYS = {
   SEED_SCHEMA_VERSION: 'gap_cockpit_seed_schema_version',
 };
 
-const CURRENT_SEED_SCHEMA_VERSION = 4;
+const CURRENT_SEED_SCHEMA_VERSION = 5;
 
 const LEGACY_TRACK_DESCRIPTIONS: Record<string, { legacy: string; replacement: string }> = {
   track_agent: {
@@ -215,9 +215,82 @@ export function getInitialSeedData() {
       position: 1,
       created_at: d8,
     },
+    {
+      id: 'act_done_agent_1',
+      track_id: 'track_agent',
+      stage_index: 0,
+      title: 'ReAct 原理与基础 Prompt Loop 验证',
+      note: '完成 Agent 最底层推理与执行循环实验',
+      effort: 'normal',
+      status: 'done',
+      position: 99,
+      created_at: '2026-09-02',
+      completed_at: '2026-09-12',
+    },
+    {
+      id: 'act_done_agent_2',
+      track_id: 'track_agent',
+      stage_index: 1,
+      title: '首个 CLI Agent 原型与 Tool Calling 跑通',
+      note: '封装最小工具注册表并跑通命令行交互',
+      effort: 'deep',
+      status: 'done',
+      position: 98,
+      created_at: '2026-09-18',
+      completed_at: '2026-09-28',
+    },
   ];
 
   const initialLogs: LogEntry[] = [
+    // Historical milestones for Agent / AI trajectory
+    {
+      id: 'log_hist_1',
+      date: '2026-09-03',
+      track_id: 'track_agent',
+      stage_index: 0,
+      type: 'session',
+      content: '梳理 LLM Agent 架构：Planning, Memory, Tools 与 ReAct 推理',
+      started_at: '14:00',
+      ended_at: '14:50',
+      duration_minutes: 50,
+      created_at: '2026-09-03T14:50:00Z',
+    },
+    {
+      id: 'log_hist_2',
+      date: '2026-09-10',
+      track_id: 'track_agent',
+      stage_index: 0,
+      type: 'session',
+      content: '手写最小 Prompt 循环，完成 ReAct 推理链与停止词验证',
+      started_at: '15:10',
+      ended_at: '16:15',
+      duration_minutes: 65,
+      created_at: '2026-09-10T16:15:00Z',
+    },
+    {
+      id: 'log_hist_3',
+      date: '2026-09-18',
+      track_id: 'track_agent',
+      stage_index: 1,
+      type: 'session',
+      content: '完成 Weather Tool 注册并跑通首个本地调用测试 Demo',
+      started_at: '16:00',
+      ended_at: '16:45',
+      duration_minutes: 45,
+      created_at: '2026-09-18T16:45:00Z',
+    },
+    {
+      id: 'log_hist_4',
+      date: '2026-09-26',
+      track_id: 'track_agent',
+      stage_index: 1,
+      type: 'session',
+      content: '重构 CLI 工具交互，封装基础 Agent Runner 与上下文管理',
+      started_at: '20:00',
+      ended_at: '21:10',
+      duration_minutes: 70,
+      created_at: '2026-09-26T21:10:00Z',
+    },
     {
       id: 'log_today_1',
       date: today,
@@ -467,6 +540,20 @@ function migrateSeedDataIfNeeded(): void {
   });
 
   if (tracksChanged) saveData(STORAGE_KEYS.TRACKS, migratedTracks);
+
+  const currentLogs = loadData<LogEntry[]>(STORAGE_KEYS.LOGS, []);
+  if (currentLogs.some(l => l.id === 'log_today_1') && !currentLogs.some(l => l.id === 'log_hist_1')) {
+    const seed = getInitialSeedData();
+    const existingLogIds = new Set(currentLogs.map(l => l.id));
+    const missingLogs = seed.logs.filter(l => !existingLogIds.has(l.id));
+    saveData(STORAGE_KEYS.LOGS, [...currentLogs, ...missingLogs]);
+
+    const currentActions = loadData<NextAction[]>(STORAGE_KEYS.ACTIONS, []);
+    const existingActIds = new Set(currentActions.map(a => a.id));
+    const missingActions = seed.actions.filter(a => !existingActIds.has(a.id));
+    saveData(STORAGE_KEYS.ACTIONS, [...currentActions, ...missingActions]);
+  }
+
   localStorage.setItem(STORAGE_KEYS.SEED_SCHEMA_VERSION, String(CURRENT_SEED_SCHEMA_VERSION));
 }
 

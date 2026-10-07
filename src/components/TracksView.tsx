@@ -5,7 +5,9 @@ import {
   Trash2,
   ArrowRight,
   ArrowUpRight,
-  Check
+  Check,
+  ChevronDown,
+  ChevronUp
 } from 'lucide-react';
 import { Card, LogEntry, NextAction, Track, TrackRole } from '../types';
 import { calculateStalenessDays } from '../lib/recommendation';
@@ -13,6 +15,8 @@ import { InlineEmptyState } from './InlineEmptyState';
 import { CockpitTooltip } from './ui/CockpitTooltip';
 import { CockpitConfirmAction } from './ui/CockpitConfirmAction';
 import { CockpitInspectionNote } from './ui/CockpitInspectionNote';
+import { TrackEpochStrata } from './TrackEpochStrata';
+import { calculateTrackTrajectory, formatCompactDate, formatDurationHoursMins } from '../lib/trajectory';
 
 interface TracksViewProps {
   tracks: Track[];
@@ -186,6 +190,13 @@ export const TracksView: React.FC<TracksViewProps> = ({
     .sort((a, b) => a.position - b.position);
 
   const relatedCards = cards.filter(c => c.track_id === selectedTrack?.id);
+  const [roadmapViewMode, setRoadmapViewMode] = useState<'scale' | 'epoch'>('scale');
+  const [showAllRecentLogs, setShowAllRecentLogs] = useState(false);
+
+  const trajectoryOverview = selectedTrack
+    ? calculateTrackTrajectory(selectedTrack, logs, actions, currentDateStr)
+    : null;
+
   const roadmapDesktopColumns = getRoadmapColumnCount(
     selectedTrack?.roadmap.length ?? 0,
     ROADMAP_DESKTOP_COLUMNS
@@ -202,10 +213,11 @@ export const TracksView: React.FC<TracksViewProps> = ({
     return log.created_at.includes('T') ? log.created_at : `${log.date}T00:00:00`;
   };
 
-  const trackLogs = logs
+  const allTrackLogs = logs
     .filter(l => l.track_id === selectedTrack?.id)
-    .sort((a, b) => getLogOccurredAt(b).localeCompare(getLogOccurredAt(a)))
-    .slice(0, 6);
+    .sort((a, b) => getLogOccurredAt(b).localeCompare(getLogOccurredAt(a)));
+
+  const displayedTrackLogs = showAllRecentLogs ? allTrackLogs : allTrackLogs.slice(0, 6);
 
   // Helper to format log date like "9/30"
   const formatLogDate = (dateStr: string) => {
@@ -347,116 +359,164 @@ export const TracksView: React.FC<TracksViewProps> = ({
                 </p>
               </div>
 
-              {/* Roadmap Scale (Mechanical instrument gauge) */}
+              {/* Roadmap Scale & Epoch Strata Switcher with Macro Trajectory HUD */}
               <div className="space-y-3 pt-1">
-                <div className="flex items-center justify-between gap-3 pb-1">
-                  <span className="track-section-label">ROADMAP SCALE / 路线刻度</span>
-                  <span className="track-section-help">点击刻度切换当前位置</span>
-                </div>
+                <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-3 pb-2 border-b border-[var(--border-accent-subtle)]">
+                  <div>
+                    <div className="flex items-center gap-2">
+                      <span className="track-section-label">
+                        ROADMAP & TRAJECTORY / 路线刻度与纪元脉络
+                      </span>
+                    </div>
+                    {/* Top Macro Lifeline Instrument Readings (起点与生命周期距今持续了多久) */}
+                    {trajectoryOverview && (
+                      <div className="flex flex-wrap items-center gap-x-2 gap-y-0.5 text-xs text-[var(--text-muted)] mt-1 font-mono">
+                        <span>
+                          起程 <strong className="text-[var(--text-secondary)] font-medium">{formatCompactDate(trajectoryOverview.createdDateStr)}</strong> ({trajectoryOverview.daysSinceCreation}天)
+                        </span>
+                        <span className="text-[var(--text-ghost)]" aria-hidden="true">·</span>
+                        <span>
+                          沉淀 <strong className="text-[var(--text-secondary)] font-medium">{trajectoryOverview.totalTouches}次</strong> / {formatDurationHoursMins(trajectoryOverview.totalMinutes)}
+                        </span>
+                        <span className="text-[var(--text-ghost)]" aria-hidden="true">·</span>
+                        <span>
+                          驻留 <strong className="text-[var(--accent-brass)] font-medium">{String(trajectoryOverview.completedStageCount + 1).padStart(2, '0')}/{String(trajectoryOverview.totalStageCount).padStart(2, '0')}</strong> 站
+                        </span>
+                      </div>
+                    )}
+                  </div>
 
-                {/* Instrument Gauge Line & Station Markers */}
-                <div className="py-2">
-                  <div
-                    className="track-roadmap-grid"
-                    style={{
-                      '--roadmap-desktop-columns': roadmapDesktopColumns,
-                      '--roadmap-mobile-columns': roadmapMobileColumns,
-                    } as React.CSSProperties}
-                  >
-                    {selectedTrack.roadmap.map((stage, idx) => {
-                      const isCurrent = idx === selectedTrack.current_stage_index;
-                      const isCompleted = idx < selectedTrack.current_stage_index;
-                      const stageState = isCompleted ? 'completed' : isCurrent ? 'current' : 'future';
-                      const connectionState = getRoadmapConnectionState(
-                        idx,
-                        selectedTrack.current_stage_index,
-                        selectedTrack.roadmap.length
-                      );
-                      const desktopPosition = getStageGridPosition(
-                        idx,
-                        selectedTrack.roadmap.length,
-                        roadmapDesktopColumns
-                      );
-                      const mobilePosition = getStageGridPosition(
-                        idx,
-                        selectedTrack.roadmap.length,
-                        roadmapMobileColumns
-                      );
-                      const gridStyle = {
-                        '--roadmap-desktop-column': desktopPosition.column,
-                        '--roadmap-desktop-row': desktopPosition.row,
-                        '--roadmap-mobile-column': mobilePosition.column,
-                        '--roadmap-mobile-row': mobilePosition.row,
-                      } as React.CSSProperties;
-                      const stageStateLabel = isCompleted ? '已完成' : isCurrent ? '当前位置' : '尚未开始';
-
-                      return (
-                        <button
-                          key={idx}
-                          type="button"
-                          onClick={() => onUpdateTrackStage(selectedTrack.id, idx)}
-                          aria-label={`切换到路线节点 ${idx + 1}：${stage}，${stageStateLabel}`}
-                          data-desktop-direction={desktopPosition.direction}
-                          data-desktop-connection={desktopPosition.connection}
-                          data-mobile-direction={mobilePosition.direction}
-                          data-mobile-connection={mobilePosition.connection}
-                          className={`track-roadmap-stage track-roadmap-stage--${stageState} group cursor-pointer`}
-                          style={gridStyle}
-                        >
-                          {/* Top: 01, 02, 03 Number */}
-                          <div
-                            className="track-roadmap-number"
-                          >
-                            {String(idx + 1).padStart(2, '0')}
-                          </div>
-
-                          {/* Middle: Station Node with Connecting Rail Segment */}
-                          <span
-                            className={`track-roadmap-turn track-roadmap-turn--${connectionState}`}
-                            aria-hidden="true"
-                          />
-                          <div className={`track-roadmap-marker track-roadmap-marker--${stageState}`}>
-                            <span
-                              className={`track-roadmap-link track-roadmap-link--${connectionState}`}
-                              aria-hidden="true"
-                            />
-
-                            {/* Station Node Marker */}
-                            <span className={`track-roadmap-socket track-roadmap-socket--${stageState}`}>
-                              {isCompleted ? (
-                                <Check className="track-roadmap-check" aria-hidden="true" />
-                              ) : isCurrent ? (
-                                <span className="track-roadmap-core track-roadmap-core--current" />
-                              ) : (
-                                <span className="track-roadmap-core track-roadmap-core--future" />
-                              )}
-                            </span>
-                          </div>
-
-                          {/* Bottom: Stage Label & Current Indicator */}
-                          <div className="space-y-0.5">
-                            <div
-                              className={`type-l5 leading-snug transition-colors font-medium ${
-                                isCompleted
-                                  ? 'text-[var(--accent-verdigris)]'
-                                  : isCurrent
-                                  ? 'text-[var(--text-title)] font-semibold'
-                                  : 'text-[var(--text-muted)] group-hover:text-[var(--text-primary)]'
-                              }`}
-                            >
-                              {stage}
-                            </div>
-                            {isCurrent && (
-                              <div className="track-roadmap-current">
-                                CURRENT
-                              </div>
-                            )}
-                          </div>
-                        </button>
-                      );
-                    })}
+                  {/* View Mode Toggle: 路线刻度 vs 纪元沉淀 */}
+                  <div className="flex items-center gap-2 self-start sm:self-auto">
+                    <div className="segmented-control compact" role="group" aria-label="路线与纪元视图切换">
+                      <button
+                        type="button"
+                        onClick={() => setRoadmapViewMode('scale')}
+                        className={`segmented-item cursor-pointer text-xs ${roadmapViewMode === 'scale' ? 'is-selected' : ''}`}
+                        aria-pressed={roadmapViewMode === 'scale'}
+                      >
+                        <span>路线刻度</span>
+                      </button>
+                      <button
+                        type="button"
+                        onClick={() => setRoadmapViewMode('epoch')}
+                        className={`segmented-item cursor-pointer text-xs ${roadmapViewMode === 'epoch' ? 'is-selected' : ''}`}
+                        aria-pressed={roadmapViewMode === 'epoch'}
+                      >
+                        <span>纪元沉淀</span>
+                      </button>
+                    </div>
                   </div>
                 </div>
+
+                {/* View Content: Exact Original Mechanical Gauge preserved when in 'scale' mode */}
+                {roadmapViewMode === 'scale' ? (
+                  <div className="py-2">
+                    <div
+                      className="track-roadmap-grid"
+                      style={{
+                        '--roadmap-desktop-columns': roadmapDesktopColumns,
+                        '--roadmap-mobile-columns': roadmapMobileColumns,
+                      } as React.CSSProperties}
+                    >
+                      {selectedTrack.roadmap.map((stage, idx) => {
+                        const isCurrent = idx === selectedTrack.current_stage_index;
+                        const isCompleted = idx < selectedTrack.current_stage_index;
+                        const stageState = isCompleted ? 'completed' : isCurrent ? 'current' : 'future';
+                        const connectionState = getRoadmapConnectionState(
+                          idx,
+                          selectedTrack.current_stage_index,
+                          selectedTrack.roadmap.length
+                        );
+                        const desktopPosition = getStageGridPosition(
+                          idx,
+                          selectedTrack.roadmap.length,
+                          roadmapDesktopColumns
+                        );
+                        const mobilePosition = getStageGridPosition(
+                          idx,
+                          selectedTrack.roadmap.length,
+                          roadmapMobileColumns
+                        );
+                        const gridStyle = {
+                          '--roadmap-desktop-column': desktopPosition.column,
+                          '--roadmap-desktop-row': desktopPosition.row,
+                          '--roadmap-mobile-column': mobilePosition.column,
+                          '--roadmap-mobile-row': mobilePosition.row,
+                        } as React.CSSProperties;
+                        const stageStateLabel = isCompleted ? '已完成' : isCurrent ? '当前位置' : '尚未开始';
+
+                        return (
+                          <button
+                            key={idx}
+                            type="button"
+                            onClick={() => onUpdateTrackStage(selectedTrack.id, idx)}
+                            aria-label={`切换到路线节点 ${idx + 1}：${stage}，${stageStateLabel}`}
+                            data-desktop-direction={desktopPosition.direction}
+                            data-desktop-connection={desktopPosition.connection}
+                            data-mobile-direction={mobilePosition.direction}
+                            data-mobile-connection={mobilePosition.connection}
+                            className={`track-roadmap-stage track-roadmap-stage--${stageState} group cursor-pointer`}
+                            style={gridStyle}
+                          >
+                            {/* Top: 01, 02, 03 Number */}
+                            <div
+                              className="track-roadmap-number"
+                            >
+                              {String(idx + 1).padStart(2, '0')}
+                            </div>
+
+                            {/* Middle: Station Node with Connecting Rail Segment */}
+                            <span
+                              className={`track-roadmap-turn track-roadmap-turn--${connectionState}`}
+                              aria-hidden="true"
+                            />
+                            <div className={`track-roadmap-marker track-roadmap-marker--${stageState}`}>
+                              <span
+                                className={`track-roadmap-link track-roadmap-link--${connectionState}`}
+                                aria-hidden="true"
+                              />
+
+                              {/* Station Node Marker */}
+                              <span className={`track-roadmap-socket track-roadmap-socket--${stageState}`}>
+                                {isCompleted ? (
+                                  <Check className="track-roadmap-check" aria-hidden="true" />
+                                ) : isCurrent ? (
+                                  <span className="track-roadmap-core track-roadmap-core--current" />
+                                ) : (
+                                  <span className="track-roadmap-core track-roadmap-core--future" />
+                                )}
+                              </span>
+                            </div>
+
+                            {/* Bottom: Stage Label & Current Indicator */}
+                            <div className="space-y-0.5">
+                              <div
+                                className={`type-l5 leading-snug transition-colors font-medium ${
+                                  isCompleted
+                                    ? 'text-[var(--accent-verdigris)]'
+                                    : isCurrent
+                                    ? 'text-[var(--text-title)] font-semibold'
+                                    : 'text-[var(--text-muted)] group-hover:text-[var(--text-primary)]'
+                                }`}
+                              >
+                                {stage}
+                              </div>
+                              {isCurrent && (
+                                <div className="track-roadmap-current">
+                                  CURRENT
+                                </div>
+                              )}
+                            </div>
+                          </button>
+                        );
+                      })}
+                    </div>
+                  </div>
+                ) : (
+                  /* Epoch Strata View */
+                  trajectoryOverview && <TrackEpochStrata stages={trajectoryOverview.stages} />
+                )}
               </div>
 
               {/* NEXT ACTIONS Section */}
@@ -682,23 +742,35 @@ export const TracksView: React.FC<TracksViewProps> = ({
               </div>
 
               {/* Recent Touches & Resources Sections (Refined Editorial Journal without excessive lines) */}
-              <div className={`pt-3 ${trackLogs.length === 0 && relatedCards.length === 0 ? 'space-y-5' : 'space-y-7'}`}>
+              <div className={`pt-3 ${allTrackLogs.length === 0 && relatedCards.length === 0 ? 'space-y-5' : 'space-y-7'}`}>
                 {/* RECENT TOUCHES Chapter */}
-                <div className={trackLogs.length === 0 ? 'space-y-1.5' : 'space-y-2'}>
+                <div className={allTrackLogs.length === 0 ? 'space-y-1.5' : 'space-y-2'}>
                   <div className="flex items-center justify-between">
-                    <span className="track-section-label">
-                      RECENT TOUCHES / 最近发生
-                    </span>
+                    <div className="flex items-center gap-2">
+                      <span className="track-section-label">
+                        RECENT TOUCHES / 最近发生
+                      </span>
+                      {allTrackLogs.length > 6 && (
+                        <button
+                          type="button"
+                          onClick={() => setShowAllRecentLogs(!showAllRecentLogs)}
+                          className="cockpit-action-text cursor-pointer text-xs flex items-center gap-1 hover:text-[var(--text-primary)]"
+                        >
+                          <span>{showAllRecentLogs ? '收起为最近 6 条' : `展开全部 (共 ${allTrackLogs.length} 条)`}</span>
+                          {showAllRecentLogs ? <ChevronUp className="w-3 h-3" /> : <ChevronDown className="w-3 h-3" />}
+                        </button>
+                      )}
+                    </div>
                     <span className="type-l6 font-mono text-[var(--text-muted)] text-[12px] font-medium">
-                      {trackLogs.length}
+                      {allTrackLogs.length}
                     </span>
                   </div>
 
-                  {trackLogs.length === 0 ? (
+                  {allTrackLogs.length === 0 ? (
                     <InlineEmptyState className="py-1" label="暂无记录" />
                   ) : (
                     <div className="recent-touch-list">
-                      {trackLogs.map(l => (
+                      {displayedTrackLogs.map(l => (
                         <div
                           key={l.id}
                           className="recent-touch-row"
